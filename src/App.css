@@ -1,5 +1,10 @@
 .App {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
   text-align: center;
+  min-height: 100vh;
 }
 
 .App-logo {
@@ -23,6 +28,23 @@
   color: #61dafb;
 }
 
+.top {
+  transform: rotate(180deg);
+}
+
+.leftClock {
+  float: left;
+}
+
+.rightClock {
+  float: right;
+}
+
+.timer {
+  padding: 50px;
+  margin: 10px;
+  outline-style: solid;
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
