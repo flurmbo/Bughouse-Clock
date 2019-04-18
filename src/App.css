@@ -44,7 +44,10 @@
   padding: 50px;
   margin: 10px;
   outline-style: solid;
+  background-color: gray;
+  font-size: 40px;
 }
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

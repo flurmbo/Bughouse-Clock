@@ -1,12 +1,18 @@
 import React, { Component } from 'react';
 import './App.css';
 import ChessClock from './ChessClock';
-const STARTING_TIME = 59;
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { timeRemaining: 0};
+const STARTING_TIME = 60;
+
+interface IProps {};
+interface IState {
+  time: number;
+}
+
+class App extends Component<IProps, IState> {
+  state: IState = {
+    time: STARTING_TIME
   }
+
 
   componentDidMount() {
     this.setState({time: 30});
