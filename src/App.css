@@ -46,8 +46,15 @@
   outline-style: solid;
   background-color: gray;
   font-size: 40px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
+.timer.active {
+  background-color: yellow;
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
