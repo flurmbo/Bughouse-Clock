@@ -1,22 +1,25 @@
 import React, { Component } from 'react';
 import './App.css';
 import ChessClock from './ChessClock';
-const STARTING_TIME = 60 * 1000;
-const DELAY = 3;
+import { TimerOptions } from './types';
 
+const OPTIONS: TimerOptions = {
+  delay: 3,
+  startingTime: 60 * 1000,
+}
 class App extends Component {
   render() {
     return (
       <div className="App">
         <ChessClock
           className="leftClock"
-          startingTime={STARTING_TIME}
-          delay={DELAY}
+          options={OPTIONS}
         />
         <ChessClock
           className="rightClock"
-          startingTime={STARTING_TIME}
-          delay={DELAY}
+          options={OPTIONS}
+        />
+
         />
       </div>
     );

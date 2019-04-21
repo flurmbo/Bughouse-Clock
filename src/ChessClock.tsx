@@ -1,51 +1,41 @@
 import React, { Component } from 'react';
-import TimeDisplay from './TimeDisplay';
-import { Side } from './types';
+import ChessTimer from './ChessTimer';
+import { Side, TimerOptions } from './types';
 import { otherSide } from './utils';
+
 interface IProps {
   className: string;
-  startingTime: number;
-  delay: number;
+  options: TimerOptions;
 }
 
 interface IState {
   running: boolean;
   turnStartTime?: number;
-  timeTop: number;
-  timeBottom: number;
-  turnSide?: Side;
+  whoseTurnItIs?: Side;
   countdownStartTime?: number;
 }
 
 class ChessClock extends Component<IProps, IState> {
   state: IState = {
-    running: false,
-    timeTop: this.props.startingTime,
-    timeBottom: this.props.startingTime,
+    running: false
   }
 
   onClickHandler = (side: Side)  => {
     return () => {
-      if (this.state.running) {
-        console.log(`you are ${side} and it is ${this.state.turnSide}'s turn`);
-      }
-      if (this.state.running && this.state.turnSide === side) {
+      if (this.state.running && this.state.whoseTurnItIs === side) {
+        // End our turn
         this.setState((state) => {
-          console.log('changing turn');
           return {
-            turnSide: otherSide(side),
-            countdownStartTime: undefined,
-            timeTop: (side === Side.Top && state.countdownStartTime) ? (state.timeTop - Date.now() + state.countdownStartTime) : state.timeTop,
-            timeBottom: (side === Side.Bottom && state.countdownStartTime) ? (state.timeBottom - Date.now() + state.countdownStartTime) : state.timeBottom
+            whoseTurnItIs: otherSide(side),
           }
         });
         this.startTurn(otherSide(side));
       } else if (!this.state.running) {
+        // Begin timing by starting other player's turn
         this.setState(() => {
-          console.log('setting run');
           return {
             running: true,
-            turnSide: otherSide(side)
+            whoseTurnItIs: otherSide(side)
           }
        });
        this.startTurn(otherSide(side));
@@ -62,22 +52,22 @@ class ChessClock extends Component<IProps, IState> {
 
   render() {
     console.log('rendering a chess clock');
-    const { className } = this.props;
-    const { timeTop, timeBottom, running, turnSide, countdownStartTime } = this.state;
+    const { className, options } = this.props;
+    const { running, whoseTurnItIs, countdownStartTime } = this.state;
     return (
       <div className={className}>
-        <TimeDisplay 
-          time={timeTop}
+        <ChessTimer 
+          options={options}
           side={Side.Top}
           onClickHandler={this.onClickHandler}
-          active={turnSide === Side.Top} 
+          active={whoseTurnItIs === Side.Top} 
           countdownStartTime={countdownStartTime}
         />
-        <TimeDisplay
-          time={timeBottom}
+        <ChessTimer
+          options-{options}
           side={Side.Bottom}
           onClickHandler={this.onClickHandler}
-          active={turnSide === Side.Bottom} 
+          active={whoseTurnItIs === Side.Bottom} 
           countdownStartTime={countdownStartTime}
         />
       </div>
