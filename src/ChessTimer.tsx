@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { toDurationString } from './utils';
-import { Side, Seconds, Milliseconds, TimerOptions } from './types';
+import { Side, Seconds, Milliseconds, TimerOptions, GameState } from './types';
 
 interface IProps {
   side: Side;
-  active: boolean;
   options: TimerOptions;
   onClickHandler: (side: Side) => () => void;
+  onTimesUp: () => void;
+  gameState: GameState;
+  whoseTurnItIs?: Side;
 }
 
 interface IState {
@@ -19,14 +21,14 @@ interface IState {
 
 class ChessTimer extends Component<IProps, IState> {
   state: IState = {
-    displayedTime: Math.ceil(this.props.options.startingTime / 1000),
+    displayedTime: this.props.options.startingTime, 
     timeLeft: this.props.options.startingTime * 1000
   }
   componentDidMount() {
     setInterval(() => {
-      const { active } = this.props;
+      const { side, whoseTurnItIs } = this.props;
       const { displayedTime, timeLeft, countdownStartTime } = this.state;
-      if (countdownStartTime && active) {
+      if (countdownStartTime && whoseTurnItIs && whoseTurnItIs === side) {
         let calculatedDisplayTime: Seconds = 
           Math.ceil((timeLeft - Date.now() + countdownStartTime) / 1000);
         if (calculatedDisplayTime !== displayedTime) {
@@ -37,23 +39,48 @@ class ChessTimer extends Component<IProps, IState> {
   }
 
   componentDidUpdate(prevProps: IProps) {
-    const { active } = this.props;
+    const { side, whoseTurnItIs } = this.props;
+    if (whoseTurnItIs && prevProps.whoseTurnItIs && whoseTurnItIs !== prevProps.whoseTurnItIs) {
+      
+    }
     if (!prevProps.active && active) {
       // begin our turn
-      const delayTimeoutID = window.setTimeout(() => {
-        this.setState({
-          countdownStartTime: Date.now(),
-          countingDown: true
-        });
-      }, this.props.options.delay);
+      const delayTimeoutID = window.setTimeout(this.onDelayElapsed, 1000 * this.props.options.delay);
       this.setState({
         countingDown: false,
         delayTimeoutID: delayTimeoutID
       });
     } else if (prevProps.active && !active) {
       // end our turn
+      this.setState((prevState) => {
+        if (prevState.countdownStartTime) {
+          return {
+            timeLeft: (prevState.timeLeft - Date.now() + prevState.countdownStartTime),
+            countdownStartTime: undefined,
+            countingDown: false,
+            delayTimeoutID: undefined
+          }
+        } else {
+          clearTimeout(prevState.delayTimeoutID);
+          return {
+            timeLeft: prevState.timeLeft,
+            countingDown: false,
+            delayTimeoutID: undefined
+          }
+        }
+      });
+    } else if (this.state.displayedTime === 0 ) {
+      this.props.onTimesUp(); 
     }
   }
+
+  onDelayElapsed = () => {
+    this.setState({
+      countdownStartTime: Date.now(),
+      countingDown: true
+    });
+  }
+
   render() {
     const { side, onClickHandler, active } = this.props;
     const { displayedTime } = this.state;

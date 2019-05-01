@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
 import ChessTimer from './ChessTimer';
-import { Side, TimerOptions } from './types';
+import { Side, TimerOptions, GameState } from './types';
 import { otherSide } from './utils';
 
 interface IProps {
   className: string;
   options: TimerOptions;
+  onTimesUp: () => void;
+  gameState: GameState;
 }
 
 interface IState {
   running: boolean;
-  turnStartTime?: number;
   whoseTurnItIs?: Side;
   countdownStartTime?: number;
 }
@@ -29,7 +30,6 @@ class ChessClock extends Component<IProps, IState> {
             whoseTurnItIs: otherSide(side),
           }
         });
-        this.startTurn(otherSide(side));
       } else if (!this.state.running) {
         // Begin timing by starting other player's turn
         this.setState(() => {
@@ -38,37 +38,33 @@ class ChessClock extends Component<IProps, IState> {
             whoseTurnItIs: otherSide(side)
           }
        });
-       this.startTurn(otherSide(side));
       }
     }
-  }
-  
-  startTurn = (side: Side) => {
-    console.log('calling start turn');
-   setTimeout(() => {
-    this.setState({ countdownStartTime: Date.now() }); 
-   }, 1000 * this.props.delay);
   }
 
   render() {
     console.log('rendering a chess clock');
-    const { className, options } = this.props;
+    const { className, options, onTimesUp, gameState } = this.props;
     const { running, whoseTurnItIs, countdownStartTime } = this.state;
     return (
       <div className={className}>
-        <ChessTimer 
+        <ChessTimer
           options={options}
           side={Side.Top}
           onClickHandler={this.onClickHandler}
-          active={whoseTurnItIs === Side.Top} 
-          countdownStartTime={countdownStartTime}
+          whoseTurnItIs={whoseTurnItIs} 
+          onTimesUp={onTimesUp}
+          gameState={gameState}
         />
         <ChessTimer
-          options-{options}
+          options={options}
           side={Side.Bottom}
           onClickHandler={this.onClickHandler}
-          active={whoseTurnItIs === Side.Bottom} 
-          countdownStartTime={countdownStartTime}
+          whoseTurnItIs={whoseTurnItIs} 
+          onTimesUp={onTimesUp}
+          gameState={gameState}
+        />
+        />
         />
       </div>
     )
