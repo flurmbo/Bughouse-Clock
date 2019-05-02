@@ -19,7 +19,7 @@ interface IState {
   countingDown?: boolean
 }
 
-class ChessTimer extends Component<IProps, IState> {
+class ChessClockFace extends Component<IProps, IState> {
   state: IState = {
     displayedTime: this.props.options.startingTime, 
     timeLeft: this.props.options.startingTime * 1000

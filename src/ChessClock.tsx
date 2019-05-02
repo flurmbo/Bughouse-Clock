@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ChessTimer from './ChessTimer';
+import ChessClockFace from './ChessClockFace';
 import { Side, TimerOptions, GameState } from './types';
 import { otherSide } from './utils';
 
@@ -48,7 +48,7 @@ class ChessClock extends Component<IProps, IState> {
     const { running, whoseTurnItIs, countdownStartTime } = this.state;
     return (
       <div className={className}>
-        <ChessTimer
+        <ChessClockFace
           options={options}
           side={Side.Top}
           onClickHandler={this.onClickHandler}
@@ -56,7 +56,7 @@ class ChessClock extends Component<IProps, IState> {
           onTimesUp={onTimesUp}
           gameState={gameState}
         />
-        <ChessTimer
+        <ChessClockFace
           options={options}
           side={Side.Bottom}
           onClickHandler={this.onClickHandler}
