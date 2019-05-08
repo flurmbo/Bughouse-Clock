@@ -43,7 +43,6 @@ class ChessClock extends Component<IProps, IState> {
   }
 
   render() {
-    console.log('rendering a chess clock');
     const { className, options, onTimesUp, gameState } = this.props;
     const { running, whoseTurnItIs, countdownStartTime } = this.state;
     return (
@@ -52,7 +51,7 @@ class ChessClock extends Component<IProps, IState> {
           options={options}
           side={Side.Top}
           onClickHandler={this.onClickHandler}
-          whoseTurnItIs={whoseTurnItIs} 
+          isItMyTurn={whoseTurnItIs === Side.Top} 
           onTimesUp={onTimesUp}
           gameState={gameState}
         />
@@ -60,11 +59,9 @@ class ChessClock extends Component<IProps, IState> {
           options={options}
           side={Side.Bottom}
           onClickHandler={this.onClickHandler}
-          whoseTurnItIs={whoseTurnItIs} 
+          isItMyTurn={whoseTurnItIs === Side.Bottom} 
           onTimesUp={onTimesUp}
           gameState={gameState}
-        />
-        />
         />
       </div>
     )

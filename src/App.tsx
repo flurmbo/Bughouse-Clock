@@ -13,7 +13,7 @@ interface IState {
   timerOptions: TimerOptions;
 }
 
-class App extends Component<IState> {
+class App extends Component<any, IState> {
   state: IState = {
     gameState: GameState.NotStarted,
     timerOptions: OPTIONS

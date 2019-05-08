@@ -8,7 +8,7 @@ interface IProps {
   onClickHandler: (side: Side) => () => void;
   onTimesUp: () => void;
   gameState: GameState;
-  whoseTurnItIs?: Side;
+  isItMyTurn: boolean;
 }
 
 interface IState {
@@ -21,15 +21,15 @@ interface IState {
 
 class ChessClockFace extends Component<IProps, IState> {
   state: IState = {
-    displayedTime: this.props.options.startingTime, 
+    displayedTime: this.props.options.startingTime,
     timeLeft: this.props.options.startingTime * 1000
   }
   componentDidMount() {
     setInterval(() => {
-      const { side, whoseTurnItIs } = this.props;
+      const { side, isItMyTurn } = this.props;
       const { displayedTime, timeLeft, countdownStartTime } = this.state;
-      if (countdownStartTime && whoseTurnItIs && whoseTurnItIs === side) {
-        let calculatedDisplayTime: Seconds = 
+      if (countdownStartTime && isItMyTurn) {
+        let calculatedDisplayTime: Seconds =
           Math.ceil((timeLeft - Date.now() + countdownStartTime) / 1000);
         if (calculatedDisplayTime !== displayedTime) {
           this.setState({ displayedTime: calculatedDisplayTime });
@@ -39,18 +39,15 @@ class ChessClockFace extends Component<IProps, IState> {
   }
 
   componentDidUpdate(prevProps: IProps) {
-    const { side, whoseTurnItIs } = this.props;
-    if (whoseTurnItIs && prevProps.whoseTurnItIs && whoseTurnItIs !== prevProps.whoseTurnItIs) {
-      
-    }
-    if (!prevProps.active && active) {
+    const { side, isItMyTurn } = this.props;
+    if (!prevProps.isItMyTurn && isItMyTurn) {
       // begin our turn
       const delayTimeoutID = window.setTimeout(this.onDelayElapsed, 1000 * this.props.options.delay);
       this.setState({
         countingDown: false,
         delayTimeoutID: delayTimeoutID
       });
-    } else if (prevProps.active && !active) {
+    } else if (prevProps.isItMyTurn && !isItMyTurn) {
       // end our turn
       this.setState((prevState) => {
         if (prevState.countdownStartTime) {
@@ -70,7 +67,7 @@ class ChessClockFace extends Component<IProps, IState> {
         }
       });
     } else if (this.state.displayedTime === 0 ) {
-      this.props.onTimesUp(); 
+      this.props.onTimesUp();
     }
   }
 
@@ -82,14 +79,14 @@ class ChessClockFace extends Component<IProps, IState> {
   }
 
   render() {
-    const { side, onClickHandler, active } = this.props;
+    const { side, onClickHandler, isItMyTurn } = this.props;
     const { displayedTime } = this.state;
     let className = (
       ((side === Side.Top) ? "timer top" : "timer bottom") +
-      (active ? ' active' : '')
+      (isItMyTurn ? ' active' : '')
     );
     return (
-     <div 
+     <div
       className={className}
       onClick={onClickHandler(side)}
      >
@@ -99,4 +96,4 @@ class ChessClockFace extends Component<IProps, IState> {
   };
 }
 
-export default ChessTimer;
+export default ChessClockFace;
