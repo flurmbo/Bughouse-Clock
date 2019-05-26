@@ -8,6 +8,7 @@
     "bottomLeftClock  middleButton bottomRightClock"
     "bottomLeftClock  bottomButton bottomRightClock";
   min-height: 100vh;
+  background-color: black;
 }
 
 .topLeftClock {
@@ -29,6 +30,7 @@
 }
 
 .topButton {
+  color: grey;
   grid-area: topButton;
   display: flex;
   justify-content: center;
@@ -36,6 +38,7 @@
 }
 
 .middleButton {
+  color: grey;
   grid-area: middleButton;
   display: flex;
   justify-content: center;
@@ -43,6 +46,7 @@
 }
 
 .bottomButton {
+  color: grey;
   grid-area: bottomButton;
   display: flex;
   justify-content: center;
@@ -64,7 +68,7 @@
 }
 
 .timer.active {
-  background-color: yellow;
+  background-color: orange;
 }
 
 .timer.timeUp {
