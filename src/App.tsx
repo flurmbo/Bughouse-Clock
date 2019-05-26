@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import ChessClock from './ChessClock';
+import ButtonTray from './ButtonTray';
 import { TimerOptions, GameState } from './types';
 
 const OPTIONS: TimerOptions = {
@@ -22,6 +23,10 @@ class App extends Component<any, IState> {
   onTimesUp = () => {
     this.setState({ gameState: GameState.GameOver });
   }
+
+  resetClocks = () => {
+    alert("I'm sorry Dave. I'm afraid I can't do that.");
+  }
   
   render() {
     const { gameState, timerOptions } = this.state
@@ -32,6 +37,10 @@ class App extends Component<any, IState> {
           options={OPTIONS}
           onTimesUp={this.onTimesUp}
           gameState={gameState}
+        />
+        <ButtonTray
+          timerRunning={gameState == GameState.InProgress}
+          resetClocks={this.resetClocks}
         />
         <ChessClock
           className="rightClock"
