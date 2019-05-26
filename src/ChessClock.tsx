@@ -46,9 +46,10 @@ class ChessClock extends Component<IProps, IState> {
     const { className, options, onTimesUp, gameState } = this.props;
     const { running, whoseTurnItIs, countdownStartTime } = this.state;
     return (
-      <div className={className}>
+      <React.Fragment>
         <ChessClockFace
           options={options}
+          className= {'timer top' + className}
           side={Side.Top}
           onClickHandler={this.onClickHandler}
           isItMyTurn={whoseTurnItIs === Side.Top} 
@@ -57,13 +58,14 @@ class ChessClock extends Component<IProps, IState> {
         />
         <ChessClockFace
           options={options}
+          className={'timer bottom' + className}
           side={Side.Bottom}
           onClickHandler={this.onClickHandler}
           isItMyTurn={whoseTurnItIs === Side.Bottom} 
           onTimesUp={onTimesUp}
           gameState={gameState}
         />
-      </div>
+      </React.Fragment>
     )
   };
 }

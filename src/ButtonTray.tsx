@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import SettingsIcon from '@material-ui/icons/Settings';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import PauseIcon from '@material-ui/icons/Pause';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import { withStyles } from '@material-ui/core/styles';
 
 interface IProps {
@@ -15,7 +12,8 @@ interface IProps {
 
 const styles = {
   root: {
-    minWidth: '0px'
+    width: '70%',
+    height: 'auto'
   }
 };
 
@@ -27,34 +25,26 @@ class ButtonTray extends Component<IProps> {
   render() {
     const { classes, timerRunning } = this.props;
     return ( 
-      <List>
-        <ListItem button>
-          <ListItemIcon classes={{root: classes.root}}>
-            <SettingsIcon
-              fontSize='large'
-            />
-          </ListItemIcon>
-        </ListItem>
-        {timerRunning &&
-          <ListItem button>
-            <ListItemIcon classes={{root: classes.root}}>
-              <PauseIcon
-                fontSize='large'
-              />
-            </ListItemIcon>
-          </ListItem>
-        }
-        <ListItem
-          button
-          onClick={this.handleOnClick}>
-          <ListItemIcon classes={{root: classes.root}}>
-            <RefreshIcon
-              fontSize='large'
-            />
-          </ListItemIcon>
-        </ListItem>
-      </List>
-      
+      <React.Fragment>
+        <div className='topButton'>
+          <SettingsIcon
+            classes={{root: classes.root}}
+            fontSize='large'
+          />
+        </div>
+        <div className='middleButton'>
+          <PauseIcon
+            classes={{root: classes.root}}
+            fontSize='large'
+          />
+        </div>
+        <div className='bottomButton'>
+          <RefreshIcon
+            classes={{root: classes.root}}
+            fontSize='large'
+          />
+        </div>
+      </React.Fragment>
     );
   }
 }

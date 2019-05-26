@@ -1,35 +1,66 @@
 .App {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+  display: grid;
+  grid-template-columns: 41fr 18fr 41fr;
+  grid-template-rows: 2fr 1fr 1fr 2fr;
+  grid-template-areas:
+    "topLeftClock     topButton    topRightClock"
+    "topLeftClock     middleButton topRightClock"
+    "bottomLeftClock  middleButton bottomRightClock"
+    "bottomLeftClock  bottomButton bottomRightClock";
   min-height: 100vh;
-  background-color: blue;
 }
 
-.top {
+.topLeftClock {
+  grid-area: topLeftClock;
   transform: rotate(180deg);
 }
 
-.leftClock {
-  float: left;
+.topRightClock {
+  grid-area: topRightClock;
+  transform: rotate(180deg);
 }
 
-.rightClock {
-  float: right;
+.bottomLeftClock {
+  grid-area: bottomLeftClock;
+}
+
+.bottomRightClock {
+  grid-area: bottomRightClock;
+}
+
+.topButton {
+  grid-area: topButton;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.middleButton {
+  grid-area: middleButton;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bottomButton {
+  grid-area: bottomButton;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .timer {
-  padding: 50px;
-  margin: 10px;
-  outline-style: solid;
+  margin: 3px 3px 6px 3px;
   background-color: gray;
-  font-size: 40px;
+  font-size: 5em;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5%;
 }
 
 .timer.active {

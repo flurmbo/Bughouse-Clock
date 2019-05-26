@@ -9,6 +9,7 @@ interface IProps {
   onTimesUp: () => void;
   gameState: GameState;
   isItMyTurn: boolean;
+  className: string;
 }
 
 interface IState {
@@ -79,15 +80,11 @@ class ChessClockFace extends Component<IProps, IState> {
   }
 
   render() {
-    const { side, onClickHandler, isItMyTurn } = this.props;
+    const { side, onClickHandler, isItMyTurn, className } = this.props;
     const { displayedTime } = this.state;
-    let className = (
-      ((side === Side.Top) ? "timer top" : "timer bottom") +
-      (isItMyTurn ? ' active' : '')
-    );
     return (
      <div
-      className={className}
+      className={className + (isItMyTurn ? ' active' : '')}
       onClick={onClickHandler(side)}
      >
        { toDurationString(displayedTime) }

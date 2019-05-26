@@ -33,7 +33,7 @@ class App extends Component<any, IState> {
     return (
       <div className="App">
         <ChessClock
-          className="leftClock"
+          className="LeftClock"
           options={OPTIONS}
           onTimesUp={this.onTimesUp}
           gameState={gameState}
@@ -43,7 +43,7 @@ class App extends Component<any, IState> {
           resetClocks={this.resetClocks}
         />
         <ChessClock
-          className="rightClock"
+          className="RightClock"
           options={OPTIONS}
           onTimesUp={this.onTimesUp}
           gameState={gameState}

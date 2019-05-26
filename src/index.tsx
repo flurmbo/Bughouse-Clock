@@ -4,8 +4,12 @@ import './index.css';
 import App from './App';
 
 declare let window: any;
+declare let StatusBar: any;
 
 const startApp = () => {
+    if (window.cordova) {
+      StatusBar.hide();
+    }
     ReactDOM.render(<App />, document.getElementById('root'));
 }
 
