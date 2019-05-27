@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { toDurationString } from './utils';
-import { Side, Seconds, Milliseconds, TimerOptions, GameState } from './types';
+import React, { Component } from "react";
+import { toDurationString } from "./utils";
+import { Side, Seconds, Milliseconds, TimerOptions, GameState } from "./types";
 
 interface IProps {
   side: Side;
@@ -26,21 +26,21 @@ class ChessClockFace extends Component<IProps, IState> {
     displayedTime: this.props.options.startingTime,
     timeLeft: this.props.options.startingTime * 1000,
     ranOutOfTimeIsMe: false
-  }
+  };
   componentDidMount() {
     const updateIntervalID = window.setInterval(() => {
       const { side, isItMyTurn } = this.props;
       const { displayedTime, timeLeft, countdownStartTime } = this.state;
       if (countdownStartTime && isItMyTurn) {
-        let calculatedDisplayTime: Seconds =
-          Math.ceil((timeLeft - Date.now() + countdownStartTime) / 1000);
+        let calculatedDisplayTime: Seconds = Math.ceil(
+          (timeLeft - Date.now() + countdownStartTime) / 1000
+        );
         if (calculatedDisplayTime !== displayedTime) {
           this.setState({ displayedTime: calculatedDisplayTime });
         }
       }
     }, 30);
-    this.setState({updateIntervalID});
-
+    this.setState({ updateIntervalID });
   }
 
   componentWillUnmount() {
@@ -51,33 +51,46 @@ class ChessClockFace extends Component<IProps, IState> {
     const { isItMyTurn, gameState } = this.props;
     if (!prevProps.isItMyTurn && isItMyTurn) {
       // begin our turn
-      const delayTimeoutID = window.setTimeout(this.onDelayElapsed, 1000 * this.props.options.delay);
+      const delayTimeoutID = window.setTimeout(
+        this.onDelayElapsed,
+        1000 * this.props.options.delay
+      );
       this.setState({
         delayTimeoutID: delayTimeoutID
       });
-    } else if (prevProps.isItMyTurn && !isItMyTurn && gameState == GameState.InProgress) {
+    } else if (
+      (prevProps.isItMyTurn &&
+        !isItMyTurn &&
+        gameState == GameState.InProgress) ||
+      (prevProps.gameState == GameState.InProgress &&
+        gameState == GameState.Paused)
+    ) {
       // end our turn
-      this.setState((prevState) => {
+      this.setState(prevState => {
         if (prevState.countdownStartTime) {
           return {
-            timeLeft: (prevState.timeLeft - Date.now() + prevState.countdownStartTime),
+            timeLeft:
+              prevState.timeLeft - Date.now() + prevState.countdownStartTime,
             countdownStartTime: undefined,
             delayTimeoutID: undefined
-          }
+          };
         } else {
           clearTimeout(prevState.delayTimeoutID);
           return {
             timeLeft: prevState.timeLeft,
             delayTimeoutID: undefined
-          }
+          };
         }
       });
-    } else if (this.state.displayedTime === 0 && gameState == GameState.InProgress) {
-      const { delayTimeoutID } = this.state
+    } else if (
+      this.state.displayedTime === 0 &&
+      gameState == GameState.InProgress
+    ) {
+      const { delayTimeoutID } = this.state;
       if (delayTimeoutID) {
         clearTimeout(delayTimeoutID);
       }
-      this.setState({ranOutOfTimeIsMe: true})
+      this.setState({ ranOutOfTimeIsMe: true });
       this.props.onTimesUp();
     }
   }
@@ -86,20 +99,24 @@ class ChessClockFace extends Component<IProps, IState> {
     this.setState({
       countdownStartTime: Date.now()
     });
-  }
+  };
 
   render() {
     const { side, onClickHandler, isItMyTurn, className } = this.props;
     const { displayedTime, ranOutOfTimeIsMe } = this.state;
     return (
-     <div
-      className={className + (isItMyTurn ? ' active' : '') + (ranOutOfTimeIsMe ? ' timeUp' : '')}
-      onClick={onClickHandler(side)}
-     >
-       { toDurationString(displayedTime) }
-     </div>
-    )
-  };
+      <div
+        className={
+          className +
+          (isItMyTurn ? " active" : "") +
+          (ranOutOfTimeIsMe ? " timeUp" : "")
+        }
+        onClick={onClickHandler(side)}
+      >
+        {toDurationString(displayedTime)}
+      </div>
+    );
+  }
 }
 
 export default ChessClockFace;

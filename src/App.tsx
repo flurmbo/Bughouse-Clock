@@ -6,7 +6,7 @@ import { TimerOptions, GameState } from './types';
 
 const OPTIONS: TimerOptions = {
   delay: 5,
-  startingTime: 5 * 60
+  startingTime: 5
 }
 
 interface IState {
@@ -31,9 +31,16 @@ class App extends Component<any, IState> {
   }
 
   resetClocks = () => {
-    alert("I'm sorry Dave. I'm afraid I can't do that.");
+    this.pauseGame();
+  }
+
+  pauseGame = () => {
+    this.setState({gameState: GameState.Paused});
   }
   
+  openSettings = () => {
+
+  }
   render() {
     const { gameState, timerOptions } = this.state
     return (
@@ -46,8 +53,10 @@ class App extends Component<any, IState> {
           gameState={gameState}
         />
         <ButtonTray
-          timerRunning={gameState == GameState.InProgress}
-          resetClocks={this.resetClocks}
+          gameState={gameState}
+          onClickResetButton={this.resetClocks}
+          onClickPauseButton={this.pauseGame}
+          onClickSettingsButton={this.openSettings}
         />
         <ChessClock
           className="RightClock"
