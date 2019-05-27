@@ -6,7 +6,7 @@ import { TimerOptions, GameState } from "./types";
 
 const OPTIONS: TimerOptions = {
   delay: 5,
-  startingTime: 5
+  startingTime: 5 * 60
 };
 
 interface IState {
