@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import ChessClockFace from './ChessClockFace';
-import { Side, TimerOptions, GameState } from './types';
-import { otherSide } from './utils';
+import React, { Component } from "react";
+import ChessClockFace from "./ChessClockFace";
+import { Side, TimerOptions, GameState } from "./types";
+import { otherSide } from "./utils";
 
 interface IProps {
   className: string;
@@ -20,29 +20,32 @@ interface IState {
 class ChessClock extends Component<IProps, IState> {
   state: IState = {
     running: false
-  }
+  };
 
-  onClickHandler = (side: Side)  => {
+  onClickHandler = (side: Side) => {
     return () => {
       if (this.state.running && this.state.whoseTurnItIs === side) {
         // End our turn
-        this.setState((state) => {
+        this.setState(state => {
           return {
-            whoseTurnItIs: otherSide(side),
-          }
+            whoseTurnItIs: otherSide(side)
+          };
         });
-      } else if (!this.state.running && this.props.gameState !== GameState.GameOver) {
+      } else if (
+        !this.state.running &&
+        this.props.gameState !== GameState.GameOver
+      ) {
         // Start game and begin timing by starting other player's turn
         this.props.onStartGame();
         this.setState(() => {
           return {
             running: true,
             whoseTurnItIs: otherSide(side)
-          }
-       });
+          };
+        });
       }
-    }
-  }
+    };
+  };
 
   render() {
     const { className, options, onTimesUp, gameState } = this.props;
@@ -51,25 +54,29 @@ class ChessClock extends Component<IProps, IState> {
       <React.Fragment>
         <ChessClockFace
           options={options}
-          className= {'timer top' + className}
+          className={"timer top" + className}
           side={Side.Top}
           onClickHandler={this.onClickHandler}
-          isItMyTurn={whoseTurnItIs === Side.Top && gameState == GameState.InProgress} 
+          isItMyTurn={
+            whoseTurnItIs === Side.Top && gameState == GameState.InProgress
+          }
           onTimesUp={onTimesUp}
           gameState={gameState}
         />
         <ChessClockFace
           options={options}
-          className={'timer bottom' + className}
+          className={"timer bottom" + className}
           side={Side.Bottom}
           onClickHandler={this.onClickHandler}
-          isItMyTurn={whoseTurnItIs === Side.Bottom && gameState == GameState.InProgress} 
+          isItMyTurn={
+            whoseTurnItIs === Side.Bottom && gameState == GameState.InProgress
+          }
           onTimesUp={onTimesUp}
           gameState={gameState}
         />
       </React.Fragment>
-    )
-  };
+    );
+  }
 }
 
 export default ChessClock;

@@ -1,4 +1,4 @@
-import { Side, Seconds } from './types';
+import { Side, Seconds } from "./types";
 function toDurationString(seconds: Seconds): string {
   const m = Math.floor(seconds / 60);
   const s = seconds % 60;
@@ -6,6 +6,6 @@ function toDurationString(seconds: Seconds): string {
 }
 
 function otherSide(side: Side) {
-  return (side === Side.Top ? Side.Bottom : Side.Top);
+  return side === Side.Top ? Side.Bottom : Side.Top;
 }
 export { toDurationString, otherSide };
