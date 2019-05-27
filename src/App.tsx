@@ -5,8 +5,8 @@ import ButtonTray from './ButtonTray';
 import { TimerOptions, GameState } from './types';
 
 const OPTIONS: TimerOptions = {
-  delay: 3,
-  startingTime: 60
+  delay: 5,
+  startingTime: 5 * 60
 }
 
 interface IState {
@@ -22,6 +22,12 @@ class App extends Component<any, IState> {
 
   onTimesUp = () => {
     this.setState({ gameState: GameState.GameOver });
+    const onTimesUpSound = new Audio('onTimesUp.mp3');
+    onTimesUpSound.play();
+  }
+
+  onStartGame = () => {
+    this.setState({gameState: GameState.InProgress});
   }
 
   resetClocks = () => {
@@ -36,6 +42,7 @@ class App extends Component<any, IState> {
           className="LeftClock"
           options={OPTIONS}
           onTimesUp={this.onTimesUp}
+          onStartGame={this.onStartGame}
           gameState={gameState}
         />
         <ButtonTray
@@ -46,6 +53,7 @@ class App extends Component<any, IState> {
           className="RightClock"
           options={OPTIONS}
           onTimesUp={this.onTimesUp}
+          onStartGame={this.onStartGame}
           gameState={gameState}
         />
       </div>

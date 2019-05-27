@@ -7,6 +7,7 @@ interface IProps {
   className: string;
   options: TimerOptions;
   onTimesUp: () => void;
+  onStartGame: () => void;
   gameState: GameState;
 }
 
@@ -30,8 +31,9 @@ class ChessClock extends Component<IProps, IState> {
             whoseTurnItIs: otherSide(side),
           }
         });
-      } else if (!this.state.running) {
-        // Begin timing by starting other player's turn
+      } else if (!this.state.running && this.props.gameState !== GameState.GameOver) {
+        // Start game and begin timing by starting other player's turn
+        this.props.onStartGame();
         this.setState(() => {
           return {
             running: true,
@@ -52,7 +54,7 @@ class ChessClock extends Component<IProps, IState> {
           className= {'timer top' + className}
           side={Side.Top}
           onClickHandler={this.onClickHandler}
-          isItMyTurn={whoseTurnItIs === Side.Top} 
+          isItMyTurn={whoseTurnItIs === Side.Top && gameState == GameState.InProgress} 
           onTimesUp={onTimesUp}
           gameState={gameState}
         />
@@ -61,7 +63,7 @@ class ChessClock extends Component<IProps, IState> {
           className={'timer bottom' + className}
           side={Side.Bottom}
           onClickHandler={this.onClickHandler}
-          isItMyTurn={whoseTurnItIs === Side.Bottom} 
+          isItMyTurn={whoseTurnItIs === Side.Bottom && gameState == GameState.InProgress} 
           onTimesUp={onTimesUp}
           gameState={gameState}
         />
