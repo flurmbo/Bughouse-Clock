@@ -111,7 +111,7 @@ class ChessClockFace extends Component<IProps, IState> {
           (isItMyTurn ? " active" : "") +
           (ranOutOfTimeIsMe ? " timeUp" : "")
         }
-        onClick={onClickHandler(side)}
+        onTouchEnd={onClickHandler(side)}
       >
         {toDurationString(displayedTime)}
       </div>
