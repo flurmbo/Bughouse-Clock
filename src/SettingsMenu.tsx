@@ -9,6 +9,12 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
+import { TimerOptions } from "./types";
+
+interface IProps {
+  open: boolean;
+  setTimerOptions: (timerOptions: TimerOptions) => () => void;
+}
 
 const useStyles = makeStyles({
   drawerPaper: {
@@ -16,31 +22,21 @@ const useStyles = makeStyles({
   }
 });
 
-function SettingsMenu(props: any) {
+function SettingsMenu(props: IProps) {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
-
-  const toggleDrawer = (open: boolean) => (event: any) => {
-    if (
-      event.type === "keydown" &&
-      (event.key === "Tab" || event.key === "Shift")
-    ) {
-      return;
-    }
-
-    setOpen(open);
-  };
-
   const list = (
-    <div
-      role="presentation"
-      onClick={toggleDrawer(false)}
-      onKeyDown={toggleDrawer(false)}
-    >
+    <div role="presentation">
       <List>
-        {["5|5", "2|2", "Options"].map((text, index) => (
+        {[
+          { text: "5|5", timerOptions: { delay: 5, startingTime: 5 * 60 } },
+          { text: "2|2", timerOptions: { delay: 2, startingTime: 2 * 60 } }
+        ].map(({ text, timerOptions }, index) => (
           <React.Fragment>
-            <ListItem button key={text}>
+            <ListItem
+              button
+              key={text}
+              onClick={props.setTimerOptions(timerOptions)}
+            >
               <ListItemIcon>
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
               </ListItemIcon>
@@ -55,10 +51,8 @@ function SettingsMenu(props: any) {
 
   return (
     <div>
-      <Button onClick={toggleDrawer(true)}>Open Drawer</Button>
       <Drawer
         open={props.open}
-        onClose={toggleDrawer(false)}
         classes={{
           paper: classes.drawerPaper
         }}

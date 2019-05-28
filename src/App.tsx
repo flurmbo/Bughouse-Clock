@@ -46,7 +46,7 @@ class App extends Component<any, IState> {
   };
 
   setTimerOptions = (timerOptions: TimerOptions) => {
-    this.setState({ timerOptions });
+    return () => this.setState({ timerOptions, settingsIsOpen: false });
   };
   render() {
     const { gameState, timerOptions, settingsIsOpen } = this.state;
@@ -54,7 +54,7 @@ class App extends Component<any, IState> {
       <div className="App">
         <ChessClock
           className="LeftClock"
-          options={OPTIONS}
+          options={timerOptions}
           onTimesUp={this.onTimesUp}
           onStartGame={this.onStartGame}
           gameState={gameState}
@@ -67,7 +67,7 @@ class App extends Component<any, IState> {
         />
         <ChessClock
           className="RightClock"
-          options={OPTIONS}
+          options={timerOptions}
           onTimesUp={this.onTimesUp}
           onStartGame={this.onStartGame}
           gameState={gameState}
