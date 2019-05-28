@@ -1,19 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
+import { isCordova } from "./utils";
 import App from "./App";
 
-declare let window: any;
 declare let StatusBar: any;
 
 const startApp = () => {
-  if (window.cordova) {
+  if (isCordova()) {
     StatusBar.hide();
   }
   ReactDOM.render(<App />, document.getElementById("root"));
 };
 
-if (window.cordova) {
+if (isCordova()) {
   document.addEventListener("deviceready", startApp, false);
 } else {
   startApp();

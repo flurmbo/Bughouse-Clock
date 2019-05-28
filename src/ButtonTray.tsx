@@ -4,6 +4,9 @@ import RefreshIcon from "@material-ui/icons/Refresh";
 import PauseIcon from "@material-ui/icons/Pause";
 import { withStyles } from "@material-ui/core/styles";
 import { GameState } from "./types";
+import { isCordova } from "./utils";
+
+declare let navigator: any;
 
 interface IProps {
   onClickResetButton: () => void;
@@ -24,20 +27,31 @@ class ButtonTray extends Component<IProps> {
   handleOnClickResetButton = () => {
     this.props.onClickResetButton();
   };
-
+  onConfirm = (i: number) => {
+    alert("You selected button " + i);
+  };
   dave = () => {
-    alert("I'm sorry Dave, I'm afraid I can't do that.");
+    if (isCordova()) {
+      navigator.notification.confirm(
+        "a winner is you",
+        this.onConfirm,
+        "Game Over",
+        ["Restart", "Exit"]
+      );
+    } else {
+      alert("I'm sorry Dave, I'm afraid I can't do that.");
+    }
   };
 
   render() {
-    const { classes, gameState } = this.props;
+    const { classes, gameState, onClickSettingsButton } = this.props;
     return (
       <React.Fragment>
         <div className="topButton">
           <SettingsIcon
             classes={{ root: classes.root }}
             fontSize="large"
-            onClick={this.dave}
+            onClick={onClickSettingsButton}
           />
         </div>
         {gameState == GameState.InProgress && (

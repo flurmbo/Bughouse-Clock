@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./App.css";
 import ChessClock from "./ChessClock";
 import ButtonTray from "./ButtonTray";
+import SettingsMenu from "./SettingsMenu";
 import { TimerOptions, GameState } from "./types";
 
 const OPTIONS: TimerOptions = {
@@ -12,12 +13,14 @@ const OPTIONS: TimerOptions = {
 interface IState {
   gameState: GameState;
   timerOptions: TimerOptions;
+  settingsIsOpen: boolean;
 }
 
 class App extends Component<any, IState> {
   state: IState = {
     gameState: GameState.NotStarted,
-    timerOptions: OPTIONS
+    timerOptions: OPTIONS,
+    settingsIsOpen: false
   };
 
   onTimesUp = () => {
@@ -38,9 +41,15 @@ class App extends Component<any, IState> {
     this.setState({ gameState: GameState.Paused });
   };
 
-  openSettings = () => {};
+  openSettings = () => {
+    this.setState(state => ({ settingsIsOpen: !state.settingsIsOpen }));
+  };
+
+  setTimerOptions = (timerOptions: TimerOptions) => {
+    this.setState({ timerOptions });
+  };
   render() {
-    const { gameState, timerOptions } = this.state;
+    const { gameState, timerOptions, settingsIsOpen } = this.state;
     return (
       <div className="App">
         <ChessClock
@@ -62,6 +71,10 @@ class App extends Component<any, IState> {
           onTimesUp={this.onTimesUp}
           onStartGame={this.onStartGame}
           gameState={gameState}
+        />
+        <SettingsMenu
+          open={settingsIsOpen}
+          setTimerOptions={this.setTimerOptions}
         />
       </div>
     );
