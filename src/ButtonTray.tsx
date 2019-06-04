@@ -67,7 +67,7 @@ class ButtonTray extends Component<IProps> {
           <RefreshIcon
             classes={{ root: classes.root }}
             fontSize="large"
-            onClick={this.dave}
+            onClick={this.handleOnClickResetButton}
           />
         </div>
       </React.Fragment>

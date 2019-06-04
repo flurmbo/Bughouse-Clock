@@ -43,6 +43,18 @@ class ChessClockFace extends Component<IProps, IState> {
     this.setState({ updateIntervalID });
   }
 
+  onResetGameState() {
+    console.log("Chess face is resetting!");
+    this.setState({
+      displayedTime: this.props.options.startingTime,
+      timeLeft: this.props.options.startingTime * 1000,
+      ranOutOfTimeIsMe: false,
+      delayTimeoutID: undefined,
+      updateIntervalID: undefined,
+      countdownStartTime: undefined
+    });
+  }
+
   componentWillUnmount() {
     clearInterval(this.state.updateIntervalID);
   }
@@ -86,12 +98,19 @@ class ChessClockFace extends Component<IProps, IState> {
       this.state.displayedTime === 0 &&
       gameState == GameState.InProgress
     ) {
+      // end game
       const { delayTimeoutID } = this.state;
       if (delayTimeoutID) {
         clearTimeout(delayTimeoutID);
       }
       this.setState({ ranOutOfTimeIsMe: true });
       this.props.onTimesUp();
+    } else if (
+      prevProps.gameState == GameState.Paused &&
+      gameState == GameState.NotStarted
+    ) {
+      // reset game
+      this.onResetGameState();
     }
   }
 

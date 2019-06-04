@@ -35,6 +35,7 @@ class App extends Component<any, IState> {
 
   resetClocks = () => {
     this.pauseGame();
+    this.setState({ gameState: GameState.NotStarted });
   };
 
   pauseGame = () => {

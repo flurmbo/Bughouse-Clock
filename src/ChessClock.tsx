@@ -14,7 +14,6 @@ interface IProps {
 interface IState {
   running: boolean;
   whoseTurnItIs?: Side;
-  countdownStartTime?: number;
 }
 
 class ChessClock extends Component<IProps, IState> {
@@ -47,9 +46,24 @@ class ChessClock extends Component<IProps, IState> {
     };
   };
 
+  componentDidUpdate(prevProps: IProps) {
+    const { gameState } = this.props;
+    if (
+      prevProps.gameState == GameState.Paused &&
+      gameState == GameState.NotStarted
+    ) {
+      // on reset game
+      console.log("Chess clock is resetting!");
+      this.setState({
+        running: false,
+        whoseTurnItIs: undefined
+      });
+    }
+  }
+
   render() {
     const { className, options, onTimesUp, gameState } = this.props;
-    const { running, whoseTurnItIs, countdownStartTime } = this.state;
+    const { whoseTurnItIs } = this.state;
     return (
       <React.Fragment>
         <ChessClockFace
