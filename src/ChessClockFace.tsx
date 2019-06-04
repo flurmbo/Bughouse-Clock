@@ -29,7 +29,7 @@ class ChessClockFace extends Component<IProps, IState> {
   };
   componentDidMount() {
     const updateIntervalID = window.setInterval(() => {
-      const { side, isItMyTurn } = this.props;
+      const { isItMyTurn } = this.props;
       const { displayedTime, timeLeft, countdownStartTime } = this.state;
       if (countdownStartTime && isItMyTurn) {
         let calculatedDisplayTime: Seconds = Math.ceil(

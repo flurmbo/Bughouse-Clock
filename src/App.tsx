@@ -48,7 +48,12 @@ class App extends Component<any, IState> {
   };
 
   setTimerOptions = (timerOptions: TimerOptions) => {
-    return () => this.setState({ timerOptions, settingsIsOpen: false });
+    return () =>
+      this.setState({
+        timerOptions,
+        settingsIsOpen: false,
+        gameState: GameState.NotStarted
+      });
   };
   render() {
     const { gameState, timerOptions, settingsIsOpen } = this.state;
