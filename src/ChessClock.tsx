@@ -49,11 +49,10 @@ class ChessClock extends Component<IProps, IState> {
   componentDidUpdate(prevProps: IProps) {
     const { gameState } = this.props;
     if (
-      prevProps.gameState == GameState.Paused &&
+      prevProps.gameState != GameState.NotStarted &&
       gameState == GameState.NotStarted
     ) {
       // on reset game
-      console.log("Chess clock is resetting!");
       this.setState({
         running: false,
         whoseTurnItIs: undefined

@@ -44,7 +44,9 @@ class ChessClockFace extends Component<IProps, IState> {
   }
 
   onResetGameState() {
-    console.log("Chess face is resetting!");
+    if (this.state.delayTimeoutID) {
+      clearTimeout(this.state.delayTimeoutID);
+    }
     this.setState({
       displayedTime: this.props.options.startingTime,
       timeLeft: this.props.options.startingTime * 1000,
@@ -106,7 +108,7 @@ class ChessClockFace extends Component<IProps, IState> {
       this.setState({ ranOutOfTimeIsMe: true });
       this.props.onTimesUp();
     } else if (
-      prevProps.gameState == GameState.Paused &&
+      prevProps.gameState != GameState.NotStarted &&
       gameState == GameState.NotStarted
     ) {
       // reset game
