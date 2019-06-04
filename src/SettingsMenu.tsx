@@ -10,6 +10,9 @@ import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 import { TimerOptions } from "./types";
+import SettingsAppBar from "./SettingsAppBar";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Container from "@material-ui/core/Container";
 
 interface IProps {
   open: boolean;
@@ -50,16 +53,18 @@ function SettingsMenu(props: IProps) {
   );
 
   return (
-    <div>
+    <React.Fragment>
+      <CssBaseline />
       <Drawer
         open={props.open}
         classes={{
           paper: classes.drawerPaper
         }}
       >
-        {list}
+        <SettingsAppBar />
+        <Container>{list}</Container>
       </Drawer>
-    </div>
+    </React.Fragment>
   );
 }
 
