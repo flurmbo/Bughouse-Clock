@@ -7,8 +7,10 @@ export enum GameState {
   NotStarted = "NOT_STARTED",
   Paused = "PAUSED",
   InProgress = "IN_PROGRESS",
-  GameOver = "GAME_OVER"
+  GameOver = "GAME_OVER",
+  Resetting = "RESETTING"
 }
+
 export type Seconds = number;
 
 export type Milliseconds = number;

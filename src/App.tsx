@@ -14,6 +14,7 @@ interface IState {
   gameState: GameState;
   timerOptions: TimerOptions;
   settingsIsOpen: boolean;
+  numberOfComponentsDoneResetting?: number;
 }
 
 class App extends Component<any, IState> {
@@ -33,10 +34,10 @@ class App extends Component<any, IState> {
     this.setState({ gameState: GameState.InProgress });
   };
 
-  resetClocks = () => {
+  resetGame = () => {
     this.pauseGame();
     // TODO: open confirm dialog
-    this.setState({ gameState: GameState.NotStarted });
+    this.setState({ gameState: GameState.Resetting });
   };
 
   pauseGame = () => {
@@ -68,7 +69,7 @@ class App extends Component<any, IState> {
         />
         <ButtonTray
           gameState={gameState}
-          onClickResetButton={this.resetClocks}
+          onClickResetButton={this.resetGame}
           onClickPauseButton={this.pauseGame}
           onClickSettingsButton={this.openSettings}
         />
