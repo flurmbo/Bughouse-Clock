@@ -9,6 +9,7 @@ interface IProps {
   onTimesUp: () => void;
   onStartGame: () => void;
   gameState: GameState;
+  onThisComponentDoneResetting: () => void;
 }
 
 interface IState {
@@ -47,21 +48,30 @@ class ChessClock extends Component<IProps, IState> {
   };
 
   componentDidUpdate(prevProps: IProps) {
-    const { gameState } = this.props;
+    const { gameState, onThisComponentDoneResetting } = this.props;
     if (
-      prevProps.gameState != GameState.NotStarted &&
-      gameState == GameState.NotStarted
+      prevProps.gameState != GameState.Resetting &&
+      gameState == GameState.Resetting
     ) {
       // on reset game
-      this.setState({
-        running: false,
-        whoseTurnItIs: undefined
-      });
+      this.setState(
+        {
+          running: false,
+          whoseTurnItIs: undefined
+        },
+        onThisComponentDoneResetting
+      );
     }
   }
 
   render() {
-    const { className, options, onTimesUp, gameState } = this.props;
+    const {
+      className,
+      options,
+      onTimesUp,
+      gameState,
+      onThisComponentDoneResetting
+    } = this.props;
     const { whoseTurnItIs } = this.state;
     return (
       <React.Fragment>
@@ -75,6 +85,7 @@ class ChessClock extends Component<IProps, IState> {
           }
           onTimesUp={onTimesUp}
           gameState={gameState}
+          onThisComponentDoneResetting={onThisComponentDoneResetting}
         />
         <ChessClockFace
           options={options}
@@ -86,6 +97,7 @@ class ChessClock extends Component<IProps, IState> {
           }
           onTimesUp={onTimesUp}
           gameState={gameState}
+          onThisComponentDoneResetting={onThisComponentDoneResetting}
         />
       </React.Fragment>
     );

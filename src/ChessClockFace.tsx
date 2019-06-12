@@ -10,6 +10,7 @@ interface IProps {
   gameState: GameState;
   isItMyTurn: boolean;
   className: string;
+  onThisComponentDoneResetting: () => void;
 }
 
 interface IState {
@@ -47,14 +48,17 @@ class ChessClockFace extends Component<IProps, IState> {
     if (this.state.delayTimeoutID) {
       clearTimeout(this.state.delayTimeoutID);
     }
-    this.setState({
-      displayedTime: this.props.options.startingTime,
-      timeLeft: this.props.options.startingTime * 1000,
-      ranOutOfTimeIsMe: false,
-      delayTimeoutID: undefined,
-      updateIntervalID: undefined,
-      countdownStartTime: undefined
-    });
+    this.setState(
+      {
+        displayedTime: this.props.options.startingTime,
+        timeLeft: this.props.options.startingTime * 1000,
+        ranOutOfTimeIsMe: false,
+        delayTimeoutID: undefined,
+        updateIntervalID: undefined,
+        countdownStartTime: undefined
+      },
+      this.props.onThisComponentDoneResetting
+    );
   }
 
   componentWillUnmount() {
@@ -108,8 +112,8 @@ class ChessClockFace extends Component<IProps, IState> {
       this.setState({ ranOutOfTimeIsMe: true });
       this.props.onTimesUp();
     } else if (
-      prevProps.gameState != GameState.NotStarted &&
-      gameState == GameState.NotStarted
+      prevProps.gameState != GameState.Resetting &&
+      gameState == GameState.Resetting
     ) {
       // reset game
       this.onResetGameState();

@@ -30,6 +30,23 @@ class App extends Component<any, IState> {
     onTimesUpSound.play();
   };
 
+  onThisComponentDoneResetting = () => {
+    console.log("onThisComponentDoneResetting has been called");
+    this.setState(
+      state => ({
+        numberOfComponentsDoneResetting: state.numberOfComponentsDoneResetting
+          ? state.numberOfComponentsDoneResetting + 1
+          : 1
+      }),
+      () => {
+        console.log(
+          "numberDoneResetting is",
+          this.state.numberOfComponentsDoneResetting
+        );
+      }
+    );
+  };
+
   onStartGame = () => {
     this.setState({ gameState: GameState.InProgress });
   };
@@ -53,9 +70,19 @@ class App extends Component<any, IState> {
       this.setState({
         timerOptions,
         settingsIsOpen: false,
-        gameState: GameState.NotStarted
+        gameState: GameState.Resetting
       });
   };
+
+  componentDidUpdate() {
+    if (this.state.numberOfComponentsDoneResetting === 6) {
+      this.setState({
+        numberOfComponentsDoneResetting: undefined,
+        gameState: GameState.NotStarted
+      });
+    }
+  }
+
   render() {
     const { gameState, timerOptions, settingsIsOpen } = this.state;
     return (
@@ -66,6 +93,7 @@ class App extends Component<any, IState> {
           onTimesUp={this.onTimesUp}
           onStartGame={this.onStartGame}
           gameState={gameState}
+          onThisComponentDoneResetting={this.onThisComponentDoneResetting}
         />
         <ButtonTray
           gameState={gameState}
@@ -79,6 +107,7 @@ class App extends Component<any, IState> {
           onTimesUp={this.onTimesUp}
           onStartGame={this.onStartGame}
           gameState={gameState}
+          onThisComponentDoneResetting={this.onThisComponentDoneResetting}
         />
         <SettingsMenu
           open={settingsIsOpen}
