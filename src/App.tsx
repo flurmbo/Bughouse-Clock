@@ -4,6 +4,7 @@ import ChessClock from "./ChessClock";
 import ButtonTray from "./ButtonTray";
 import SettingsMenu from "./SettingsMenu";
 import { TimerOptions, GameState } from "./types";
+import ConfirmResetDialog from "./ConfirmResetDialog";
 
 const OPTIONS: TimerOptions = {
   delay: 5,
@@ -15,13 +16,15 @@ interface IState {
   timerOptions: TimerOptions;
   settingsIsOpen: boolean;
   numberOfComponentsDoneResetting?: number;
+  resetDialogIsOpen: boolean;
 }
 
 class App extends Component<any, IState> {
   state: IState = {
     gameState: GameState.NotStarted,
     timerOptions: OPTIONS,
-    settingsIsOpen: false
+    settingsIsOpen: false,
+    resetDialogIsOpen: false
   };
 
   onTimesUp = () => {
@@ -52,8 +55,6 @@ class App extends Component<any, IState> {
   };
 
   resetGame = () => {
-    this.pauseGame();
-    // TODO: open confirm dialog
     this.setState({ gameState: GameState.Resetting });
   };
 
@@ -65,6 +66,16 @@ class App extends Component<any, IState> {
     this.setState(state => ({ settingsIsOpen: !state.settingsIsOpen }));
   };
 
+  handleYes = () => {
+    this.setState({ gameState: GameState.Resetting, resetDialogIsOpen: false });
+  };
+
+  handleNo = () => {};
+
+  openConfirmResetDialog = () => {
+    this.pauseGame();
+    this.setState({ resetDialogIsOpen: true });
+  };
   setTimerOptions = (timerOptions: TimerOptions) => {
     return () =>
       this.setState({
@@ -84,7 +95,12 @@ class App extends Component<any, IState> {
   }
 
   render() {
-    const { gameState, timerOptions, settingsIsOpen } = this.state;
+    const {
+      gameState,
+      timerOptions,
+      settingsIsOpen,
+      resetDialogIsOpen
+    } = this.state;
     return (
       <div className="App">
         <ChessClock
@@ -100,6 +116,7 @@ class App extends Component<any, IState> {
           onResetGame={this.resetGame}
           onClickPauseButton={this.pauseGame}
           onClickSettingsButton={this.openSettings}
+          openConfirmResetDialog={this.openConfirmResetDialog}
         />
         <ChessClock
           className="RightClock"
@@ -112,6 +129,11 @@ class App extends Component<any, IState> {
         <SettingsMenu
           open={settingsIsOpen}
           setTimerOptions={this.setTimerOptions}
+        />
+        <ConfirmResetDialog
+          open={resetDialogIsOpen}
+          handleYes={this.handleYes}
+          handleNo={this.handleNo}
         />
       </div>
     );

@@ -7,17 +7,19 @@ import DialogActions from "@material-ui/core/DialogActions";
 
 interface IProps {
   open: boolean;
+  handleYes: () => void;
+  handleNo: () => void;
 }
 
 function ConfirmResetDialog(props: IProps) {
-  const { open } = props;
+  const { open, handleYes, handleNo } = props;
   return (
     <Dialog open={open}>
       <DialogTitle>{"Are you sure you want to reset the clock?"}</DialogTitle>
       <DialogContentText />
       <DialogActions>
-        <Button>Yes</Button>
-        <Button>No</Button>
+        <Button onClick={handleNo}>No</Button>
+        <Button onClick={handleYes}>Yes</Button>
       </DialogActions>
     </Dialog>
   );
