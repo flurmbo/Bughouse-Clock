@@ -5,15 +5,20 @@ import PauseIcon from "@material-ui/icons/Pause";
 import { withStyles } from "@material-ui/core/styles";
 import { GameState } from "./types";
 import { isCordova } from "./utils";
+import ConfirmResetDialog from "./ConfirmResetDialog";
 
 declare let navigator: any;
 
 interface IProps {
-  onClickResetButton: () => void;
+  onResetGame: () => void;
   onClickPauseButton: () => void;
   onClickSettingsButton: () => void;
   gameState: GameState;
   classes: any;
+}
+
+interface IState {
+  resetButtonDialogIsOpen: boolean;
 }
 
 const styles = {
@@ -23,9 +28,14 @@ const styles = {
   }
 };
 
-class ButtonTray extends Component<IProps> {
+class ButtonTray extends Component<IProps, IState> {
+  state: IState = {
+    resetButtonDialogIsOpen: false
+  };
+
   handleOnClickResetButton = () => {
-    this.props.onClickResetButton();
+    this.setState({ resetButtonDialogIsOpen: true });
+    //this.props.onResetGame();
   };
   onConfirm = (i: number) => {
     alert("You selected button " + i);
@@ -45,6 +55,7 @@ class ButtonTray extends Component<IProps> {
 
   render() {
     const { classes, gameState, onClickSettingsButton } = this.props;
+    const { resetButtonDialogIsOpen } = this.state;
     return (
       <React.Fragment>
         <div className="topButton">
@@ -70,6 +81,7 @@ class ButtonTray extends Component<IProps> {
             onClick={this.handleOnClickResetButton}
           />
         </div>
+        <ConfirmResetDialog open={resetButtonDialogIsOpen} />
       </React.Fragment>
     );
   }

@@ -97,7 +97,7 @@ class App extends Component<any, IState> {
         />
         <ButtonTray
           gameState={gameState}
-          onClickResetButton={this.resetGame}
+          onResetGame={this.resetGame}
           onClickPauseButton={this.pauseGame}
           onClickSettingsButton={this.openSettings}
         />
