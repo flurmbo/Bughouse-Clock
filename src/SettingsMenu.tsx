@@ -34,7 +34,7 @@ function SettingsMenu(props: IProps) {
           { text: "5|5", timerOptions: { delay: 5, startingTime: 5 * 60 } },
           { text: "2|2", timerOptions: { delay: 2, startingTime: 2 * 60 } }
         ].map(({ text, timerOptions }, index) => (
-          <React.Fragment>
+          <React.Fragment key={text}>
             <ListItem
               button
               key={text}
