@@ -3,8 +3,7 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import useScrollTrigger from "@material-ui/core/useScrollTrigger";
-import IconButton from "@material-ui/core/IconButton";
-import MoreIcon from "@material-ui/icons/MoreVert";
+import OptionsDropDown from "./OptionsDropDown";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles({
@@ -28,9 +27,7 @@ function SettingsAppBar() {
         <AppBar color="primary">
           <Toolbar>
             <Typography className={classes.title}>Settings</Typography>
-            <IconButton color="inherit" edge="end">
-              <MoreIcon />
-            </IconButton>
+            <OptionsDropDown />
           </Toolbar>
         </AppBar>
       </ElevationScroll>
