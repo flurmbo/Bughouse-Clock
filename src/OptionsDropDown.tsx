@@ -9,7 +9,10 @@ import { TimerOptions } from "./types";
 
 interface IProps {
   timerOptions: TimerOptions;
-  setTimerOptions: (newTimerOptions: Partial<TimerOptions>) => () => void;
+  setTimerOptions: (
+    newTimerOptions: Partial<TimerOptions>,
+    reset?: boolean
+  ) => () => void;
 }
 
 function OptionsDropDown(props: IProps) {
@@ -19,14 +22,31 @@ function OptionsDropDown(props: IProps) {
     setAnchorEl(e.currentTarget);
   }
 
-  // function handleClose() {
-  //   setAnchorEl(null);
-  // }
+  function handleClose() {
+    setAnchorEl(null);
+  }
 
-  function onClickFullScreen() {
-    console.log("onclick handler is going and props is");
-    console.log(props);
-    props.setTimerOptions({ fullScreen: true })();
+  function onClickFullScreen(e: any) {
+    if (
+      e.target.getAttribute("type") == "checkbox" ||
+      e.target.getAttribute("role") == "menuitem"
+    ) {
+      props.setTimerOptions(
+        { fullScreen: !props.timerOptions.fullScreen },
+        false
+      )();
+    }
+  }
+  function onClickSingleTap(e: any) {
+    if (
+      e.target.getAttribute("type") == "checkbox" ||
+      e.target.getAttribute("role") == "menuitem"
+    ) {
+      props.setTimerOptions(
+        { singleTap: !props.timerOptions.singleTap },
+        false
+      )();
+    }
   }
   return (
     <React.Fragment>
@@ -38,11 +58,17 @@ function OptionsDropDown(props: IProps) {
       >
         <MoreIcon />
       </IconButton>
-      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)}>
+      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
         <MenuItem onClick={onClickFullScreen}>
           <FormControlLabel
             control={<Checkbox checked={props.timerOptions.fullScreen} />}
             label="Full Screen"
+          />
+        </MenuItem>
+        <MenuItem onClick={onClickSingleTap}>
+          <FormControlLabel
+            control={<Checkbox checked={props.timerOptions.singleTap} />}
+            label="Single tap starts timers"
           />
         </MenuItem>
       </Menu>

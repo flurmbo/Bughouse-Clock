@@ -10,7 +10,7 @@ const OPTIONS: TimerOptions = {
   delay: 5,
   startingTime: 5 * 60,
   fullScreen: false,
-  singleTap: false
+  singleTap: false,
 };
 
 interface IState {
@@ -26,7 +26,7 @@ class App extends Component<any, IState> {
     gameState: GameState.NotStarted,
     timerOptions: OPTIONS,
     settingsIsOpen: false,
-    resetDialogIsOpen: false
+    resetDialogIsOpen: false,
   };
 
   onTimesUp = () => {
@@ -36,12 +36,11 @@ class App extends Component<any, IState> {
   };
 
   onThisComponentDoneResetting = () => {
-    console.log("onThisComponentDoneResetting has been called");
     this.setState(
       state => ({
         numberOfComponentsDoneResetting: state.numberOfComponentsDoneResetting
           ? state.numberOfComponentsDoneResetting + 1
-          : 1
+          : 1,
       }),
       () => {
         console.log(
@@ -78,23 +77,22 @@ class App extends Component<any, IState> {
     this.pauseGame();
     this.setState({ resetDialogIsOpen: true });
   };
-  setTimerOptions = (newTimerOptions: Partial<TimerOptions>) => {
+  setTimerOptions = (newTimerOptions: Partial<TimerOptions>, reset = true) => {
     return () =>
       this.setState(state => ({
         timerOptions: { ...state.timerOptions, ...newTimerOptions },
-        settingsIsOpen: false,
-        gameState: GameState.Resetting
+        settingsIsOpen: !reset,
+        gameState: reset ? GameState.Resetting : state.gameState,
       }));
   };
 
   componentDidUpdate() {
     if (this.state.timerOptions.fullScreen) {
-      console.log("we are now in fullscreen mode");
     }
     if (this.state.numberOfComponentsDoneResetting === 6) {
       this.setState({
         numberOfComponentsDoneResetting: undefined,
-        gameState: GameState.NotStarted
+        gameState: GameState.NotStarted,
       });
     }
   }
@@ -104,7 +102,7 @@ class App extends Component<any, IState> {
       gameState,
       timerOptions,
       settingsIsOpen,
-      resetDialogIsOpen
+      resetDialogIsOpen,
     } = this.state;
     return (
       <div className="App">
