@@ -5,6 +5,9 @@ import Typography from "@material-ui/core/Typography";
 import useScrollTrigger from "@material-ui/core/useScrollTrigger";
 import OptionsDropDown from "./OptionsDropDown";
 import { makeStyles } from "@material-ui/core/styles";
+import IconButton from "@material-ui/core/IconButton";
+import EditIcon from "@material-ui/icons/Edit";
+import AddIcon from "@material-ui/icons/AddCircle";
 import { TimerOptions } from "./types";
 
 interface IProps {
@@ -32,6 +35,12 @@ function SettingsAppBar(props: IProps) {
         <AppBar color="primary">
           <Toolbar>
             <Typography className={classes.title}>Settings</Typography>
+            <IconButton color="inherit" edge="end">
+              <AddIcon />
+            </IconButton>
+            <IconButton color="inherit" edge="end">
+              <EditIcon />
+            </IconButton>
             <OptionsDropDown
               setTimerOptions={props.setTimerOptions}
               timerOptions={props.timerOptions}
