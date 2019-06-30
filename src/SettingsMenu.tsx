@@ -22,8 +22,8 @@ interface IProps {
 
 const useStyles = makeStyles({
   drawerPaper: {
-    width: "100%"
-  }
+    width: "100%",
+  },
 });
 
 function SettingsMenu(props: IProps) {
@@ -33,7 +33,7 @@ function SettingsMenu(props: IProps) {
       <List>
         {[
           { text: "5|5", timerOptions: { delay: 5, startingTime: 5 * 60 } },
-          { text: "2|2", timerOptions: { delay: 2, startingTime: 2 * 60 } }
+          { text: "2|2", timerOptions: { delay: 2, startingTime: 2 * 60 } },
         ].map(({ text, timerOptions }, index) => (
           <React.Fragment key={text}>
             <ListItem
@@ -59,7 +59,7 @@ function SettingsMenu(props: IProps) {
       <Drawer
         open={props.open}
         classes={{
-          paper: classes.drawerPaper
+          paper: classes.drawerPaper,
         }}
       >
         <SettingsAppBar

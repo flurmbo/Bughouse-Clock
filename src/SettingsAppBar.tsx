@@ -13,15 +13,15 @@ interface IProps {
 }
 const useStyles = makeStyles({
   title: {
-    flexGrow: 1
-  }
+    flexGrow: 1,
+  },
 });
 
 function ElevationScroll(props: any) {
   const { children } = props;
   const trigger = useScrollTrigger();
   return React.cloneElement(children, {
-    elevation: trigger ? 4 : 0
+    elevation: trigger ? 4 : 0,
   });
 }
 function SettingsAppBar(props: IProps) {
