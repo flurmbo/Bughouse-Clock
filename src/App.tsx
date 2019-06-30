@@ -8,7 +8,9 @@ import ConfirmResetDialog from "./ConfirmResetDialog";
 
 const OPTIONS: TimerOptions = {
   delay: 5,
-  startingTime: 5 * 60
+  startingTime: 5 * 60,
+  fullScreen: false,
+  singleTap: false
 };
 
 interface IState {
@@ -76,16 +78,19 @@ class App extends Component<any, IState> {
     this.pauseGame();
     this.setState({ resetDialogIsOpen: true });
   };
-  setTimerOptions = (timerOptions: TimerOptions) => {
+  setTimerOptions = (newTimerOptions: Partial<TimerOptions>) => {
     return () =>
-      this.setState({
-        timerOptions,
+      this.setState(state => ({
+        timerOptions: { ...state.timerOptions, ...newTimerOptions },
         settingsIsOpen: false,
         gameState: GameState.Resetting
-      });
+      }));
   };
 
   componentDidUpdate() {
+    if (this.state.timerOptions.fullScreen) {
+      console.log("we are now in fullscreen mode");
+    }
     if (this.state.numberOfComponentsDoneResetting === 6) {
       this.setState({
         numberOfComponentsDoneResetting: undefined,
@@ -129,6 +134,7 @@ class App extends Component<any, IState> {
         <SettingsMenu
           open={settingsIsOpen}
           setTimerOptions={this.setTimerOptions}
+          timerOptions={timerOptions}
         />
         <ConfirmResetDialog
           open={resetDialogIsOpen}

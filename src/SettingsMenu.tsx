@@ -16,7 +16,8 @@ import Container from "@material-ui/core/Container";
 
 interface IProps {
   open: boolean;
-  setTimerOptions: (timerOptions: TimerOptions) => () => void;
+  setTimerOptions: (newTimerOptions: Partial<TimerOptions>) => () => void;
+  timerOptions: TimerOptions;
 }
 
 const useStyles = makeStyles({
@@ -61,7 +62,10 @@ function SettingsMenu(props: IProps) {
           paper: classes.drawerPaper
         }}
       >
-        <SettingsAppBar />
+        <SettingsAppBar
+          setTimerOptions={props.setTimerOptions}
+          timerOptions={props.timerOptions}
+        />
         <Container>{list}</Container>
       </Drawer>
     </React.Fragment>

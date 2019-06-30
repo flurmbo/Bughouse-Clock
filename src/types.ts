@@ -18,4 +18,6 @@ export type Milliseconds = number;
 export interface TimerOptions {
   delay: Seconds;
   startingTime: Seconds;
+  fullScreen: boolean;
+  singleTap: boolean;
 }
