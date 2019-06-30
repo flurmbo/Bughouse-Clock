@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import ChessClockFace from "./ChessClockFace";
-import { Side, TimerOptions, GameState } from "./types";
-import { otherSide } from "./utils";
+import { Side, TimerOptions, GameState } from "../../types";
+import { otherSide } from "../../utils";
 
 interface IProps {
   className: string;
@@ -19,7 +19,7 @@ interface IState {
 
 class ChessClock extends Component<IProps, IState> {
   state: IState = {
-    running: false
+    running: false,
   };
 
   onClickHandler = (side: Side) => {
@@ -28,7 +28,7 @@ class ChessClock extends Component<IProps, IState> {
         // End our turn
         this.setState(state => {
           return {
-            whoseTurnItIs: otherSide(side)
+            whoseTurnItIs: otherSide(side),
           };
         });
       } else if (
@@ -40,7 +40,7 @@ class ChessClock extends Component<IProps, IState> {
         this.setState(() => {
           return {
             running: true,
-            whoseTurnItIs: otherSide(side)
+            whoseTurnItIs: otherSide(side),
           };
         });
       }
@@ -57,7 +57,7 @@ class ChessClock extends Component<IProps, IState> {
       this.setState(
         {
           running: false,
-          whoseTurnItIs: undefined
+          whoseTurnItIs: undefined,
         },
         onThisComponentDoneResetting
       );
@@ -70,7 +70,7 @@ class ChessClock extends Component<IProps, IState> {
       options,
       onTimesUp,
       gameState,
-      onThisComponentDoneResetting
+      onThisComponentDoneResetting,
     } = this.props;
     const { whoseTurnItIs } = this.state;
     return (

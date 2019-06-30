@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import "./App.css";
-import ChessClock from "./ChessClock";
-import ButtonTray from "./ButtonTray";
-import SettingsMenu from "./SettingsMenu";
+import ChessClock from "./components/clock/ChessClock";
+import ButtonTray from "./components/clock/ButtonTray";
+import SettingsMenu from "./components/settings/SettingsMenu";
 import { TimerOptions, GameState } from "./types";
-import ConfirmResetDialog from "./ConfirmResetDialog";
+import ConfirmResetDialog from "./components/ConfirmResetDialog";
 
 const OPTIONS: TimerOptions = {
   delay: 5,

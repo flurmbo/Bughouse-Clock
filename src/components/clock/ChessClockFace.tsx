@@ -1,6 +1,12 @@
 import React, { Component } from "react";
-import { toDurationString } from "./utils";
-import { Side, Seconds, Milliseconds, TimerOptions, GameState } from "./types";
+import { toDurationString } from "../../utils";
+import {
+  Side,
+  Seconds,
+  Milliseconds,
+  TimerOptions,
+  GameState,
+} from "../../types";
 
 interface IProps {
   side: Side;
@@ -26,7 +32,7 @@ class ChessClockFace extends Component<IProps, IState> {
   state: IState = {
     displayedTime: this.props.options.startingTime,
     timeLeft: this.props.options.startingTime * 1000,
-    ranOutOfTimeIsMe: false
+    ranOutOfTimeIsMe: false,
   };
   componentDidMount() {
     const updateIntervalID = window.setInterval(() => {
@@ -55,7 +61,7 @@ class ChessClockFace extends Component<IProps, IState> {
         ranOutOfTimeIsMe: false,
         delayTimeoutID: undefined,
         updateIntervalID: undefined,
-        countdownStartTime: undefined
+        countdownStartTime: undefined,
       },
       this.props.onThisComponentDoneResetting
     );
@@ -74,7 +80,7 @@ class ChessClockFace extends Component<IProps, IState> {
         1000 * this.props.options.delay
       );
       this.setState({
-        delayTimeoutID: delayTimeoutID
+        delayTimeoutID: delayTimeoutID,
       });
     } else if (
       (prevProps.isItMyTurn &&
@@ -90,13 +96,13 @@ class ChessClockFace extends Component<IProps, IState> {
             timeLeft:
               prevState.timeLeft - Date.now() + prevState.countdownStartTime,
             countdownStartTime: undefined,
-            delayTimeoutID: undefined
+            delayTimeoutID: undefined,
           };
         } else {
           clearTimeout(prevState.delayTimeoutID);
           return {
             timeLeft: prevState.timeLeft,
-            delayTimeoutID: undefined
+            delayTimeoutID: undefined,
           };
         }
       });
@@ -122,7 +128,7 @@ class ChessClockFace extends Component<IProps, IState> {
 
   onDelayElapsed = () => {
     this.setState({
-      countdownStartTime: Date.now()
+      countdownStartTime: Date.now(),
     });
   };
 

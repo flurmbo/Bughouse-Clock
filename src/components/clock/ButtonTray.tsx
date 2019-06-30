@@ -3,8 +3,8 @@ import SettingsIcon from "@material-ui/icons/Settings";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import PauseIcon from "@material-ui/icons/Pause";
 import { withStyles } from "@material-ui/core/styles";
-import { GameState } from "./types";
-import { isCordova } from "./utils";
+import { GameState } from "../../types";
+import { isCordova } from "../../utils";
 
 declare let navigator: any;
 
@@ -20,8 +20,8 @@ interface IProps {
 const styles = {
   root: {
     width: "70%",
-    height: "auto"
-  }
+    height: "auto",
+  },
 };
 
 class ButtonTray extends Component<IProps> {

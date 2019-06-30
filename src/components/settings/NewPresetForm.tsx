@@ -9,7 +9,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
-import { TimerOptions } from "./types";
+import { TimerOptions } from "../../types";
 import SettingsAppBar from "./SettingsAppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
@@ -41,9 +41,6 @@ function SettingsMenu(props: IProps) {
               key={text}
               onClick={props.setTimerOptions(timerOptions)}
             >
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>
             <Divider />
