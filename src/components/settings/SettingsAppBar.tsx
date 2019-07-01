@@ -40,14 +40,16 @@ function SettingsAppBar(props: IProps) {
             <IconButton color="inherit" edge="end">
               <AddIcon />
             </IconButton>
-            <IconButton color="inherit" edge="end">
-              <EditIcon
-                onClick={() =>
-                  props.setShowEditDeletePresetButtons(
-                    !props.showEditDeletePresetButtons
-                  )
-                }
-              />
+            <IconButton
+              color="inherit"
+              edge="end"
+              onClick={() =>
+                props.setShowEditDeletePresetButtons(
+                  !props.showEditDeletePresetButtons
+                )
+              }
+            >
+              <EditIcon />
             </IconButton>
             <OptionsDropDown
               setTimerOptions={props.setTimerOptions}

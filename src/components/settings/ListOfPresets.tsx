@@ -13,30 +13,45 @@ interface IProps {
   presets: Preset[];
   showEditDeletePresetButtons: boolean;
   setDeletePresetDialogIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectedPreset: React.Dispatch<React.SetStateAction<number>>;
   setTimerOptions: (newTimerOptions: Partial<TimerOptions>) => () => void;
+  updatePresets: (presets: Preset[]) => void;
 }
 
 function OptionsDropDown(props: IProps) {
-  const { setTimerOptions, presets } = props;
+  function onClickDeleteButton(id: number) {
+    return () => {
+      setDeletePresetDialogIsOpen(true);
+      setSelectedPreset(id);
+    };
+  }
+
+  const {
+    setTimerOptions,
+    presets,
+    showEditDeletePresetButtons,
+    setDeletePresetDialogIsOpen,
+    setSelectedPreset,
+  } = props;
   return (
     <List>
-      {props.presets.map(preset => {
-        const { text, startingTime, delay } = preset;
+      {presets.map(preset => {
+        const { text, startingTime, delay, id } = preset;
         return (
-          <React.Fragment key={text}>
+          <React.Fragment key={id}>
             <ListItem
+              key={id}
               button
-              key={text}
-              onClick={props.setTimerOptions({ delay, startingTime })}
+              // onClick={setTimerOptions({ delay, startingTime })}
             >
               <ListItemText primary={text} />
-              {props.showEditDeletePresetButtons && (
+              {showEditDeletePresetButtons && (
                 <React.Fragment>
                   <IconButton color="inherit" edge="end">
                     <EditIcon />
                   </IconButton>
                   <IconButton
-                    onClick={() => props.setDeletePresetDialogIsOpen(true)}
+                    onClick={onClickDeleteButton(id)}
                     color="inherit"
                     edge="end"
                   >

@@ -20,6 +20,7 @@ interface IProps {
   setTimerOptions: (newTimerOptions: Partial<TimerOptions>) => () => void;
   timerOptions: TimerOptions;
   presets: Preset[];
+  updatePresets: (presets: Preset[]) => void;
 }
 
 const useStyles = makeStyles({
@@ -29,7 +30,11 @@ const useStyles = makeStyles({
 });
 
 function SettingsMenu(props: IProps) {
-  const { open, setTimerOptions, timerOptions, presets } = props;
+  function onYesDelete() {
+    updatePresets(presets.filter(preset => preset.id != selectedPreset));
+    setDeletePresetDialogIsOpen(false);
+  }
+  const { open, setTimerOptions, timerOptions, presets, updatePresets } = props;
   const classes = useStyles();
   const [
     showEditDeletePresetButtons,
@@ -38,6 +43,7 @@ function SettingsMenu(props: IProps) {
   const [deletePresetDialogIsOpen, setDeletePresetDialogIsOpen] = useState(
     false
   );
+  const [selectedPreset, setSelectedPreset] = useState(0);
   return (
     <React.Fragment>
       <CssBaseline />
@@ -57,15 +63,19 @@ function SettingsMenu(props: IProps) {
           <ListOfPresets
             presets={presets}
             showEditDeletePresetButtons={showEditDeletePresetButtons}
-            setDeletePresetDialogIsOpen={setShowEditDeletePresetButtons}
+            setDeletePresetDialogIsOpen={setDeletePresetDialogIsOpen}
             setTimerOptions={setTimerOptions}
+            updatePresets={updatePresets}
+            setSelectedPreset={setSelectedPreset}
           />
         </Container>
       </Drawer>
       <ConfirmationDialog
         open={deletePresetDialogIsOpen}
-        handleYes={() => {}}
-        handleNo={() => {}}
+        handleYes={onYesDelete}
+        handleNo={() => {
+          setDeletePresetDialogIsOpen(false);
+        }}
         text={"Are you sure you want to delete this preset?"}
       />
     </React.Fragment>

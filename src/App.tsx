@@ -13,8 +13,8 @@ const OPTIONS: TimerOptions = {
   singleTap: false,
 };
 const STARTING_PRESETS: Preset[] = [
-  { text: "5|5", delay: 5, startingTime: 5 * 60 },
-  { text: "2|2", delay: 2, startingTime: 2 * 60 },
+  { text: "5|5", delay: 5, startingTime: 5 * 60, id: 0 },
+  { text: "2|2", delay: 2, startingTime: 2 * 60, id: 1 },
 ];
 interface IState {
   gameState: GameState;
@@ -39,7 +39,9 @@ class App extends Component<any, IState> {
     const onTimesUpSound = new Audio("onTimesUp.mp3");
     onTimesUpSound.play();
   };
-
+  updatePresets = (newPresets: Preset[]) => {
+    this.setState({ presets: newPresets });
+  };
   onThisComponentDoneResetting = () => {
     this.setState(
       state => ({
@@ -140,6 +142,7 @@ class App extends Component<any, IState> {
           setTimerOptions={this.setTimerOptions}
           timerOptions={timerOptions}
           presets={presets}
+          updatePresets={this.updatePresets}
         />
         <ConfirmationDialog
           open={resetDialogIsOpen}
