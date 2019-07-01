@@ -8,6 +8,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import IconButton from "@material-ui/core/IconButton";
 import EditIcon from "@material-ui/icons/Edit";
 import AddIcon from "@material-ui/icons/AddCircle";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import { TimerOptions } from "../../types";
 
 interface IProps {
@@ -30,31 +31,53 @@ function ElevationScroll(props: any) {
   });
 }
 function SettingsAppBar(props: IProps) {
+  const {
+    setTimerOptions,
+    timerOptions,
+    setShowEditDeletePresetButtons,
+    showEditDeletePresetButtons,
+  } = props;
+  const appBarDisplayText = showEditDeletePresetButtons
+    ? "Edit or delete presets"
+    : "Settings";
   const classes = useStyles();
   return (
     <React.Fragment>
       <ElevationScroll>
-        <AppBar color="primary">
+        <AppBar color={showEditDeletePresetButtons ? "secondary" : "primary"}>
           <Toolbar>
-            <Typography className={classes.title}>Settings</Typography>
-            <IconButton color="inherit" edge="end">
-              <AddIcon />
-            </IconButton>
-            <IconButton
-              color="inherit"
-              edge="end"
-              onClick={() =>
-                props.setShowEditDeletePresetButtons(
-                  !props.showEditDeletePresetButtons
-                )
-              }
-            >
-              <EditIcon />
-            </IconButton>
-            <OptionsDropDown
-              setTimerOptions={props.setTimerOptions}
-              timerOptions={props.timerOptions}
-            />
+            {showEditDeletePresetButtons && (
+              <IconButton
+                color="inherit"
+                edge="start"
+                onClick={() => setShowEditDeletePresetButtons(false)}
+              >
+                <ArrowBackIcon />
+              </IconButton>
+            )}
+            <Typography className={classes.title}>
+              {appBarDisplayText}
+            </Typography>
+            {!showEditDeletePresetButtons && (
+              <React.Fragment>
+                <IconButton color="inherit" edge="end">
+                  <AddIcon />
+                </IconButton>
+                <IconButton
+                  color="inherit"
+                  edge="end"
+                  onClick={() =>
+                    setShowEditDeletePresetButtons(!showEditDeletePresetButtons)
+                  }
+                >
+                  <EditIcon />
+                </IconButton>
+                <OptionsDropDown
+                  setTimerOptions={setTimerOptions}
+                  timerOptions={timerOptions}
+                />
+              </React.Fragment>
+            )}
           </Toolbar>
         </AppBar>
       </ElevationScroll>
