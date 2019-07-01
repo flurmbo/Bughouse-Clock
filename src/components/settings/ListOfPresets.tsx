@@ -41,7 +41,7 @@ function OptionsDropDown(props: IProps) {
           <React.Fragment key={id}>
             <ListItem
               key={id}
-              button={!showEditDeletePresetButtons}
+              button={!showEditDeletePresetButtons as any}
               onClick={
                 showEditDeletePresetButtons
                   ? undefined
