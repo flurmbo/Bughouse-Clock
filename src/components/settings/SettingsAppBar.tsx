@@ -13,6 +13,8 @@ import { TimerOptions } from "../../types";
 interface IProps {
   setTimerOptions: (newTimerOptions: Partial<TimerOptions>) => () => void;
   timerOptions: TimerOptions;
+  setShowEditDeletePresetButtons: React.Dispatch<React.SetStateAction<boolean>>;
+  showEditDeletePresetButtons: boolean;
 }
 const useStyles = makeStyles({
   title: {
@@ -39,7 +41,13 @@ function SettingsAppBar(props: IProps) {
               <AddIcon />
             </IconButton>
             <IconButton color="inherit" edge="end">
-              <EditIcon />
+              <EditIcon
+                onClick={() =>
+                  props.setShowEditDeletePresetButtons(
+                    !props.showEditDeletePresetButtons
+                  )
+                }
+              />
             </IconButton>
             <OptionsDropDown
               setTimerOptions={props.setTimerOptions}

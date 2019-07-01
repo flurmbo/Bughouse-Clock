@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import Button from "@material-ui/core/Button";
@@ -7,8 +7,11 @@ import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
+import IconButton from "@material-ui/core/IconButton";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
+import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
 import { TimerOptions } from "../../types";
 import SettingsAppBar from "./SettingsAppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -28,6 +31,10 @@ const useStyles = makeStyles({
 
 function SettingsMenu(props: IProps) {
   const classes = useStyles();
+  const [
+    showEditDeletePresetButtons,
+    setShowEditDeletePresetButtons,
+  ] = useState(false);
   const list = (
     <div role="presentation">
       <List>
@@ -42,6 +49,16 @@ function SettingsMenu(props: IProps) {
               onClick={props.setTimerOptions(timerOptions)}
             >
               <ListItemText primary={text} />
+              {showEditDeletePresetButtons && (
+                <React.Fragment>
+                  <IconButton color="inherit" edge="end">
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton color="inherit" edge="end">
+                    <DeleteIcon />
+                  </IconButton>
+                </React.Fragment>
+              )}
             </ListItem>
             <Divider />
           </React.Fragment>
@@ -62,6 +79,8 @@ function SettingsMenu(props: IProps) {
         <SettingsAppBar
           setTimerOptions={props.setTimerOptions}
           timerOptions={props.timerOptions}
+          setShowEditDeletePresetButtons={setShowEditDeletePresetButtons}
+          showEditDeletePresetButtons={showEditDeletePresetButtons}
         />
         <Container>{list}</Container>
       </Drawer>

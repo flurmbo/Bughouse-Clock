@@ -1,72 +1,79 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Drawer from "@material-ui/core/Drawer";
-import Button from "@material-ui/core/Button";
-import List from "@material-ui/core/List";
-import Divider from "@material-ui/core/Divider";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
+import IconButton from "@material-ui/core/IconButton";
+import MoreIcon from "@material-ui/icons/MoreVert";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import Checkbox from "@material-ui/core/Checkbox";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { TimerOptions } from "../../types";
-import SettingsAppBar from "./SettingsAppBar";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Container from "@material-ui/core/Container";
 
 interface IProps {
-  open: boolean;
-  setTimerOptions: (newTimerOptions: Partial<TimerOptions>) => () => void;
   timerOptions: TimerOptions;
+  setTimerOptions: (
+    newTimerOptions: Partial<TimerOptions>,
+    reset?: boolean
+  ) => () => void;
 }
 
-const useStyles = makeStyles({
-  drawerPaper: {
-    width: "100%",
-  },
-});
+function OptionsDropDown(props: IProps) {
+  const [anchorEl, setAnchorEl] = React.useState(null);
 
-function SettingsMenu(props: IProps) {
-  const classes = useStyles();
-  const list = (
-    <div role="presentation">
-      <List>
-        {[
-          { text: "5|5", timerOptions: { delay: 5, startingTime: 5 * 60 } },
-          { text: "2|2", timerOptions: { delay: 2, startingTime: 2 * 60 } },
-        ].map(({ text, timerOptions }, index) => (
-          <React.Fragment key={text}>
-            <ListItem
-              button
-              key={text}
-              onClick={props.setTimerOptions(timerOptions)}
-            >
-              <ListItemText primary={text} />
-            </ListItem>
-            <Divider />
-          </React.Fragment>
-        ))}
-      </List>
-    </div>
-  );
+  function handleClick(e: any) {
+    setAnchorEl(e.currentTarget);
+  }
 
+  function handleClose() {
+    setAnchorEl(null);
+  }
+
+  function onClickFullScreen(e: any) {
+    if (
+      e.target.getAttribute("type") == "checkbox" ||
+      e.target.getAttribute("role") == "menuitem"
+    ) {
+      props.setTimerOptions(
+        { fullScreen: !props.timerOptions.fullScreen },
+        false
+      )();
+    }
+  }
+  function onClickSingleTap(e: any) {
+    if (
+      e.target.getAttribute("type") == "checkbox" ||
+      e.target.getAttribute("role") == "menuitem"
+    ) {
+      props.setTimerOptions(
+        { singleTap: !props.timerOptions.singleTap },
+        false
+      )();
+    }
+  }
   return (
     <React.Fragment>
-      <CssBaseline />
-      <Drawer
-        open={props.open}
-        classes={{
-          paper: classes.drawerPaper,
-        }}
+      <IconButton
+        color="inherit"
+        edge="end"
+        aria-haspopup="true"
+        onClick={handleClick}
       >
-        <SettingsAppBar
-          setTimerOptions={props.setTimerOptions}
-          timerOptions={props.timerOptions}
-        />
-        <Container>{list}</Container>
-      </Drawer>
+        <MoreIcon />
+      </IconButton>
+      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
+        <MenuItem onClick={onClickFullScreen}>
+          <FormControlLabel
+            control={<Checkbox checked={props.timerOptions.fullScreen} />}
+            label="Full Screen"
+          />
+        </MenuItem>
+        <MenuItem onClick={onClickSingleTap}>
+          <FormControlLabel
+            control={<Checkbox checked={props.timerOptions.singleTap} />}
+            label="Single tap starts timers"
+          />
+        </MenuItem>
+      </Menu>
     </React.Fragment>
   );
 }
 
-export default SettingsMenu;
+export default OptionsDropDown;
