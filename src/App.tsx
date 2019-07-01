@@ -3,8 +3,8 @@ import "./App.css";
 import ChessClock from "./components/clock/ChessClock";
 import ButtonTray from "./components/clock/ButtonTray";
 import SettingsMenu from "./components/settings/SettingsMenu";
-import { TimerOptions, GameState } from "./types";
-import ConfirmResetDialog from "./components/ConfirmResetDialog";
+import { TimerOptions, GameState, Preset } from "./types";
+import ConfirmationDialog from "./components/ConfirmationDialog";
 
 const OPTIONS: TimerOptions = {
   delay: 5,
@@ -12,13 +12,17 @@ const OPTIONS: TimerOptions = {
   fullScreen: false,
   singleTap: false,
 };
-
+const STARTING_PRESETS: Preset[] = [
+  { text: "5|5", delay: 5, startingTime: 5 * 60 },
+  { text: "2|2", delay: 2, startingTime: 2 * 60 },
+];
 interface IState {
   gameState: GameState;
   timerOptions: TimerOptions;
   settingsIsOpen: boolean;
   numberOfComponentsDoneResetting?: number;
   resetDialogIsOpen: boolean;
+  presets: Preset[];
 }
 
 class App extends Component<any, IState> {
@@ -27,6 +31,7 @@ class App extends Component<any, IState> {
     timerOptions: OPTIONS,
     settingsIsOpen: false,
     resetDialogIsOpen: false,
+    presets: STARTING_PRESETS,
   };
 
   onTimesUp = () => {
@@ -103,6 +108,7 @@ class App extends Component<any, IState> {
       timerOptions,
       settingsIsOpen,
       resetDialogIsOpen,
+      presets,
     } = this.state;
     return (
       <div className="App">
@@ -133,11 +139,13 @@ class App extends Component<any, IState> {
           open={settingsIsOpen}
           setTimerOptions={this.setTimerOptions}
           timerOptions={timerOptions}
+          presets={presets}
         />
-        <ConfirmResetDialog
+        <ConfirmationDialog
           open={resetDialogIsOpen}
           handleYes={this.handleYes}
           handleNo={this.handleNo}
+          text={"Are you sure you want to reset the clock?"}
         />
       </div>
     );

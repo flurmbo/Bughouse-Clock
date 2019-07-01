@@ -1,6 +1,6 @@
 export enum Side {
   Top = "TOP",
-  Bottom = "BOTTOM"
+  Bottom = "BOTTOM",
 }
 
 export enum GameState {
@@ -8,7 +8,7 @@ export enum GameState {
   Paused = "PAUSED",
   InProgress = "IN_PROGRESS",
   GameOver = "GAME_OVER",
-  Resetting = "RESETTING"
+  Resetting = "RESETTING",
 }
 
 export type Seconds = number;
@@ -20,4 +20,10 @@ export interface TimerOptions {
   startingTime: Seconds;
   fullScreen: boolean;
   singleTap: boolean;
+}
+
+export interface Preset {
+  text: string;
+  delay: number;
+  startingTime: number;
 }

@@ -8,12 +8,10 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import IconButton from "@material-ui/core/IconButton";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
-import EditIcon from "@material-ui/icons/Edit";
-import DeleteIcon from "@material-ui/icons/Delete";
-import { TimerOptions } from "../../types";
+import { TimerOptions, Preset } from "../../types";
+import ConfirmationDialog from "../ConfirmationDialog";
 import SettingsAppBar from "./SettingsAppBar";
+import ListOfPresets from "./ListOfPresets";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 
@@ -21,6 +19,7 @@ interface IProps {
   open: boolean;
   setTimerOptions: (newTimerOptions: Partial<TimerOptions>) => () => void;
   timerOptions: TimerOptions;
+  presets: Preset[];
 }
 
 const useStyles = makeStyles({
@@ -30,60 +29,45 @@ const useStyles = makeStyles({
 });
 
 function SettingsMenu(props: IProps) {
+  const { open, setTimerOptions, timerOptions, presets } = props;
   const classes = useStyles();
   const [
     showEditDeletePresetButtons,
     setShowEditDeletePresetButtons,
   ] = useState(false);
-  const list = (
-    <div role="presentation">
-      <List>
-        {[
-          { text: "5|5", timerOptions: { delay: 5, startingTime: 5 * 60 } },
-          { text: "2|2", timerOptions: { delay: 2, startingTime: 2 * 60 } },
-        ].map(({ text, timerOptions }, index) => (
-          <React.Fragment key={text}>
-            <ListItem
-              button
-              key={text}
-              onClick={props.setTimerOptions(timerOptions)}
-            >
-              <ListItemText primary={text} />
-              {showEditDeletePresetButtons && (
-                <React.Fragment>
-                  <IconButton color="inherit" edge="end">
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton color="inherit" edge="end">
-                    <DeleteIcon />
-                  </IconButton>
-                </React.Fragment>
-              )}
-            </ListItem>
-            <Divider />
-          </React.Fragment>
-        ))}
-      </List>
-    </div>
+  const [deletePresetDialogIsOpen, setDeletePresetDialogIsOpen] = useState(
+    false
   );
-
   return (
     <React.Fragment>
       <CssBaseline />
       <Drawer
-        open={props.open}
+        open={open}
         classes={{
           paper: classes.drawerPaper,
         }}
       >
         <SettingsAppBar
-          setTimerOptions={props.setTimerOptions}
-          timerOptions={props.timerOptions}
+          setTimerOptions={setTimerOptions}
+          timerOptions={timerOptions}
           setShowEditDeletePresetButtons={setShowEditDeletePresetButtons}
           showEditDeletePresetButtons={showEditDeletePresetButtons}
         />
-        <Container>{list}</Container>
+        <Container>
+          <ListOfPresets
+            presets={presets}
+            showEditDeletePresetButtons={showEditDeletePresetButtons}
+            setDeletePresetDialogIsOpen={setShowEditDeletePresetButtons}
+            setTimerOptions={setTimerOptions}
+          />
+        </Container>
       </Drawer>
+      <ConfirmationDialog
+        open={deletePresetDialogIsOpen}
+        handleYes={() => {}}
+        handleNo={() => {}}
+        text={"Are you sure you want to delete this preset?"}
+      />
     </React.Fragment>
   );
 }

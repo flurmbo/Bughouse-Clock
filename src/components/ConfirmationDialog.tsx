@@ -9,13 +9,14 @@ interface IProps {
   open: boolean;
   handleYes: () => void;
   handleNo: () => void;
+  text: string;
 }
 
-function ConfirmResetDialog(props: IProps) {
+function ConfirmationDialog(props: IProps) {
   const { open, handleYes, handleNo } = props;
   return (
     <Dialog open={open}>
-      <DialogTitle>{"Are you sure you want to reset the clock?"}</DialogTitle>
+      <DialogTitle>{props.text}</DialogTitle>
       <DialogContentText />
       <DialogActions>
         <Button onClick={handleNo}>No</Button>
@@ -25,4 +26,4 @@ function ConfirmResetDialog(props: IProps) {
   );
 }
 
-export default ConfirmResetDialog;
+export default ConfirmationDialog;
