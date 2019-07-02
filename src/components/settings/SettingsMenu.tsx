@@ -98,8 +98,13 @@ function SettingsMenu(props: IProps) {
       <EditPresetForm
         open={editPresetFormIsOpen}
         updatePresets={updatePresets}
-        preset={presets[selectedPreset]}
+        editedPreset={
+          selectedPreset
+            ? presets.find(preset => preset.id == selectedPreset)
+            : undefined
+        }
         setEditPresetFormIsOpen={setEditPresetFormIsOpen}
+        presets={presets}
       />
     </React.Fragment>
   );

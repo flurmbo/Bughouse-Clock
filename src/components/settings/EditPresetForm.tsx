@@ -6,6 +6,7 @@ import EditPresetFormAppBar from "./EditPresetFormAppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import TextField from "@material-ui/core/TextField";
+import { Button } from "@material-ui/core";
 
 interface IProps {
   open: boolean;
@@ -33,6 +34,14 @@ function EditPresetForm(props: IProps) {
       })
     );
   }
+  function handleChange(name: string) {
+    return (event: any) => {
+      setUnsavedPreset(
+        Object.assign({}, unsavedPreset, { [name]: event.target.value })
+      );
+    };
+  }
+
   const {
     open,
     editedPreset,
@@ -56,6 +65,12 @@ function EditPresetForm(props: IProps) {
         />
         <Container>
           {editedPreset && `You have selected preset "${editedPreset.text}".`}
+          <TextField
+            value={unsavedPreset ? unsavedPreset.text : ""}
+            label="text"
+            onChange={handleChange("text")}
+          />
+          <Button onClick={savePreset}>Save</Button>
         </Container>
       </Drawer>
     </React.Fragment>

@@ -13,8 +13,8 @@ const OPTIONS: TimerOptions = {
   singleTap: false,
 };
 const STARTING_PRESETS: Preset[] = [
-  { text: "5|5", delay: 5, startingTime: 5 * 60, id: 0 },
-  { text: "2|2", delay: 2, startingTime: 2 * 60, id: 1 },
+  { text: "5|5", delay: 5, startingTime: 5 * 60, id: 1 },
+  { text: "2|2", delay: 2, startingTime: 2 * 60, id: 2 },
 ];
 interface IState {
   gameState: GameState;
