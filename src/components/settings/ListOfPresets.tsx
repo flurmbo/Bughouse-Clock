@@ -14,6 +14,8 @@ interface IProps {
   showEditDeletePresetButtons: boolean;
   setDeletePresetDialogIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedPreset: React.Dispatch<React.SetStateAction<number>>;
+  setEditPresetFormIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+
   setTimerOptions: (newTimerOptions: Partial<TimerOptions>) => () => void;
   updatePresets: (presets: Preset[]) => void;
 }
@@ -26,12 +28,20 @@ function OptionsDropDown(props: IProps) {
     };
   }
 
+  function onClickEditButton(id: number) {
+    return () => {
+      setEditPresetFormIsOpen(true);
+      setSelectedPreset(id);
+    };
+  }
+
   const {
     setTimerOptions,
     presets,
     showEditDeletePresetButtons,
     setDeletePresetDialogIsOpen,
     setSelectedPreset,
+    setEditPresetFormIsOpen,
   } = props;
   return (
     <List>
@@ -51,7 +61,11 @@ function OptionsDropDown(props: IProps) {
               <ListItemText primary={text} />
               {showEditDeletePresetButtons && (
                 <React.Fragment>
-                  <IconButton color="inherit" edge="end">
+                  <IconButton
+                    color="inherit"
+                    edge="end"
+                    onClick={onClickEditButton(id)}
+                  >
                     <EditIcon />
                   </IconButton>
                   <IconButton

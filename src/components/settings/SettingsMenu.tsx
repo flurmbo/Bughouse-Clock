@@ -1,15 +1,9 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
-import Button from "@material-ui/core/Button";
-import List from "@material-ui/core/List";
-import Divider from "@material-ui/core/Divider";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import IconButton from "@material-ui/core/IconButton";
 import { TimerOptions, Preset } from "../../types";
 import ConfirmationDialog from "../ConfirmationDialog";
+import EditPresetForm from "./EditPresetForm";
 import SettingsAppBar from "./SettingsAppBar";
 import ListOfPresets from "./ListOfPresets";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -51,6 +45,7 @@ function SettingsMenu(props: IProps) {
     false
   );
   const [selectedPreset, setSelectedPreset] = useState(0);
+  const [editPresetFormIsOpen, setEditPresetFormIsOpen] = useState(false);
   return (
     <React.Fragment>
       <CssBaseline />
@@ -71,6 +66,7 @@ function SettingsMenu(props: IProps) {
             presets={presets}
             showEditDeletePresetButtons={showEditDeletePresetButtons}
             setDeletePresetDialogIsOpen={setDeletePresetDialogIsOpen}
+            setEditPresetFormIsOpen={setEditPresetFormIsOpen}
             setTimerOptions={setTimerOptions}
             updatePresets={updatePresets}
             setSelectedPreset={setSelectedPreset}
@@ -89,6 +85,12 @@ function SettingsMenu(props: IProps) {
           setDeletePresetDialogIsOpen(false);
         }}
         text={"Are you sure you want to delete this preset?"}
+      />
+      <EditPresetForm
+        open={editPresetFormIsOpen}
+        updatePresets={updatePresets}
+        preset={presets[selectedPreset]}
+        setEditPresetFormIsOpen={setEditPresetFormIsOpen}
       />
     </React.Fragment>
   );
