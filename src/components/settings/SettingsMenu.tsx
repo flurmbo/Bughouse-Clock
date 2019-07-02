@@ -14,6 +14,8 @@ import SettingsAppBar from "./SettingsAppBar";
 import ListOfPresets from "./ListOfPresets";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
+import Fab from "@material-ui/core/Fab";
+import AddIcon from "@material-ui/icons/Add";
 
 interface IProps {
   open: boolean;
@@ -23,11 +25,16 @@ interface IProps {
   updatePresets: (presets: Preset[]) => void;
 }
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   drawerPaper: {
     width: "100%",
   },
-});
+  fab: {
+    position: "absolute",
+    bottom: theme.spacing(2),
+    right: theme.spacing(2),
+  },
+}));
 
 function SettingsMenu(props: IProps) {
   function onYesDelete() {
@@ -69,6 +76,11 @@ function SettingsMenu(props: IProps) {
             setSelectedPreset={setSelectedPreset}
           />
         </Container>
+        {!showEditDeletePresetButtons && (
+          <Fab color="secondary" aria-label="Add" className={classes.fab}>
+            <AddIcon />
+          </Fab>
+        )}
       </Drawer>
       <ConfirmationDialog
         open={deletePresetDialogIsOpen}

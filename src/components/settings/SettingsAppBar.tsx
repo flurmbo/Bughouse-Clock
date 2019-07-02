@@ -7,7 +7,6 @@ import OptionsDropDown from "./OptionsDropDown";
 import { makeStyles } from "@material-ui/core/styles";
 import IconButton from "@material-ui/core/IconButton";
 import EditIcon from "@material-ui/icons/Edit";
-import AddIcon from "@material-ui/icons/AddCircle";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import { TimerOptions } from "../../types";
 
@@ -60,9 +59,6 @@ function SettingsAppBar(props: IProps) {
             </Typography>
             {!showEditDeletePresetButtons && (
               <React.Fragment>
-                <IconButton color="inherit" edge="end">
-                  <AddIcon />
-                </IconButton>
                 <IconButton
                   color="inherit"
                   edge="end"
