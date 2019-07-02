@@ -15,6 +15,7 @@ interface IProps {
   timerOptions: TimerOptions;
   setShowEditDeletePresetButtons: React.Dispatch<React.SetStateAction<boolean>>;
   showEditDeletePresetButtons: boolean;
+  closeSettings: () => void;
 }
 const useStyles = makeStyles({
   title: {
@@ -35,6 +36,7 @@ function SettingsAppBar(props: IProps) {
     timerOptions,
     setShowEditDeletePresetButtons,
     showEditDeletePresetButtons,
+    closeSettings,
   } = props;
   const appBarDisplayText = showEditDeletePresetButtons
     ? "Edit or delete presets"
@@ -45,15 +47,18 @@ function SettingsAppBar(props: IProps) {
       <ElevationScroll>
         <AppBar color={showEditDeletePresetButtons ? "secondary" : "primary"}>
           <Toolbar>
-            {showEditDeletePresetButtons && (
-              <IconButton
-                color="inherit"
-                edge="start"
-                onClick={() => setShowEditDeletePresetButtons(false)}
-              >
-                <ArrowBackIcon />
-              </IconButton>
-            )}
+            <IconButton
+              color="inherit"
+              edge="start"
+              onClick={
+                showEditDeletePresetButtons
+                  ? () => setShowEditDeletePresetButtons(false)
+                  : closeSettings
+              }
+            >
+              <ArrowBackIcon />
+            </IconButton>
+
             <Typography className={classes.title}>
               {appBarDisplayText}
             </Typography>

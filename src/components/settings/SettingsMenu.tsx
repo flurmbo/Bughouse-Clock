@@ -16,6 +16,7 @@ interface IProps {
   setTimerOptions: (newTimerOptions: Partial<TimerOptions>) => () => void;
   timerOptions: TimerOptions;
   presets: Preset[];
+  closeSettings: () => void;
   updatePresets: (presets: Preset[]) => void;
 }
 
@@ -35,7 +36,14 @@ function SettingsMenu(props: IProps) {
     updatePresets(presets.filter(preset => preset.id != selectedPreset));
     setDeletePresetDialogIsOpen(false);
   }
-  const { open, setTimerOptions, timerOptions, presets, updatePresets } = props;
+  const {
+    open,
+    setTimerOptions,
+    timerOptions,
+    presets,
+    updatePresets,
+    closeSettings,
+  } = props;
   const classes = useStyles();
   const [
     showEditDeletePresetButtons,
@@ -60,6 +68,7 @@ function SettingsMenu(props: IProps) {
           timerOptions={timerOptions}
           setShowEditDeletePresetButtons={setShowEditDeletePresetButtons}
           showEditDeletePresetButtons={showEditDeletePresetButtons}
+          closeSettings={closeSettings}
         />
         <Container>
           <ListOfPresets

@@ -80,6 +80,9 @@ class App extends Component<any, IState> {
 
   handleNo = () => {};
 
+  closeSettings = () => {
+    this.setState({ settingsIsOpen: false });
+  };
   openConfirmResetDialog = () => {
     this.pauseGame();
     this.setState({ resetDialogIsOpen: true });
@@ -143,6 +146,7 @@ class App extends Component<any, IState> {
           timerOptions={timerOptions}
           presets={presets}
           updatePresets={this.updatePresets}
+          closeSettings={this.closeSettings}
         />
         <ConfirmationDialog
           open={resetDialogIsOpen}
