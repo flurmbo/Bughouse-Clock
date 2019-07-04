@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import { TimerOptions, Preset } from "../../types";
@@ -50,7 +50,13 @@ function EditPresetForm(props: IProps) {
     presets,
   } = props;
   const [unsavedPreset, setUnsavedPreset] = useState(editedPreset);
+
+  useEffect(() => {
+    setUnsavedPreset(editedPreset);
+  }, [editedPreset]);
+
   const classes = useStyles();
+
   return (
     <React.Fragment>
       <CssBaseline />
@@ -59,6 +65,7 @@ function EditPresetForm(props: IProps) {
         classes={{
           paper: classes.drawerPaper,
         }}
+        keepMounted={false}
       >
         <EditPresetFormAppBar
           setEditPresetFormIsOpen={setEditPresetFormIsOpen}

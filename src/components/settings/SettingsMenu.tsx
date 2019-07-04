@@ -52,6 +52,7 @@ function SettingsMenu(props: IProps) {
   const [deletePresetDialogIsOpen, setDeletePresetDialogIsOpen] = useState(
     false
   );
+
   const [selectedPreset, setSelectedPreset] = useState(0);
   const [editPresetFormIsOpen, setEditPresetFormIsOpen] = useState(false);
   return (
