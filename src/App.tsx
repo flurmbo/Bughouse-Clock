@@ -5,6 +5,7 @@ import ButtonTray from "./components/clock/ButtonTray";
 import SettingsMenu from "./components/settings/SettingsMenu";
 import { TimerOptions, GameState, Preset } from "./types";
 import ConfirmationDialog from "./components/ConfirmationDialog";
+import { v4 as uuid } from "uuid";
 
 const OPTIONS: TimerOptions = {
   delay: 5,
@@ -13,8 +14,8 @@ const OPTIONS: TimerOptions = {
   singleTap: false,
 };
 const STARTING_PRESETS: Preset[] = [
-  { text: "5|5", delay: 5, startingTime: 5 * 60, id: 1 },
-  { text: "2|2", delay: 2, startingTime: 2 * 60, id: 2 },
+  { text: "5|5", delay: 5, startingTime: 5 * 60, id: uuid() },
+  { text: "2|2", delay: 2, startingTime: 2 * 60, id: uuid() },
 ];
 interface IState {
   gameState: GameState;

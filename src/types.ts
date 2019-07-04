@@ -26,5 +26,5 @@ export interface Preset {
   text: string;
   delay: number;
   startingTime: number;
-  id: number;
+  id: string;
 }

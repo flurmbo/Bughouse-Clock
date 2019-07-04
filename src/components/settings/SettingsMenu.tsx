@@ -32,10 +32,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function SettingsMenu(props: IProps) {
-  function onYesDelete() {
-    updatePresets(presets.filter(preset => preset.id != selectedPreset));
-    setDeletePresetDialogIsOpen(false);
-  }
   const {
     open,
     setTimerOptions,
@@ -44,6 +40,16 @@ function SettingsMenu(props: IProps) {
     updatePresets,
     closeSettings,
   } = props;
+
+  function onYesDelete() {
+    updatePresets(presets.filter(preset => preset.id != selectedPreset));
+    setDeletePresetDialogIsOpen(false);
+  }
+
+  function editNewPreset() {
+    updatePresets;
+  }
+
   const classes = useStyles();
   const [
     showEditDeletePresetButtons,
@@ -53,7 +59,7 @@ function SettingsMenu(props: IProps) {
     false
   );
 
-  const [selectedPreset, setSelectedPreset] = useState(0);
+  const [selectedPreset, setSelectedPreset] = useState("");
   const [editPresetFormIsOpen, setEditPresetFormIsOpen] = useState(false);
   return (
     <React.Fragment>
@@ -83,7 +89,12 @@ function SettingsMenu(props: IProps) {
           />
         </Container>
         {!showEditDeletePresetButtons && (
-          <Fab color="secondary" aria-label="Add" className={classes.fab}>
+          <Fab
+            color="secondary"
+            aria-label="Add"
+            className={classes.fab}
+            onClick={editNewPreset}
+          >
             <AddIcon />
           </Fab>
         )}

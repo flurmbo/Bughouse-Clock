@@ -13,7 +13,7 @@ interface IProps {
   presets: Preset[];
   showEditDeletePresetButtons: boolean;
   setDeletePresetDialogIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setSelectedPreset: React.Dispatch<React.SetStateAction<number>>;
+  setSelectedPreset: React.Dispatch<React.SetStateAction<string>>;
   setEditPresetFormIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 
   setTimerOptions: (newTimerOptions: Partial<TimerOptions>) => () => void;
@@ -21,14 +21,14 @@ interface IProps {
 }
 
 function OptionsDropDown(props: IProps) {
-  function onClickDeleteButton(id: number) {
+  function onClickDeleteButton(id: string) {
     return () => {
       setDeletePresetDialogIsOpen(true);
       setSelectedPreset(id);
     };
   }
 
-  function onClickEditButton(id: number) {
+  function onClickEditButton(id: string) {
     return () => {
       setEditPresetFormIsOpen(true);
       setSelectedPreset(id);
