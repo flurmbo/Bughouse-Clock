@@ -10,6 +10,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
+import { v4 as uuid } from "uuid";
 
 interface IProps {
   open: boolean;
@@ -47,7 +48,10 @@ function SettingsMenu(props: IProps) {
   }
 
   function editNewPreset() {
-    updatePresets;
+    const id = uuid();
+    updatePresets([...presets, { text: "", delay: 0, startingTime: 0, id }]);
+    setSelectedPreset(id);
+    setEditPresetFormIsOpen(true);
   }
 
   const classes = useStyles();
