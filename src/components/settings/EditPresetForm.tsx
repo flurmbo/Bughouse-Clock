@@ -6,7 +6,6 @@ import EditPresetFormAppBar from "./EditPresetFormAppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import TextField from "@material-ui/core/TextField";
-import { Button } from "@material-ui/core";
 
 interface IProps {
   open: boolean;
@@ -60,15 +59,10 @@ function EditPresetForm(props: IProps) {
   return (
     <React.Fragment>
       <CssBaseline />
-      <Drawer
-        open={open}
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-        keepMounted={false}
-      >
+      <Drawer open={open} classes={{ paper: classes.drawerPaper }}>
         <EditPresetFormAppBar
           setEditPresetFormIsOpen={setEditPresetFormIsOpen}
+          savePreset={savePreset}
         />
         <Container>
           {editedPreset && `You have selected preset "${editedPreset.text}".`}
@@ -77,7 +71,6 @@ function EditPresetForm(props: IProps) {
             label="text"
             onChange={handleChange("text")}
           />
-          <Button onClick={savePreset}>Save</Button>
         </Container>
       </Drawer>
     </React.Fragment>

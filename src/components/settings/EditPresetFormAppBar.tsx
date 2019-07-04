@@ -7,9 +7,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import IconButton from "@material-ui/core/IconButton";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import { TimerOptions } from "../../types";
+import Button from "@material-ui/core/Button";
 
 interface IProps {
   setEditPresetFormIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  savePreset: () => void;
 }
 const useStyles = makeStyles({
   title: {
@@ -25,7 +27,7 @@ function ElevationScroll(props: any) {
   });
 }
 function EditPresetFormAppBar(props: IProps) {
-  const { setEditPresetFormIsOpen } = props;
+  const { setEditPresetFormIsOpen, savePreset } = props;
   const appBarDisplayText = "Edit preset";
   const classes = useStyles();
   return (
@@ -44,6 +46,9 @@ function EditPresetFormAppBar(props: IProps) {
             <Typography className={classes.title}>
               {appBarDisplayText}
             </Typography>
+            <Button color="inherit" onClick={savePreset}>
+              SAVE
+            </Button>
           </Toolbar>
         </AppBar>
       </ElevationScroll>
