@@ -1,22 +1,23 @@
 import React, { Component } from "react";
-import "./App.css";
-import ChessClock from "./components/clock/ChessClock";
-import ButtonTray from "./components/clock/ButtonTray";
-import SettingsMenu from "./components/settings/SettingsMenu";
-import { TimerOptions, GameState, Preset } from "./types";
-import ConfirmationDialog from "./components/ConfirmationDialog";
 import { v4 as uuid } from "uuid";
+import "./App.css";
+import ButtonTray from "./components/clock/ButtonTray";
+import ChessClock from "./components/clock/ChessClock";
+import ConfirmationDialog from "./components/ConfirmationDialog";
+import SettingsMenu from "./components/settings/SettingsMenu";
+import { GameState, Preset, TimerOptions } from "./types";
 
 const OPTIONS: TimerOptions = {
   delay: 5,
-  startingTime: 5 * 60,
   fullScreen: false,
   singleTap: false,
+  startingTime: 5 * 60,
 };
 const STARTING_PRESETS: Preset[] = [
   { text: "5|5", delay: 5, startingTime: 5 * 60, id: uuid() },
   { text: "2|2", delay: 2, startingTime: 2 * 60, id: uuid() },
 ];
+
 interface IState {
   gameState: GameState;
   timerOptions: TimerOptions;
@@ -29,10 +30,10 @@ interface IState {
 class App extends Component<any, IState> {
   state: IState = {
     gameState: GameState.NotStarted,
-    timerOptions: OPTIONS,
-    settingsIsOpen: false,
-    resetDialogIsOpen: false,
     presets: STARTING_PRESETS,
+    resetDialogIsOpen: false,
+    settingsIsOpen: false,
+    timerOptions: OPTIONS,
   };
 
   onTimesUp = () => {
@@ -51,6 +52,7 @@ class App extends Component<any, IState> {
           : 1,
       }),
       () => {
+        // tslint:disable-next-line:no-console
         console.log(
           "numberDoneResetting is",
           this.state.numberOfComponentsDoneResetting
