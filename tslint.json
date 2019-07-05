@@ -1,5 +1,7 @@
 {
+  "extends": ["tslint:latest", "tslint-react"],
   "rules": {
-    "no-var-keyword": true
+    // override tslint-react rules here
+    "jsx-wrap-multiline": false
   }
 }
