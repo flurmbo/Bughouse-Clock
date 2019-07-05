@@ -5,10 +5,10 @@ import ButtonTray from "./components/clock/ButtonTray";
 import ChessClock from "./components/clock/ChessClock";
 import ConfirmationDialog from "./components/ConfirmationDialog";
 import SettingsMenu from "./components/settings/SettingsMenu";
-import { GameState, Preset, TimerOptions } from "./types";
+import { GameState, IPreset, ITimerOptions } from "./types";
 import { getStoredPresets, savePresetsInLocalStorage } from "./utils";
 
-const OPTIONS: TimerOptions = {
+const OPTIONS: ITimerOptions = {
   delay: 5,
   fullScreen: false,
   singleTap: false,
@@ -17,11 +17,11 @@ const OPTIONS: TimerOptions = {
 
 interface IState {
   gameState: GameState;
-  timerOptions: TimerOptions;
+  timerOptions: ITimerOptions;
   settingsIsOpen: boolean;
   numberOfComponentsDoneResetting?: number;
   resetDialogIsOpen: boolean;
-  presets: Preset[];
+  presets: IPreset[];
 }
 
 class App extends Component<any, IState> {
@@ -38,7 +38,7 @@ class App extends Component<any, IState> {
     const onTimesUpSound = new Audio("onTimesUp.mp3");
     onTimesUpSound.play();
   };
-  updatePresets = (newPresets: Preset[]) => {
+  updatePresets = (newPresets: IPreset[]) => {
     savePresetsInLocalStorage(newPresets);
     this.setState({ presets: newPresets });
   };
@@ -88,7 +88,7 @@ class App extends Component<any, IState> {
     this.pauseGame();
     this.setState({ resetDialogIsOpen: true });
   };
-  setTimerOptions = (newTimerOptions: Partial<TimerOptions>, reset = true) => {
+  setTimerOptions = (newTimerOptions: Partial<ITimerOptions>, reset = true) => {
     return () =>
       this.setState(state => ({
         timerOptions: { ...state.timerOptions, ...newTimerOptions },

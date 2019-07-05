@@ -4,13 +4,13 @@ import {
   Side,
   Seconds,
   Milliseconds,
-  TimerOptions,
+  ITimerOptions,
   GameState,
 } from "../../types";
 
 interface IProps {
   side: Side;
-  options: TimerOptions;
+  options: ITimerOptions;
   onClickHandler: (side: Side) => () => void;
   onTimesUp: () => void;
   gameState: GameState;

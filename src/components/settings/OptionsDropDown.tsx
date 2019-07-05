@@ -1,16 +1,16 @@
-import React from "react";
-import IconButton from "@material-ui/core/IconButton";
-import MoreIcon from "@material-ui/icons/MoreVert";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import { TimerOptions } from "../../types";
+import IconButton from "@material-ui/core/IconButton";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import MoreIcon from "@material-ui/icons/MoreVert";
+import React from "react";
+import { ITimerOptions } from "../../types";
 
 interface IProps {
-  timerOptions: TimerOptions;
+  timerOptions: ITimerOptions;
   setTimerOptions: (
-    newTimerOptions: Partial<TimerOptions>,
+    newTimerOptions: Partial<ITimerOptions>,
     reset?: boolean
   ) => () => void;
 }
@@ -28,8 +28,8 @@ function OptionsDropDown(props: IProps) {
 
   function onClickFullScreen(e: any) {
     if (
-      e.target.getAttribute("type") == "checkbox" ||
-      e.target.getAttribute("role") == "menuitem"
+      e.target.getAttribute("type") === "checkbox" ||
+      e.target.getAttribute("role") === "menuitem"
     ) {
       props.setTimerOptions(
         { fullScreen: !props.timerOptions.fullScreen },
@@ -39,8 +39,8 @@ function OptionsDropDown(props: IProps) {
   }
   function onClickSingleTap(e: any) {
     if (
-      e.target.getAttribute("type") == "checkbox" ||
-      e.target.getAttribute("role") == "menuitem"
+      e.target.getAttribute("type") === "checkbox" ||
+      e.target.getAttribute("role") === "menuitem"
     ) {
       props.setTimerOptions(
         { singleTap: !props.timerOptions.singleTap },

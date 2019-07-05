@@ -1,9 +1,9 @@
-import { Side, Seconds, Preset } from "./types";
 import { v4 as uuid } from "uuid";
+import { IPreset, Seconds, Side } from "./types";
 
 declare let window: any;
 const LOCAL_STORAGE_ITEM = "bughouseTimerPresets";
-const DEFAULT_PRESETS: Preset[] = [
+const DEFAULT_PRESETS: IPreset[] = [
   { text: "5|5", delay: 5, startingTime: 5 * 60, id: uuid() },
   { text: "2|2", delay: 2, startingTime: 2 * 60, id: uuid() },
 ];
@@ -21,7 +21,7 @@ function isCordova() {
   return !!window.cordova;
 }
 
-function getStoredPresets(): Preset[] {
+function getStoredPresets(): IPreset[] {
   const data = localStorage.getItem(LOCAL_STORAGE_ITEM);
   if (data) {
     return JSON.parse(data);
@@ -30,7 +30,7 @@ function getStoredPresets(): Preset[] {
   }
 }
 
-function savePresetsInLocalStorage(presets: Preset[]) {
+function savePresetsInLocalStorage(presets: IPreset[]) {
   localStorage.setItem(LOCAL_STORAGE_ITEM, JSON.stringify(presets));
 }
 

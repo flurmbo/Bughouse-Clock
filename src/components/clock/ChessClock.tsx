@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import ChessClockFace from "./ChessClockFace";
-import { Side, TimerOptions, GameState } from "../../types";
+import { Side, ITimerOptions, GameState } from "../../types";
 import { otherSide } from "../../utils";
 
 interface IProps {
   className: string;
-  options: TimerOptions;
+  options: ITimerOptions;
   onTimesUp: () => void;
   onStartGame: () => void;
   gameState: GameState;

@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Drawer from "@material-ui/core/Drawer";
-import { TimerOptions, Preset } from "../../types";
-import EditPresetFormAppBar from "./EditPresetFormAppBar";
-import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Drawer from "@material-ui/core/Drawer";
+import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
+import React, { useEffect, useState } from "react";
+import { IPreset, ITimerOptions } from "../../types";
+import EditPresetFormAppBar from "./EditPresetFormAppBar";
 
 interface IProps {
   open: boolean;
-  editedPreset?: Preset;
-  presets: Preset[];
-  updatePresets: (presets: Preset[]) => void;
+  editedPreset?: IPreset;
+  presets: IPreset[];
+  updatePresets: (presets: IPreset[]) => void;
   setEditPresetFormIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -25,7 +25,7 @@ function EditPresetForm(props: IProps) {
   function savePreset() {
     updatePresets(
       presets.map(preset => {
-        if (editedPreset && unsavedPreset && preset.id == editedPreset.id) {
+        if (editedPreset && unsavedPreset && preset.id === editedPreset.id) {
           return unsavedPreset;
         } else {
           return preset;

@@ -15,14 +15,14 @@ export type Seconds = number;
 
 export type Milliseconds = number;
 
-export interface TimerOptions {
+export interface ITimerOptions {
   delay: Seconds;
   startingTime: Seconds;
   fullScreen: boolean;
   singleTap: boolean;
 }
 
-export interface Preset {
+export interface IPreset {
   text: string;
   delay: number;
   startingTime: number;

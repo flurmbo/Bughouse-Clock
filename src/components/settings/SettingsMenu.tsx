@@ -6,7 +6,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
 import React, { useState } from "react";
 import { v4 as uuid } from "uuid";
-import { Preset, TimerOptions } from "../../types";
+import { IPreset, ITimerOptions } from "../../types";
 import ConfirmationDialog from "../ConfirmationDialog";
 import EditPresetForm from "./EditPresetForm";
 import ListOfPresets from "./ListOfPresets";
@@ -14,11 +14,11 @@ import SettingsAppBar from "./SettingsAppBar";
 
 interface IProps {
   open: boolean;
-  setTimerOptions: (newTimerOptions: Partial<TimerOptions>) => () => void;
-  timerOptions: TimerOptions;
-  presets: Preset[];
+  setTimerOptions: (newTimerOptions: Partial<ITimerOptions>) => () => void;
+  timerOptions: ITimerOptions;
+  presets: IPreset[];
   closeSettings: () => void;
-  updatePresets: (presets: Preset[]) => void;
+  updatePresets: (presets: IPreset[]) => void;
 }
 
 const useStyles = makeStyles(theme => ({

@@ -1,18 +1,18 @@
-import React from "react";
 import AppBar from "@material-ui/core/AppBar";
+import IconButton from "@material-ui/core/IconButton";
+import { makeStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import useScrollTrigger from "@material-ui/core/useScrollTrigger";
-import OptionsDropDown from "./OptionsDropDown";
-import { makeStyles } from "@material-ui/core/styles";
-import IconButton from "@material-ui/core/IconButton";
-import EditIcon from "@material-ui/icons/Edit";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import { TimerOptions } from "../../types";
+import EditIcon from "@material-ui/icons/Edit";
+import React from "react";
+import { ITimerOptions } from "../../types";
+import OptionsDropDown from "./OptionsDropDown";
 
 interface IProps {
-  setTimerOptions: (newTimerOptions: Partial<TimerOptions>) => () => void;
-  timerOptions: TimerOptions;
+  setTimerOptions: (newTimerOptions: Partial<ITimerOptions>) => () => void;
+  timerOptions: ITimerOptions;
   setShowEditDeletePresetButtons: React.Dispatch<React.SetStateAction<boolean>>;
   showEditDeletePresetButtons: boolean;
   closeSettings: () => void;

@@ -1,23 +1,22 @@
 import React from "react";
 import IconButton from "@material-ui/core/IconButton";
-import { TimerOptions } from "../../types";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
-import { Preset } from "../../types";
+import { IPreset, ITimerOptions } from "../../types";
 
 interface IProps {
-  presets: Preset[];
+  presets: IPreset[];
   showEditDeletePresetButtons: boolean;
   setDeletePresetDialogIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedPreset: React.Dispatch<React.SetStateAction<string>>;
   setEditPresetFormIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 
-  setTimerOptions: (newTimerOptions: Partial<TimerOptions>) => () => void;
-  updatePresets: (presets: Preset[]) => void;
+  setTimerOptions: (newTimerOptions: Partial<ITimerOptions>) => () => void;
+  updatePresets: (presets: IPreset[]) => void;
 }
 
 function OptionsDropDown(props: IProps) {
