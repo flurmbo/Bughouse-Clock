@@ -6,6 +6,7 @@ import ChessClock from "./components/clock/ChessClock";
 import ConfirmationDialog from "./components/ConfirmationDialog";
 import SettingsMenu from "./components/settings/SettingsMenu";
 import { GameState, Preset, TimerOptions } from "./types";
+import { getStoredPresets, savePresetsInLocalStorage } from "./utils";
 
 const OPTIONS: TimerOptions = {
   delay: 5,
@@ -13,10 +14,6 @@ const OPTIONS: TimerOptions = {
   singleTap: false,
   startingTime: 5 * 60,
 };
-const STARTING_PRESETS: Preset[] = [
-  { text: "5|5", delay: 5, startingTime: 5 * 60, id: uuid() },
-  { text: "2|2", delay: 2, startingTime: 2 * 60, id: uuid() },
-];
 
 interface IState {
   gameState: GameState;
@@ -30,7 +27,7 @@ interface IState {
 class App extends Component<any, IState> {
   state: IState = {
     gameState: GameState.NotStarted,
-    presets: STARTING_PRESETS,
+    presets: getStoredPresets(),
     resetDialogIsOpen: false,
     settingsIsOpen: false,
     timerOptions: OPTIONS,
@@ -42,6 +39,7 @@ class App extends Component<any, IState> {
     onTimesUpSound.play();
   };
   updatePresets = (newPresets: Preset[]) => {
+    savePresetsInLocalStorage(newPresets);
     this.setState({ presets: newPresets });
   };
   onThisComponentDoneResetting = () => {

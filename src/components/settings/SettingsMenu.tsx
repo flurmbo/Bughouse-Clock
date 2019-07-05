@@ -1,16 +1,16 @@
-import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
+import CssBaseline from "@material-ui/core/CssBaseline";
 import Drawer from "@material-ui/core/Drawer";
-import { TimerOptions, Preset } from "../../types";
+import Fab from "@material-ui/core/Fab";
+import { makeStyles } from "@material-ui/core/styles";
+import AddIcon from "@material-ui/icons/Add";
+import React, { useState } from "react";
+import { v4 as uuid } from "uuid";
+import { Preset, TimerOptions } from "../../types";
 import ConfirmationDialog from "../ConfirmationDialog";
 import EditPresetForm from "./EditPresetForm";
-import SettingsAppBar from "./SettingsAppBar";
 import ListOfPresets from "./ListOfPresets";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Container from "@material-ui/core/Container";
-import Fab from "@material-ui/core/Fab";
-import AddIcon from "@material-ui/icons/Add";
-import { v4 as uuid } from "uuid";
+import SettingsAppBar from "./SettingsAppBar";
 
 interface IProps {
   open: boolean;
@@ -26,8 +26,8 @@ const useStyles = makeStyles(theme => ({
     width: "100%",
   },
   fab: {
-    position: "absolute",
     bottom: theme.spacing(2),
+    position: "absolute",
     right: theme.spacing(2),
   },
 }));
@@ -43,7 +43,7 @@ function SettingsMenu(props: IProps) {
   } = props;
 
   function onYesDelete() {
-    updatePresets(presets.filter(preset => preset.id != selectedPreset));
+    updatePresets(presets.filter(preset => preset.id !== selectedPreset));
     setDeletePresetDialogIsOpen(false);
   }
 
@@ -116,7 +116,7 @@ function SettingsMenu(props: IProps) {
         updatePresets={updatePresets}
         editedPreset={
           selectedPreset
-            ? presets.find(preset => preset.id == selectedPreset)
+            ? presets.find(preset => preset.id === selectedPreset)
             : undefined
         }
         setEditPresetFormIsOpen={setEditPresetFormIsOpen}
