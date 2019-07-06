@@ -1,32 +1,32 @@
+import { DialogContent } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import React from "react";
 
 interface IProps {
   open: boolean;
-  handleYes: () => void;
-  handleNo: () => void;
-  text: string;
 }
 
-function ConfirmationDialog(props: IProps) {
-  const { open, handleYes, handleNo } = props;
+function AboutDialog(props: IProps) {
+  const { open } = props;
   return (
     <Dialog open={open}>
-      <DialogTitle>{props.text}</DialogTitle>
+      <DialogTitle>About Bughouse Timer</DialogTitle>
       <DialogContent>
-        <DialogContentText />
+        <DialogContentText>
+          Bughouse Timer was developed by Phil Marshall. You can email comments
+          and questions{" "}
+          <a href="mailto: phillipsolomonmarshall@gmail.com">here</a>.
+        </DialogContentText>
         <DialogActions>
-          <Button onClick={handleNo}>No</Button>
-          <Button onClick={handleYes}>Yes</Button>
+          <Button>OK</Button>
         </DialogActions>
       </DialogContent>
     </Dialog>
   );
 }
 
-export default ConfirmationDialog;
+export default AboutDialog;

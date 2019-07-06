@@ -6,8 +6,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import { makeStyles } from "@material-ui/core/styles";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import React from "react";
+import AboutDialog from "./AboutDialog";
 import { ITimerOptions } from "../../types";
-
 interface IProps {
   timerOptions: ITimerOptions;
   setTimerOptions: (
@@ -28,6 +28,7 @@ const useStyles = makeStyles({
 
 function OptionsDropDown(props: IProps) {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [aboutDialogIsOpen, setAboutDialogIsOpen] = React.useState(false);
 
   function handleClick(e: any) {
     setAnchorEl(e.currentTarget);
@@ -48,9 +49,9 @@ function OptionsDropDown(props: IProps) {
     };
   }
 
-  const onClickAbout = onClickButton(() => {
-    console.log("you clicked about!");
-  });
+  const onClickAbout = () => {
+    setAboutDialogIsOpen(true);
+  };
 
   function onClickFullScreen(e: any) {
     if (
@@ -106,6 +107,7 @@ function OptionsDropDown(props: IProps) {
           <div className={classes.aboutMenuItem}>About</div>
         </MenuItem>
       </Menu>
+      <AboutDialog open={aboutDialogIsOpen} />
     </React.Fragment>
   );
 }
