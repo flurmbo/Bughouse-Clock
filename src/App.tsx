@@ -25,7 +25,7 @@ interface IState {
 }
 
 class App extends Component<any, IState> {
-  state: IState = {
+  public state: IState = {
     gameState: GameState.NotStarted,
     presets: getStoredPresets(),
     resetDialogIsOpen: false,
@@ -33,82 +33,16 @@ class App extends Component<any, IState> {
     timerOptions: OPTIONS,
   };
 
-  onTimesUp = () => {
-    this.setState({ gameState: GameState.GameOver });
-    const onTimesUpSound = new Audio("onTimesUp.mp3");
-    onTimesUpSound.play();
-  };
-  updatePresets = (newPresets: IPreset[]) => {
-    savePresetsInLocalStorage(newPresets);
-    this.setState({ presets: newPresets });
-  };
-  onThisComponentDoneResetting = () => {
-    this.setState(
-      state => ({
-        numberOfComponentsDoneResetting: state.numberOfComponentsDoneResetting
-          ? state.numberOfComponentsDoneResetting + 1
-          : 1,
-      }),
-      () => {
-        // tslint:disable-next-line:no-console
-        console.log(
-          "numberDoneResetting is",
-          this.state.numberOfComponentsDoneResetting
-        );
-      }
-    );
-  };
-
-  onStartGame = () => {
-    this.setState({ gameState: GameState.InProgress });
-  };
-
-  resetGame = () => {
-    this.setState({ gameState: GameState.Resetting });
-  };
-
-  pauseGame = () => {
-    this.setState({ gameState: GameState.Paused });
-  };
-
-  openSettings = () => {
-    this.setState(state => ({ settingsIsOpen: !state.settingsIsOpen }));
-  };
-
-  handleYes = () => {
-    this.setState({ gameState: GameState.Resetting, resetDialogIsOpen: false });
-  };
-
-  handleNo = () => {};
-
-  closeSettings = () => {
-    this.setState({ settingsIsOpen: false });
-  };
-  openConfirmResetDialog = () => {
-    this.pauseGame();
-    this.setState({ resetDialogIsOpen: true });
-  };
-  setTimerOptions = (newTimerOptions: Partial<ITimerOptions>, reset = true) => {
-    return () =>
-      this.setState(state => ({
-        timerOptions: { ...state.timerOptions, ...newTimerOptions },
-        settingsIsOpen: !reset,
-        gameState: reset ? GameState.Resetting : state.gameState,
-      }));
-  };
-
-  componentDidUpdate() {
-    if (this.state.timerOptions.fullScreen) {
-    }
+  public componentDidUpdate() {
     if (this.state.numberOfComponentsDoneResetting === 6) {
       this.setState({
-        numberOfComponentsDoneResetting: undefined,
         gameState: GameState.NotStarted,
+        numberOfComponentsDoneResetting: undefined,
       });
     }
   }
 
-  render() {
+  public render() {
     const {
       gameState,
       timerOptions,
@@ -158,6 +92,76 @@ class App extends Component<any, IState> {
       </div>
     );
   }
+  private updatePresets = (newPresets: IPreset[]) => {
+    savePresetsInLocalStorage(newPresets);
+    this.setState({ presets: newPresets });
+  };
+  private onThisComponentDoneResetting = () => {
+    this.setState(
+      state => ({
+        numberOfComponentsDoneResetting: state.numberOfComponentsDoneResetting
+          ? state.numberOfComponentsDoneResetting + 1
+          : 1,
+      }),
+      () => {
+        // tslint:disable-next-line:no-console
+        console.log(
+          "numberDoneResetting is",
+          this.state.numberOfComponentsDoneResetting,
+        );
+      },
+    );
+  };
+
+  private onStartGame = () => {
+    this.setState({ gameState: GameState.InProgress });
+  };
+
+  private resetGame = () => {
+    this.setState({ gameState: GameState.Resetting });
+  };
+
+  private pauseGame = () => {
+    this.setState({ gameState: GameState.Paused });
+  };
+
+  private openSettings = () => {
+    this.setState(state => ({ settingsIsOpen: !state.settingsIsOpen }));
+  };
+
+  private handleYes = () => {
+    this.setState({ gameState: GameState.Resetting, resetDialogIsOpen: false });
+  };
+
+  private handleNo = () => {
+    console.log("we handled no!");
+  };
+
+  private closeSettings = () => {
+    this.setState({ settingsIsOpen: false });
+  };
+  private openConfirmResetDialog = () => {
+    this.pauseGame();
+    this.setState({ resetDialogIsOpen: true });
+  };
+
+  private onTimesUp = () => {
+    this.setState({ gameState: GameState.GameOver });
+    const onTimesUpSound = new Audio("onTimesUp.mp3");
+    onTimesUpSound.play();
+  };
+
+  private setTimerOptions = (
+    newTimerOptions: Partial<ITimerOptions>,
+    reset = true,
+  ) => {
+    return () =>
+      this.setState(state => ({
+        gameState: reset ? GameState.Resetting : state.gameState,
+        settingsIsOpen: !reset,
+        timerOptions: { ...state.timerOptions, ...newTimerOptions },
+      }));
+  };
 }
 
 export default App;
