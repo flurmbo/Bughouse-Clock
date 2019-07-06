@@ -3,6 +3,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import IconButton from "@material-ui/core/IconButton";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
+import { makeStyles } from "@material-ui/core/styles";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import React from "react";
 import { ITimerOptions } from "../../types";
@@ -15,6 +16,16 @@ interface IProps {
   ) => () => void;
 }
 
+const useStyles = makeStyles({
+  aboutMenuItem: {
+    marginLeft: "16px",
+  },
+  formControlLabel: {
+    flexGrow: 1,
+    justifyContent: "space-between",
+  },
+});
+
 function OptionsDropDown(props: IProps) {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -25,6 +36,21 @@ function OptionsDropDown(props: IProps) {
   function handleClose() {
     setAnchorEl(null);
   }
+
+  function onClickButton(callback: () => void) {
+    return (e: any) => {
+      if (
+        e.target.getAttribute("type") === "checkbox" ||
+        e.target.getAttribute("role") === "menuitem"
+      ) {
+        callback();
+      }
+    };
+  }
+
+  const onClickAbout = onClickButton(() => {
+    console.log("you clicked about!");
+  });
 
   function onClickFullScreen(e: any) {
     if (
@@ -48,6 +74,7 @@ function OptionsDropDown(props: IProps) {
       )();
     }
   }
+  const classes = useStyles();
   return (
     <React.Fragment>
       <IconButton
@@ -63,13 +90,20 @@ function OptionsDropDown(props: IProps) {
           <FormControlLabel
             control={<Checkbox checked={props.timerOptions.fullScreen} />}
             label="Full Screen"
+            labelPlacement="start"
+            className={classes.formControlLabel}
           />
         </MenuItem>
         <MenuItem onClick={onClickSingleTap}>
           <FormControlLabel
             control={<Checkbox checked={props.timerOptions.singleTap} />}
             label="Single tap starts timers"
+            labelPlacement="start"
+            className={classes.formControlLabel}
           />
+        </MenuItem>
+        <MenuItem onClick={onClickAbout}>
+          <div className={classes.aboutMenuItem}>About</div>
         </MenuItem>
       </Menu>
     </React.Fragment>
