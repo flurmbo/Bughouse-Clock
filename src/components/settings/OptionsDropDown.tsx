@@ -12,7 +12,7 @@ interface IProps {
   timerOptions: ITimerOptions;
   setTimerOptions: (
     newTimerOptions: Partial<ITimerOptions>,
-    reset?: boolean
+    reset?: boolean,
   ) => () => void;
 }
 
@@ -60,7 +60,7 @@ function OptionsDropDown(props: IProps) {
     ) {
       props.setTimerOptions(
         { fullScreen: !props.timerOptions.fullScreen },
-        false
+        false,
       )();
     }
   }
@@ -71,7 +71,7 @@ function OptionsDropDown(props: IProps) {
     ) {
       props.setTimerOptions(
         { singleTap: !props.timerOptions.singleTap },
-        false
+        false,
       )();
     }
   }
