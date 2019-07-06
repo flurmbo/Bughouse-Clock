@@ -9,19 +9,25 @@ import React from "react";
 interface IProps {
   open: boolean;
   handleYes: () => void;
-  handleNo: () => void;
+  handleNo: (() => void) | React.Dispatch<React.SetStateAction<boolean>>;
   text: string;
 }
 
 function ConfirmationDialog(props: IProps) {
   const { open, handleYes, handleNo } = props;
+  const noHandler =
+    handleNo.name === "bound dispatchAction"
+      ? () => {
+          handleNo(false);
+        }
+      : (handleNo as (() => void));
   return (
     <Dialog open={open}>
       <DialogTitle>{props.text}</DialogTitle>
       <DialogContent>
         <DialogContentText />
         <DialogActions>
-          <Button onClick={handleNo} color="primary">
+          <Button onClick={noHandler} color="primary">
             No
           </Button>
           <Button onClick={handleYes} color="primary">

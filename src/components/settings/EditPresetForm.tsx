@@ -61,6 +61,12 @@ function EditPresetForm(props: IProps) {
     setUnsavedPreset(editedPreset);
   }, [editedPreset]);
 
+  function closeEditPresetFormWithoutSaving(): void {
+    setDiscardChangesDialogIsOpen(false);
+    setEditPresetFormIsOpen(false);
+    setUnsavedPreset(undefined);
+  }
+
   const classes = useStyles();
 
   return (
@@ -86,8 +92,8 @@ function EditPresetForm(props: IProps) {
       <ConfirmationDialog
         open={discardChangesDialogIsOpen}
         text="Discard unsaved changes?"
-        handleYes={() => {}}
-        handleNo={() => {}}
+        handleYes={closeEditPresetFormWithoutSaving}
+        handleNo={setDiscardChangesDialogIsOpen}
       />
     </React.Fragment>
   );
