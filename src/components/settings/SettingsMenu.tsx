@@ -54,13 +54,17 @@ function SettingsMenu(props: IProps) {
     setEditPresetFormIsOpen(true);
   }
 
+  function closePresetDialog() {
+    setDeletePresetDialogIsOpen(false);
+  }
+
   const classes = useStyles();
   const [
     showEditDeletePresetButtons,
     setShowEditDeletePresetButtons,
   ] = useState(false);
   const [deletePresetDialogIsOpen, setDeletePresetDialogIsOpen] = useState(
-    false
+    false,
   );
 
   const [selectedPreset, setSelectedPreset] = useState("");
@@ -106,9 +110,7 @@ function SettingsMenu(props: IProps) {
       <ConfirmationDialog
         open={deletePresetDialogIsOpen}
         handleYes={onYesDelete}
-        handleNo={() => {
-          setDeletePresetDialogIsOpen(false);
-        }}
+        handleNo={closePresetDialog}
         text={"Are you sure you want to delete this preset?"}
       />
       <EditPresetForm

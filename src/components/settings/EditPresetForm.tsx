@@ -30,14 +30,18 @@ function EditPresetForm(props: IProps) {
         } else {
           return preset;
         }
-      })
+      }),
     );
   }
   function handleChange(name: string) {
     return (event: any) => {
-      setUnsavedPreset(
-        Object.assign({}, unsavedPreset, { [name]: event.target.value })
-      );
+      if (unsavedPreset) {
+        const newUnsavedPreset: IPreset = {
+          ...unsavedPreset,
+          [name]: event.target.value,
+        };
+        setUnsavedPreset(newUnsavedPreset);
+      }
     };
   }
 

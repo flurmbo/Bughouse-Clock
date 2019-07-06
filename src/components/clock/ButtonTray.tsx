@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import SettingsIcon from "@material-ui/icons/Settings";
-import RefreshIcon from "@material-ui/icons/Refresh";
-import PauseIcon from "@material-ui/icons/Pause";
 import { withStyles } from "@material-ui/core/styles";
+import PauseIcon from "@material-ui/icons/Pause";
+import RefreshIcon from "@material-ui/icons/Refresh";
+import SettingsIcon from "@material-ui/icons/Settings";
+import React, { Component } from "react";
 import { GameState } from "../../types";
 import { isCordova } from "../../utils";
 
@@ -19,33 +19,33 @@ interface IProps {
 
 const styles = {
   root: {
-    width: "70%",
     height: "auto",
+    width: "70%",
   },
 };
 
 class ButtonTray extends Component<IProps> {
-  handleOnClickResetButton = () => {
+  public handleOnClickResetButton = () => {
     this.props.openConfirmResetDialog();
-    //this.props.onResetGame();
+    // this.props.onResetGame();
   };
-  onConfirm = (i: number) => {
+  public onConfirm = (i: number) => {
     alert("You selected button " + i);
   };
-  dave = () => {
+  public dave = () => {
     if (isCordova()) {
       navigator.notification.confirm(
         "a winner is you",
         this.onConfirm,
         "Game Over",
-        ["Restart", "Exit"]
+        ["Restart", "Exit"],
       );
     } else {
       alert("I'm sorry Dave, I'm afraid I can't do that.");
     }
   };
 
-  render() {
+  public render() {
     const { classes, gameState, onClickSettingsButton } = this.props;
     return (
       <React.Fragment>
@@ -56,7 +56,7 @@ class ButtonTray extends Component<IProps> {
             onClick={onClickSettingsButton}
           />
         </div>
-        {gameState == GameState.InProgress && (
+        {gameState === GameState.InProgress && (
           <div className="middleButton">
             <PauseIcon
               classes={{ root: classes.root }}

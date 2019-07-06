@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import { toDurationString } from "../../utils";
 import {
-  Side,
-  Seconds,
-  Milliseconds,
-  ITimerOptions,
   GameState,
+  ITimerOptions,
+  Milliseconds,
+  Seconds,
+  Side,
 } from "../../types";
+import { toDurationString } from "../../utils";
 
 interface IProps {
   side: Side;
@@ -29,18 +29,18 @@ interface IState {
 }
 
 class ChessClockFace extends Component<IProps, IState> {
-  state: IState = {
+  public state: IState = {
     displayedTime: this.props.options.startingTime,
-    timeLeft: this.props.options.startingTime * 1000,
     ranOutOfTimeIsMe: false,
+    timeLeft: this.props.options.startingTime * 1000,
   };
-  componentDidMount() {
+  public componentDidMount() {
     const updateIntervalID = window.setInterval(() => {
       const { isItMyTurn } = this.props;
       const { displayedTime, timeLeft, countdownStartTime } = this.state;
       if (countdownStartTime && isItMyTurn) {
-        let calculatedDisplayTime: Seconds = Math.ceil(
-          (timeLeft - Date.now() + countdownStartTime) / 1000
+        const calculatedDisplayTime: Seconds = Math.ceil(
+          (timeLeft - Date.now() + countdownStartTime) / 1000,
         );
         if (calculatedDisplayTime !== displayedTime) {
           this.setState({ displayedTime: calculatedDisplayTime });
@@ -50,65 +50,65 @@ class ChessClockFace extends Component<IProps, IState> {
     this.setState({ updateIntervalID });
   }
 
-  onResetGameState() {
+  public onResetGameState() {
     if (this.state.delayTimeoutID) {
       clearTimeout(this.state.delayTimeoutID);
     }
     this.setState(
       {
-        displayedTime: this.props.options.startingTime,
-        timeLeft: this.props.options.startingTime * 1000,
-        ranOutOfTimeIsMe: false,
-        delayTimeoutID: undefined,
-        updateIntervalID: undefined,
         countdownStartTime: undefined,
+        delayTimeoutID: undefined,
+        displayedTime: this.props.options.startingTime,
+        ranOutOfTimeIsMe: false,
+        timeLeft: this.props.options.startingTime * 1000,
+        updateIntervalID: undefined,
       },
-      this.props.onThisComponentDoneResetting
+      this.props.onThisComponentDoneResetting,
     );
   }
 
-  componentWillUnmount() {
+  public componentWillUnmount() {
     clearInterval(this.state.updateIntervalID);
   }
 
-  componentDidUpdate(prevProps: IProps) {
+  public componentDidUpdate(prevProps: IProps) {
     const { isItMyTurn, gameState } = this.props;
     if (!prevProps.isItMyTurn && isItMyTurn) {
       // begin our turn
       const delayTimeoutID = window.setTimeout(
         this.onDelayElapsed,
-        1000 * this.props.options.delay
+        1000 * this.props.options.delay,
       );
       this.setState({
-        delayTimeoutID: delayTimeoutID,
+        delayTimeoutID,
       });
     } else if (
       (prevProps.isItMyTurn &&
         !isItMyTurn &&
-        gameState == GameState.InProgress) ||
-      (prevProps.gameState == GameState.InProgress &&
-        gameState == GameState.Paused)
+        gameState === GameState.InProgress) ||
+      (prevProps.gameState === GameState.InProgress &&
+        gameState === GameState.Paused)
     ) {
       // end our turn
       this.setState(prevState => {
         if (prevState.countdownStartTime) {
           return {
-            timeLeft:
-              prevState.timeLeft - Date.now() + prevState.countdownStartTime,
             countdownStartTime: undefined,
             delayTimeoutID: undefined,
+            timeLeft:
+              prevState.timeLeft - Date.now() + prevState.countdownStartTime,
           };
         } else {
           clearTimeout(prevState.delayTimeoutID);
           return {
-            timeLeft: prevState.timeLeft,
             delayTimeoutID: undefined,
+            timeLeft: prevState.timeLeft,
           };
         }
       });
     } else if (
       this.state.displayedTime === 0 &&
-      gameState == GameState.InProgress
+      gameState === GameState.InProgress
     ) {
       // end game
       const { delayTimeoutID } = this.state;
@@ -118,21 +118,21 @@ class ChessClockFace extends Component<IProps, IState> {
       this.setState({ ranOutOfTimeIsMe: true });
       this.props.onTimesUp();
     } else if (
-      prevProps.gameState != GameState.Resetting &&
-      gameState == GameState.Resetting
+      prevProps.gameState !== GameState.Resetting &&
+      gameState === GameState.Resetting
     ) {
       // reset game
       this.onResetGameState();
     }
   }
 
-  onDelayElapsed = () => {
+  public onDelayElapsed = () => {
     this.setState({
       countdownStartTime: Date.now(),
     });
   };
 
-  render() {
+  public render() {
     const { side, onClickHandler, isItMyTurn, className } = this.props;
     const { displayedTime, ranOutOfTimeIsMe } = this.state;
     return (

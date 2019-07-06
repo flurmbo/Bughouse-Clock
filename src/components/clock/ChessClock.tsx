@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import ChessClockFace from "./ChessClockFace";
-import { Side, ITimerOptions, GameState } from "../../types";
+import { GameState, ITimerOptions, Side } from "../../types";
 import { otherSide } from "../../utils";
+import ChessClockFace from "./ChessClockFace";
 
 interface IProps {
   className: string;
@@ -18,11 +18,67 @@ interface IState {
 }
 
 class ChessClock extends Component<IProps, IState> {
-  state: IState = {
+  public state: IState = {
     running: false,
   };
 
-  onClickHandler = (side: Side) => {
+  public componentDidUpdate(prevProps: IProps) {
+    const { gameState, onThisComponentDoneResetting } = this.props;
+    if (
+      prevProps.gameState !== GameState.Resetting &&
+      gameState === GameState.Resetting
+    ) {
+      // on reset game
+      this.setState(
+        {
+          running: false,
+          whoseTurnItIs: undefined,
+        },
+        onThisComponentDoneResetting,
+      );
+    }
+  }
+
+  public render() {
+    const {
+      className,
+      options,
+      onTimesUp,
+      gameState,
+      onThisComponentDoneResetting,
+    } = this.props;
+    const { whoseTurnItIs } = this.state;
+    return (
+      <React.Fragment>
+        <ChessClockFace
+          options={options}
+          className={"timer top" + className}
+          side={Side.Top}
+          onClickHandler={this.onClickHandler}
+          isItMyTurn={
+            whoseTurnItIs === Side.Top && gameState === GameState.InProgress
+          }
+          onTimesUp={onTimesUp}
+          gameState={gameState}
+          onThisComponentDoneResetting={onThisComponentDoneResetting}
+        />
+        <ChessClockFace
+          options={options}
+          className={"timer bottom" + className}
+          side={Side.Bottom}
+          onClickHandler={this.onClickHandler}
+          isItMyTurn={
+            whoseTurnItIs === Side.Bottom && gameState === GameState.InProgress
+          }
+          onTimesUp={onTimesUp}
+          gameState={gameState}
+          onThisComponentDoneResetting={onThisComponentDoneResetting}
+        />
+      </React.Fragment>
+    );
+  }
+
+  private onClickHandler = (side: Side) => {
     return () => {
       if (this.state.running && this.state.whoseTurnItIs === side) {
         // End our turn
@@ -46,62 +102,6 @@ class ChessClock extends Component<IProps, IState> {
       }
     };
   };
-
-  componentDidUpdate(prevProps: IProps) {
-    const { gameState, onThisComponentDoneResetting } = this.props;
-    if (
-      prevProps.gameState != GameState.Resetting &&
-      gameState == GameState.Resetting
-    ) {
-      // on reset game
-      this.setState(
-        {
-          running: false,
-          whoseTurnItIs: undefined,
-        },
-        onThisComponentDoneResetting
-      );
-    }
-  }
-
-  render() {
-    const {
-      className,
-      options,
-      onTimesUp,
-      gameState,
-      onThisComponentDoneResetting,
-    } = this.props;
-    const { whoseTurnItIs } = this.state;
-    return (
-      <React.Fragment>
-        <ChessClockFace
-          options={options}
-          className={"timer top" + className}
-          side={Side.Top}
-          onClickHandler={this.onClickHandler}
-          isItMyTurn={
-            whoseTurnItIs === Side.Top && gameState == GameState.InProgress
-          }
-          onTimesUp={onTimesUp}
-          gameState={gameState}
-          onThisComponentDoneResetting={onThisComponentDoneResetting}
-        />
-        <ChessClockFace
-          options={options}
-          className={"timer bottom" + className}
-          side={Side.Bottom}
-          onClickHandler={this.onClickHandler}
-          isItMyTurn={
-            whoseTurnItIs === Side.Bottom && gameState == GameState.InProgress
-          }
-          onTimesUp={onTimesUp}
-          gameState={gameState}
-          onThisComponentDoneResetting={onThisComponentDoneResetting}
-        />
-      </React.Fragment>
-    );
-  }
 }
 
 export default ChessClock;

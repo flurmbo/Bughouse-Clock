@@ -134,7 +134,7 @@ class App extends Component<any, IState> {
   };
 
   private handleNo = () => {
-    console.log("we handled no!");
+    // do nothing
   };
 
   private closeSettings = () => {
@@ -161,6 +161,7 @@ class App extends Component<any, IState> {
         settingsIsOpen: !reset,
         timerOptions: { ...state.timerOptions, ...newTimerOptions },
       }));
+    // tslint:disable-next-line: semicolon
   };
 }
 

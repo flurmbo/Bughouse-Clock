@@ -38,6 +38,11 @@ function SettingsAppBar(props: IProps) {
     showEditDeletePresetButtons,
     closeSettings,
   } = props;
+
+  function toggleShowEditDeleteButtons() {
+    setShowEditDeletePresetButtons(!showEditDeletePresetButtons);
+  }
+
   const appBarDisplayText = showEditDeletePresetButtons
     ? "Edit or delete presets"
     : "Settings";
@@ -67,9 +72,7 @@ function SettingsAppBar(props: IProps) {
                 <IconButton
                   color="inherit"
                   edge="end"
-                  onClick={() =>
-                    setShowEditDeletePresetButtons(!showEditDeletePresetButtons)
-                  }
+                  onClick={toggleShowEditDeleteButtons}
                 >
                   <EditIcon />
                 </IconButton>

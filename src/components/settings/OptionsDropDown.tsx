@@ -6,8 +6,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import { makeStyles } from "@material-ui/core/styles";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import React from "react";
-import AboutDialog from "./AboutDialog";
 import { ITimerOptions } from "../../types";
+import AboutDialog from "./AboutDialog";
 interface IProps {
   timerOptions: ITimerOptions;
   setTimerOptions: (
