@@ -5,6 +5,7 @@
     "jsx-wrap-multiline": false,
     "jsx-no-multiline-js": false,
     "no-submodule-imports": false,
-    "semicolon": [true, "always", "strict-bound-class-methods"]
+    "semicolon": [true, "always", "strict-bound-class-methods"],
+    "arrow-parens": false
   }
 }
