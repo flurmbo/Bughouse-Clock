@@ -7,12 +7,15 @@ import Typography from "@material-ui/core/Typography";
 import useScrollTrigger from "@material-ui/core/useScrollTrigger";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import React from "react";
-import { ITimerOptions } from "../../types";
+import { IPreset, ITimerOptions } from "../../types";
 import ConfirmationDialog from "../ConfirmationDialog";
 
 interface IProps {
+  editedPreset: IPreset | undefined;
+  unsavedPreset: IPreset | undefined;
   setEditPresetFormIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   savePreset: () => void;
+  setDiscardChangesDialogIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 const useStyles = makeStyles({
   title: {
@@ -29,23 +32,39 @@ function ElevationScroll(props: any) {
 }
 
 function EditPresetFormAppBar(props: IProps) {
-  const { setEditPresetFormIsOpen, savePreset } = props;
+  const {
+    editedPreset,
+    unsavedPreset,
+    setEditPresetFormIsOpen,
+    setDiscardChangesDialogIsOpen,
+    savePreset,
+  } = props;
   const appBarDisplayText = "Edit preset";
 
   function closePresetForm() {
     setEditPresetFormIsOpen(false);
   }
+
+  function handleBackButton() {
+    if (JSON.stringify(editedPreset) !== JSON.stringify(unsavedPreset)) {
+      setDiscardChangesDialogIsOpen(true);
+    } else {
+      closePresetForm();
+    }
+  }
+
   function savePresetAndCloseForm() {
     savePreset();
     closePresetForm();
   }
+
   const classes = useStyles();
   return (
     <React.Fragment>
       <ElevationScroll>
         <AppBar color="secondary">
           <Toolbar>
-            <IconButton color="inherit" edge="start" onClick={closePresetForm}>
+            <IconButton color="inherit" edge="start" onClick={handleBackButton}>
               <ArrowBackIcon />
             </IconButton>
 

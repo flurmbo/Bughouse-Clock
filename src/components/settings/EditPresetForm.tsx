@@ -5,6 +5,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import React, { useEffect, useState } from "react";
 import { IPreset, ITimerOptions } from "../../types";
+import ConfirmationDialog from "../ConfirmationDialog";
 import EditPresetFormAppBar from "./EditPresetFormAppBar";
 
 interface IProps {
@@ -53,7 +54,9 @@ function EditPresetForm(props: IProps) {
     presets,
   } = props;
   const [unsavedPreset, setUnsavedPreset] = useState(editedPreset);
-
+  const [discardChangesDialogIsOpen, setDiscardChangesDialogIsOpen] = useState(
+    false,
+  );
   useEffect(() => {
     setUnsavedPreset(editedPreset);
   }, [editedPreset]);
@@ -65,8 +68,11 @@ function EditPresetForm(props: IProps) {
       <CssBaseline />
       <Drawer open={open} classes={{ paper: classes.drawerPaper }}>
         <EditPresetFormAppBar
+          editedPreset={editedPreset}
+          unsavedPreset={unsavedPreset}
           setEditPresetFormIsOpen={setEditPresetFormIsOpen}
           savePreset={savePreset}
+          setDiscardChangesDialogIsOpen={setDiscardChangesDialogIsOpen}
         />
         <Container>
           {editedPreset && `You have selected preset "${editedPreset.text}".`}
@@ -77,6 +83,12 @@ function EditPresetForm(props: IProps) {
           />
         </Container>
       </Drawer>
+      <ConfirmationDialog
+        open={discardChangesDialogIsOpen}
+        text="Discard unsaved changes?"
+        handleYes={() => {}}
+        handleNo={() => {}}
+      />
     </React.Fragment>
   );
 }
