@@ -8,21 +8,27 @@ import React from "react";
 
 interface IProps {
   open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 function AboutDialog(props: IProps) {
-  const { open } = props;
+  const { open, setOpen } = props;
+  const closeDialog = () => {
+    setOpen(false);
+  };
   return (
     <Dialog open={open}>
       <DialogTitle>About Bughouse Timer</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          Bughouse Timer was developed by Phil Marshall. You can email comments
-          and questions{" "}
+          Bughouse Timer was developed by Phil Marshall in 2019. You can email
+          him comments and questions{" "}
           <a href="mailto: phillipsolomonmarshall@gmail.com">here</a>.
         </DialogContentText>
         <DialogActions>
-          <Button>OK</Button>
+          <Button onClick={closeDialog} color="primary">
+            OK
+          </Button>
         </DialogActions>
       </DialogContent>
     </Dialog>

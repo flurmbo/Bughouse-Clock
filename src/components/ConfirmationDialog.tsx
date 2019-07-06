@@ -21,8 +21,12 @@ function ConfirmationDialog(props: IProps) {
       <DialogContent>
         <DialogContentText />
         <DialogActions>
-          <Button onClick={handleNo}>No</Button>
-          <Button onClick={handleYes}>Yes</Button>
+          <Button onClick={handleNo} color="primary">
+            No
+          </Button>
+          <Button onClick={handleYes} color="primary">
+            Yes
+          </Button>
         </DialogActions>
       </DialogContent>
     </Dialog>

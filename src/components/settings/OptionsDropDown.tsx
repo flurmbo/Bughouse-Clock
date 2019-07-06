@@ -107,7 +107,7 @@ function OptionsDropDown(props: IProps) {
           <div className={classes.aboutMenuItem}>About</div>
         </MenuItem>
       </Menu>
-      <AboutDialog open={aboutDialogIsOpen} />
+      <AboutDialog open={aboutDialogIsOpen} setOpen={setAboutDialogIsOpen} />
     </React.Fragment>
   );
 }
