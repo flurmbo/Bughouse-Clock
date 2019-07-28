@@ -87,6 +87,11 @@ function EditPresetForm(props: IProps) {
             label="text"
             onChange={handleChange("text")}
           />
+          <TextField
+            value={unsavedPreset ? unsavedPreset.startingTime : ""}
+            label="startingTime"
+            onChange={handleChange("startingTime")}
+          />
         </Container>
       </Drawer>
       <ConfirmationDialog
