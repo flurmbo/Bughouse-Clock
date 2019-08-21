@@ -11,12 +11,18 @@ export enum GameState {
   Resetting = "RESETTING",
 }
 
+export enum IncrementType {
+  Fischer = "FISCHER",
+  Delay = "DELAY",
+}
+
 export type Seconds = number;
 
 export type Milliseconds = number;
 
 export interface ITimerOptions {
-  delay: Seconds;
+  increment: Seconds;
+  incrementType: IncrementType;
   startingTime: Seconds;
   fullScreen: boolean;
   singleTap: boolean;
@@ -24,7 +30,8 @@ export interface ITimerOptions {
 
 export interface IPreset {
   text: string;
-  delay: number;
+  increment: number;
+  incrementType: IncrementType;
   startingTime: number;
   id: string;
 }

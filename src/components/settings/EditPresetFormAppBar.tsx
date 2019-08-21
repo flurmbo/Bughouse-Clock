@@ -16,6 +16,7 @@ interface IProps {
   setEditPresetFormIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   savePreset: () => void;
   setDiscardChangesDialogIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowError: React.Dispatch<React.SetStateAction<boolean>>;
 }
 const useStyles = makeStyles({
   title: {
@@ -39,7 +40,7 @@ function EditPresetFormAppBar(props: IProps) {
     setDiscardChangesDialogIsOpen,
     savePreset,
   } = props;
-  const appBarDisplayText = "Edit preset";
+  const appBarDisplayText = "Edit Preset";
 
   function closePresetForm() {
     setEditPresetFormIsOpen(false);
@@ -54,8 +55,12 @@ function EditPresetFormAppBar(props: IProps) {
   }
 
   function savePresetAndCloseForm() {
-    savePreset();
-    closePresetForm();
+    if (unsavedPreset && unsavedPreset.text) {
+      savePreset();
+      closePresetForm();
+    } else {
+      props.setShowError(true);
+    }
   }
 
   const classes = useStyles();

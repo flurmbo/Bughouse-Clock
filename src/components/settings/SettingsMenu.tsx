@@ -6,7 +6,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
 import React, { useState } from "react";
 import { v4 as uuid } from "uuid";
-import { IPreset, ITimerOptions } from "../../types";
+import { IPreset, ITimerOptions, IncrementType } from "../../types";
 import ConfirmationDialog from "../ConfirmationDialog";
 import EditPresetForm from "./EditPresetForm";
 import ListOfPresets from "./ListOfPresets";
@@ -49,7 +49,16 @@ function SettingsMenu(props: IProps) {
 
   function editNewPreset() {
     const id = uuid();
-    updatePresets([...presets, { text: "", delay: 0, startingTime: 0, id }]);
+    updatePresets([
+      ...presets,
+      {
+        text: "",
+        increment: 0,
+        startingTime: 0,
+        incrementType: IncrementType.Delay,
+        id,
+      },
+    ]);
     setSelectedPreset(id);
     setEditPresetFormIsOpen(true);
   }
@@ -113,17 +122,19 @@ function SettingsMenu(props: IProps) {
         handleNo={closePresetDialog}
         text={"Are you sure you want to delete this preset?"}
       />
-      <EditPresetForm
-        open={editPresetFormIsOpen}
-        updatePresets={updatePresets}
-        editedPreset={
-          selectedPreset
-            ? presets.find(preset => preset.id === selectedPreset)
-            : undefined
-        }
-        setEditPresetFormIsOpen={setEditPresetFormIsOpen}
-        presets={presets}
-      />
+      {editPresetFormIsOpen && (
+        <EditPresetForm
+          open={editPresetFormIsOpen}
+          updatePresets={updatePresets}
+          editedPreset={
+            selectedPreset
+              ? presets.find(preset => preset.id === selectedPreset)
+              : undefined
+          }
+          setEditPresetFormIsOpen={setEditPresetFormIsOpen}
+          presets={presets}
+        />
+      )}
     </React.Fragment>
   );
 }

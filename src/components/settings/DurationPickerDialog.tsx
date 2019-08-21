@@ -13,6 +13,7 @@ interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   initialDuration: number;
   onClose: (duration: DurationPicker.Duration) => void;
+  title: string;
 }
 
 function DurationPickerDialog(props: IProps) {
@@ -23,7 +24,7 @@ function DurationPickerDialog(props: IProps) {
     [],
   );
 
-  const { open, setOpen, initialDuration, onClose } = props;
+  const { open, setOpen, initialDuration, onClose, title } = props;
   const [displayedDuration, setDisplayedDuration] = useState(
     secondsToDuration(initialDuration),
   );
@@ -35,7 +36,7 @@ function DurationPickerDialog(props: IProps) {
 
   return (
     <Dialog open={open}>
-      <DialogTitle>Select Delay</DialogTitle>
+      <DialogTitle>{title}</DialogTitle>
       <DialogContent>
         <DurationPicker
           onChange={onChangeDisplayedDuration}

@@ -77,7 +77,7 @@ class ChessClockFace extends Component<IProps, IState> {
       // begin our turn
       const delayTimeoutID = window.setTimeout(
         this.onDelayElapsed,
-        1000 * this.props.options.delay,
+        1000 * this.props.options.increment,
       );
       this.setState({
         delayTimeoutID,

@@ -1,11 +1,23 @@
 import { v4 as uuid } from "uuid";
-import { IDuration, IPreset, Seconds, Side } from "./types";
+import { IDuration, IPreset, Seconds, Side, IncrementType } from "./types";
 
 declare let window: any;
-const LOCAL_STORAGE_ITEM = "bughouseTimerPresets";
+const LOCAL_STORAGE_ITEM = "bughouseTimerPresets2";
 const DEFAULT_PRESETS: IPreset[] = [
-  { text: "5|5", delay: 5, startingTime: 5 * 60, id: uuid() },
-  { text: "2|2", delay: 2, startingTime: 2 * 60, id: uuid() },
+  {
+    text: "5|5",
+    increment: 5,
+    startingTime: 5 * 60,
+    incrementType: IncrementType.Delay,
+    id: uuid(),
+  },
+  {
+    text: "2|2",
+    increment: 2,
+    startingTime: 2 * 60,
+    incrementType: IncrementType.Delay,
+    id: uuid(),
+  },
 ];
 function toDurationString(seconds: Seconds): string {
   const m = Math.floor(seconds / 60);

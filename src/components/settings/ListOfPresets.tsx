@@ -45,7 +45,7 @@ function OptionsDropDown(props: IProps) {
   return (
     <List>
       {presets.map(preset => {
-        const { text, startingTime, delay, id } = preset;
+        const { text, startingTime, increment, id } = preset;
         return (
           <React.Fragment key={id}>
             <ListItem
@@ -54,7 +54,7 @@ function OptionsDropDown(props: IProps) {
               onClick={
                 showEditDeletePresetButtons
                   ? undefined
-                  : setTimerOptions({ delay, startingTime })
+                  : setTimerOptions({ increment, startingTime })
               }
             >
               <ListItemText primary={text} />

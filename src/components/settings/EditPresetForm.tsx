@@ -1,21 +1,22 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Drawer from "@material-ui/core/Drawer";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import Radio from "@material-ui/core/Radio";
 
-import { IPreset, ITimerOptions, IDuration } from "../../types";
-import { durationToSeconds } from "../../utils";
+import FormControl from "@material-ui/core/FormControl";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormLabel from "@material-ui/core/FormLabel";
+import Grid from "@material-ui/core/Grid";
+import { IDuration, IPreset, ITimerOptions } from "../../types";
+import { durationToSeconds, toDurationString } from "../../utils";
 import ConfirmationDialog from "../ConfirmationDialog";
 import DurationPickerDialog from "./DurationPickerDialog";
 import EditPresetFormAppBar from "./EditPresetFormAppBar";
-import FormLabel from "@material-ui/core/FormLabel";
-import FormControl from "@material-ui/core/FormControl";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 interface IProps {
   open: boolean;
@@ -55,11 +56,21 @@ function EditPresetForm(props: IProps) {
     };
   }
 
-  const handleChangeDuration = (duration: IDuration) => {
+  const handleChangeMainTime = (duration: IDuration) => {
     if (unsavedPreset) {
       const newUnsavedPreset: IPreset = {
         ...unsavedPreset,
         startingTime: durationToSeconds(duration),
+      };
+      setUnsavedPreset(newUnsavedPreset);
+    }
+  };
+
+  const handleChangeIncrement = (duration: IDuration) => {
+    if (unsavedPreset) {
+      const newUnsavedPreset: IPreset = {
+        ...unsavedPreset,
+        increment: durationToSeconds(duration),
       };
       setUnsavedPreset(newUnsavedPreset);
     }
@@ -76,9 +87,10 @@ function EditPresetForm(props: IProps) {
   const [discardChangesDialogIsOpen, setDiscardChangesDialogIsOpen] = useState(
     false,
   );
-  const [durationPickerDialogIsOpen, setDurationPickerDialogIsOpen] = useState(
-    false,
-  );
+  const [mainTimeDialogIsOpen, setMainTimeDialogIsOpen] = useState(false);
+  const [incrementDialogIsOpen, setIncrementDialogIsOpen] = useState(false);
+
+  const [showError, setShowError] = useState(false);
   useEffect(() => {
     setUnsavedPreset(editedPreset);
   }, [editedPreset]);
@@ -89,8 +101,13 @@ function EditPresetForm(props: IProps) {
     setUnsavedPreset(undefined);
   }
 
-  const openDurationPickerDialog = useCallback(
-    () => setDurationPickerDialogIsOpen(true),
+  const openMainTimeDialog = useCallback(
+    () => setMainTimeDialogIsOpen(true),
+    [],
+  );
+
+  const openIncrementDialog = useCallback(
+    () => setIncrementDialogIsOpen(true),
     [],
   );
 
@@ -106,20 +123,44 @@ function EditPresetForm(props: IProps) {
           setEditPresetFormIsOpen={setEditPresetFormIsOpen}
           savePreset={savePreset}
           setDiscardChangesDialogIsOpen={setDiscardChangesDialogIsOpen}
+          setShowError={setShowError}
         />
         <Container>
-          {editedPreset && `You have selected preset "${editedPreset.text}".`}
-          <TextField
-            value={unsavedPreset ? unsavedPreset.text : ""}
-            label="text"
-            onChange={handleChange("text")}
-          />
-          <TextField
-            value={unsavedPreset ? unsavedPreset.startingTime : ""}
-            label="startingTime"
-            onChange={handleChange("startingTime")}
-            onClick={openDurationPickerDialog}
-          />
+          <Grid container>
+            <Grid item xs={12}>
+              <TextField
+                error={
+                  showError && unsavedPreset && unsavedPreset.text.length === 0
+                }
+                value={unsavedPreset ? unsavedPreset.text : ""}
+                label="Preset Name"
+                onChange={handleChange("text")}
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                value={
+                  unsavedPreset
+                    ? toDurationString(unsavedPreset.startingTime)
+                    : ""
+                }
+                label="Main Time"
+                onTouchStart={openMainTimeDialog}
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                value={
+                  unsavedPreset ? toDurationString(unsavedPreset.increment) : ""
+                }
+                label="Increment"
+                onTouchStart={openIncrementDialog}
+                fullWidth
+              />
+            </Grid>
+          </Grid>
           <FormControl component="fieldset">
             <FormLabel component="legend">Increment Type</FormLabel>
             <RadioGroup aria-label="increment" name="increment">
@@ -128,7 +169,11 @@ function EditPresetForm(props: IProps) {
                 control={<Radio />}
                 label="Delay"
               />
-              <FormControlLabel value="add" control={<Radio />} label="Add" />
+              <FormControlLabel
+                value="fischer"
+                control={<Radio />}
+                label="Fischer"
+              />
             </RadioGroup>
           </FormControl>
         </Container>
@@ -139,12 +184,22 @@ function EditPresetForm(props: IProps) {
         handleYes={closeEditPresetFormWithoutSaving}
         handleNo={setDiscardChangesDialogIsOpen}
       />
-      {durationPickerDialogIsOpen && (
+      {mainTimeDialogIsOpen && (
         <DurationPickerDialog
-          open={durationPickerDialogIsOpen}
-          setOpen={setDurationPickerDialogIsOpen}
+          open={mainTimeDialogIsOpen}
+          setOpen={setMainTimeDialogIsOpen}
           initialDuration={unsavedPreset ? unsavedPreset.startingTime : 0}
-          onClose={handleChangeDuration}
+          onClose={handleChangeMainTime}
+          title="Select Main Time"
+        />
+      )}
+      {incrementDialogIsOpen && (
+        <DurationPickerDialog
+          open={incrementDialogIsOpen}
+          setOpen={setIncrementDialogIsOpen}
+          initialDuration={unsavedPreset ? unsavedPreset.increment : 0}
+          onClose={handleChangeIncrement}
+          title="Select Increment Time"
         />
       )}
     </React.Fragment>

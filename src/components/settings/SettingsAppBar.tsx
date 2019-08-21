@@ -44,7 +44,7 @@ function SettingsAppBar(props: IProps) {
   }
 
   const appBarDisplayText = showEditDeletePresetButtons
-    ? "Edit or delete presets"
+    ? "Edit or Delete Presets"
     : "Settings";
   const classes = useStyles();
   return (

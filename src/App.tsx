@@ -5,11 +5,12 @@ import ButtonTray from "./components/clock/ButtonTray";
 import ChessClock from "./components/clock/ChessClock";
 import ConfirmationDialog from "./components/ConfirmationDialog";
 import SettingsMenu from "./components/settings/SettingsMenu";
-import { GameState, IPreset, ITimerOptions } from "./types";
+import { GameState, IncrementType, IPreset, ITimerOptions } from "./types";
 import { getStoredPresets, savePresetsInLocalStorage } from "./utils";
 
 const OPTIONS: ITimerOptions = {
-  delay: 5,
+  increment: 5,
+  incrementType: IncrementType.Delay,
   fullScreen: false,
   singleTap: false,
   startingTime: 5 * 60,
