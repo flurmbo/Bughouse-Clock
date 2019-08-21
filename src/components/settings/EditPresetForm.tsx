@@ -12,7 +12,7 @@ import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormLabel from "@material-ui/core/FormLabel";
 import Grid from "@material-ui/core/Grid";
-import { IDuration, IPreset, ITimerOptions } from "../../types";
+import { IDuration, IncrementType, IPreset, ITimerOptions } from "../../types";
 import { durationToSeconds, toDurationString } from "../../utils";
 import ConfirmationDialog from "../ConfirmationDialog";
 import DurationPickerDialog from "./DurationPickerDialog";
@@ -127,7 +127,7 @@ function EditPresetForm(props: IProps) {
         />
         <Container>
           <Grid container>
-            <Grid item xs={12}>
+            <Grid item xs={12} style={{ margin: 5 }}>
               <TextField
                 error={
                   showError && unsavedPreset && unsavedPreset.text.length === 0
@@ -138,7 +138,7 @@ function EditPresetForm(props: IProps) {
                 fullWidth
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} style={{ margin: 5 }}>
               <TextField
                 value={
                   unsavedPreset
@@ -150,7 +150,7 @@ function EditPresetForm(props: IProps) {
                 fullWidth
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} style={{ margin: 5 }}>
               <TextField
                 value={
                   unsavedPreset ? toDurationString(unsavedPreset.increment) : ""
@@ -161,21 +161,31 @@ function EditPresetForm(props: IProps) {
               />
             </Grid>
           </Grid>
-          <FormControl component="fieldset">
-            <FormLabel component="legend">Increment Type</FormLabel>
-            <RadioGroup aria-label="increment" name="increment">
-              <FormControlLabel
-                value="delay"
-                control={<Radio />}
-                label="Delay"
-              />
-              <FormControlLabel
-                value="fischer"
-                control={<Radio />}
-                label="Fischer"
-              />
-            </RadioGroup>
-          </FormControl>
+          <Grid item xs={12} style={{ margin: 5 }}>
+            <FormControl component="fieldset">
+              <FormLabel component="legend">Increment Type</FormLabel>
+              <RadioGroup
+                aria-label="increment"
+                name="increment"
+                style={{ display: "flex", flexDirection: "row" }}
+                value={unsavedPreset ? unsavedPreset.incrementType : ""}
+                onChange={handleChange("incrementType")}
+              >
+                <FormControlLabel
+                  value={IncrementType.Delay}
+                  control={<Radio style={{ display: "inline-block" }} />}
+                  label="Delay"
+                  style={{ display: "inline-block" }}
+                />
+                <FormControlLabel
+                  value={IncrementType.Fischer}
+                  control={<Radio style={{ display: "inline-block" }} />}
+                  label="Fischer"
+                  style={{ display: "inline-block" }}
+                />
+              </RadioGroup>
+            </FormControl>
+          </Grid>
         </Container>
       </Drawer>
       <ConfirmationDialog
