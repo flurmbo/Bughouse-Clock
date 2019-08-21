@@ -75,20 +75,24 @@ class App extends Component<any, IState> {
           gameState={gameState}
           onThisComponentDoneResetting={this.onThisComponentDoneResetting}
         />
-        <SettingsMenu
-          open={settingsIsOpen}
-          setTimerOptions={this.setTimerOptions}
-          timerOptions={timerOptions}
-          presets={presets}
-          updatePresets={this.updatePresets}
-          closeSettings={this.closeSettings}
-        />
-        <ConfirmationDialog
-          open={resetDialogIsOpen}
-          handleYes={this.handleYes}
-          handleNo={this.handleNo}
-          text={"Are you sure you want to reset the clock?"}
-        />
+        {settingsIsOpen && (
+          <SettingsMenu
+            open={settingsIsOpen}
+            setTimerOptions={this.setTimerOptions}
+            timerOptions={timerOptions}
+            presets={presets}
+            updatePresets={this.updatePresets}
+            closeSettings={this.closeSettings}
+          />
+        )}
+        {resetDialogIsOpen && (
+          <ConfirmationDialog
+            open={resetDialogIsOpen}
+            handleYes={this.handleYes}
+            handleNo={this.handleNo}
+            text={"Are you sure you want to reset the clock?"}
+          />
+        )}
       </div>
     );
   }

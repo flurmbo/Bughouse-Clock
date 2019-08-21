@@ -1,12 +1,21 @@
+import React, { useEffect, useState, useCallback } from "react";
+
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Drawer from "@material-ui/core/Drawer";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
-import React, { useEffect, useState } from "react";
-import { IPreset, ITimerOptions } from "../../types";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import Radio from "@material-ui/core/Radio";
+
+import { IPreset, ITimerOptions, IDuration } from "../../types";
+import { durationToSeconds } from "../../utils";
 import ConfirmationDialog from "../ConfirmationDialog";
+import DurationPickerDialog from "./DurationPickerDialog";
 import EditPresetFormAppBar from "./EditPresetFormAppBar";
+import FormLabel from "@material-ui/core/FormLabel";
+import FormControl from "@material-ui/core/FormControl";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 interface IProps {
   open: boolean;
@@ -46,6 +55,16 @@ function EditPresetForm(props: IProps) {
     };
   }
 
+  const handleChangeDuration = (duration: IDuration) => {
+    if (unsavedPreset) {
+      const newUnsavedPreset: IPreset = {
+        ...unsavedPreset,
+        startingTime: durationToSeconds(duration),
+      };
+      setUnsavedPreset(newUnsavedPreset);
+    }
+  };
+
   const {
     open,
     editedPreset,
@@ -57,6 +76,9 @@ function EditPresetForm(props: IProps) {
   const [discardChangesDialogIsOpen, setDiscardChangesDialogIsOpen] = useState(
     false,
   );
+  const [durationPickerDialogIsOpen, setDurationPickerDialogIsOpen] = useState(
+    false,
+  );
   useEffect(() => {
     setUnsavedPreset(editedPreset);
   }, [editedPreset]);
@@ -66,6 +88,11 @@ function EditPresetForm(props: IProps) {
     setEditPresetFormIsOpen(false);
     setUnsavedPreset(undefined);
   }
+
+  const openDurationPickerDialog = useCallback(
+    () => setDurationPickerDialogIsOpen(true),
+    [],
+  );
 
   const classes = useStyles();
 
@@ -91,7 +118,19 @@ function EditPresetForm(props: IProps) {
             value={unsavedPreset ? unsavedPreset.startingTime : ""}
             label="startingTime"
             onChange={handleChange("startingTime")}
+            onClick={openDurationPickerDialog}
           />
+          <FormControl component="fieldset">
+            <FormLabel component="legend">Increment Type</FormLabel>
+            <RadioGroup aria-label="increment" name="increment">
+              <FormControlLabel
+                value="delay"
+                control={<Radio />}
+                label="Delay"
+              />
+              <FormControlLabel value="add" control={<Radio />} label="Add" />
+            </RadioGroup>
+          </FormControl>
         </Container>
       </Drawer>
       <ConfirmationDialog
@@ -100,6 +139,14 @@ function EditPresetForm(props: IProps) {
         handleYes={closeEditPresetFormWithoutSaving}
         handleNo={setDiscardChangesDialogIsOpen}
       />
+      {durationPickerDialogIsOpen && (
+        <DurationPickerDialog
+          open={durationPickerDialogIsOpen}
+          setOpen={setDurationPickerDialogIsOpen}
+          initialDuration={unsavedPreset ? unsavedPreset.startingTime : 0}
+          onClose={handleChangeDuration}
+        />
+      )}
     </React.Fragment>
   );
 }

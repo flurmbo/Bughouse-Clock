@@ -28,3 +28,9 @@ export interface IPreset {
   startingTime: number;
   id: string;
 }
+
+export interface IDuration {
+  hours: number;
+  minutes: number;
+  seconds: number;
+}
