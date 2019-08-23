@@ -3,7 +3,7 @@ export enum Side {
   Bottom = "BOTTOM",
 }
 
-export enum GameState {
+export enum GameLifecycle {
   NotStarted = "NOT_STARTED",
   Paused = "PAUSED",
   InProgress = "IN_PROGRESS",
@@ -40,7 +40,19 @@ export interface IDuration {
   seconds: number;
 }
 
-export interface ITurnState {
-  left: Side | undefined;
-  right: Side | undefined;
+export interface IGameState {
+  left: {
+    side: Side | undefined;
+    time: {
+      top: number;
+      bottom: number;
+    };
+  };
+  right: {
+    side: Side | undefined;
+    time: {
+      top: number;
+      bottom: number;
+    };
+  };
 }

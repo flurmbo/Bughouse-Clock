@@ -1,12 +1,12 @@
 import React from "react";
-import { ITurnState, Side } from "../../types";
+import { IGameState, Side } from "../../types";
 import ChessClockFace from "./ChessClockFace";
 
 interface IProps {
   className: string;
   onClickClockFace: (side: Side, clock: "left" | "right") => void;
   clock: "left" | "right";
-  turnState: ITurnState;
+  gameState: IGameState;
   displayedTimes: number[];
 }
 
@@ -15,7 +15,7 @@ const ChessClock = (props: IProps) => {
     className,
     onClickClockFace,
     clock,
-    turnState,
+    gameState,
     displayedTimes,
   } = props;
   return (
@@ -25,7 +25,7 @@ const ChessClock = (props: IProps) => {
         side={Side.Top}
         onClickClockFace={onClickClockFace}
         clock={clock}
-        turnState={turnState}
+        gameState={gameState}
         displayedTime={displayedTimes[0]}
       />
       <ChessClockFace
@@ -33,7 +33,7 @@ const ChessClock = (props: IProps) => {
         side={Side.Bottom}
         onClickClockFace={onClickClockFace}
         clock={clock}
-        turnState={turnState}
+        gameState={gameState}
         displayedTime={displayedTimes[1]}
       />
     </React.Fragment>

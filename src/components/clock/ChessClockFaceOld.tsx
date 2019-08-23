@@ -1,12 +1,18 @@
 import React, { Component } from "react";
-import { GameState, IPreset, Milliseconds, Seconds, Side } from "../../types";
+import {
+  GameLifecycle,
+  IPreset,
+  Milliseconds,
+  Seconds,
+  Side,
+} from "../../types";
 import { toDurationString } from "../../utils";
 
 interface IProps {
   side: Side;
   onClickHandler: (side: Side) => () => void;
   onTimesUp: () => void;
-  gameState: GameState;
+  gameLifecycle: GameLifecycle;
   isItMyTurn: boolean;
   className: string;
   onThisComponentDoneResetting: () => void;
@@ -45,7 +51,7 @@ class ChessClockFace extends Component<IProps, IState> {
     this.setState({ updateIntervalID });
   }
 
-  public onResetGameState() {
+  public onResetGameLifecycle() {
     if (this.state.delayTimeoutID) {
       clearTimeout(this.state.delayTimeoutID);
     }
@@ -67,7 +73,7 @@ class ChessClockFace extends Component<IProps, IState> {
   // }
 
   public componentDidUpdate(prevProps: IProps) {
-    const { isItMyTurn, gameState } = this.props;
+    const { isItMyTurn, gameLifecycle } = this.props;
     if (!prevProps.isItMyTurn && isItMyTurn) {
       // begin our turn
       const delayTimeoutID = window.setTimeout(
@@ -80,9 +86,9 @@ class ChessClockFace extends Component<IProps, IState> {
     } else if (
       (prevProps.isItMyTurn &&
         !isItMyTurn &&
-        gameState === GameState.InProgress) ||
-      (prevProps.gameState === GameState.InProgress &&
-        gameState === GameState.Paused)
+        gameLifecycle === GameLifecycle.InProgress) ||
+      (prevProps.gameLifecycle === GameLifecycle.InProgress &&
+        gameLifecycle === GameLifecycle.Paused)
     ) {
       // end our turn
       this.setState(prevState => {
@@ -103,7 +109,7 @@ class ChessClockFace extends Component<IProps, IState> {
       });
     } else if (
       this.state.displayedTime === 0 &&
-      gameState === GameState.InProgress
+      gameLifecycle === GameLifecycle.InProgress
     ) {
       // end game
       const { delayTimeoutID } = this.state;
@@ -113,11 +119,11 @@ class ChessClockFace extends Component<IProps, IState> {
       this.setState({ ranOutOfTimeIsMe: true });
       this.props.onTimesUp();
     } else if (
-      prevProps.gameState !== GameState.Resetting &&
-      gameState === GameState.Resetting
+      prevProps.gameLifecycle !== GameLifecycle.Resetting &&
+      gameLifecycle === GameLifecycle.Resetting
     ) {
       // reset game
-      this.onResetGameState();
+      this.onResetGameLifecycle();
     }
   }
 

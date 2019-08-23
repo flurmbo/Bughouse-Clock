@@ -4,7 +4,7 @@ import "./App.css";
 import ClockContainer from "./components/clock/ClockContainer";
 import ConfirmationDialog from "./components/ConfirmationDialog";
 import SettingsMenu from "./components/settings/SettingsMenu";
-import { GameState, IncrementType, IPreset, ISettings } from "./types";
+import { GameLifecycle, IncrementType, IPreset, ISettings } from "./types";
 
 import {
   getPresetById,
@@ -16,7 +16,7 @@ import {
 } from "./utils";
 
 interface IState {
-  gameState: GameState;
+  gameLifecycle: GameLifecycle;
   settingsIsOpen: boolean;
   numberOfComponentsDoneResetting?: number;
   resetDialogIsOpen: boolean;
@@ -29,7 +29,7 @@ class App extends Component<any, IState> {
   public storedSettings = getStoredSettings();
 
   public state: IState = {
-    gameState: GameState.NotStarted,
+    gameLifecycle: GameLifecycle.NotStarted,
     presets: this.storedPresets,
     resetDialogIsOpen: false,
     settingsIsOpen: false,
@@ -39,7 +39,7 @@ class App extends Component<any, IState> {
   public componentDidUpdate() {
     if (this.state.numberOfComponentsDoneResetting === 6) {
       this.setState({
-        gameState: GameState.NotStarted,
+        gameLifecycle: GameLifecycle.NotStarted,
         numberOfComponentsDoneResetting: undefined,
       });
     }
@@ -47,7 +47,7 @@ class App extends Component<any, IState> {
 
   public render() {
     const {
-      gameState,
+      gameLifecycle,
       settingsIsOpen,
       resetDialogIsOpen,
       presets,
@@ -59,8 +59,8 @@ class App extends Component<any, IState> {
     return (
       <div className="App">
         <ClockContainer
-          gameState={gameState}
-          setGameState={this.setGameState}
+          gameLifecycle={gameLifecycle}
+          setGameLifecycle={this.setGameLifecycle}
           selectedPreset={selectedPreset}
           onClickSettingsButton={this.openSettings}
           onClickPauseButton={this.pauseGame}
@@ -109,15 +109,18 @@ class App extends Component<any, IState> {
   };
 
   private pauseGame = () => {
-    this.setState({ gameState: GameState.Paused });
+    this.setState({ gameLifecycle: GameLifecycle.Paused });
   };
 
-  private setGameState = (gameState: GameState) => {
-    this.setState({ gameState });
+  private setGameLifecycle = (gameLifecycle: GameLifecycle) => {
+    this.setState({ gameLifecycle });
   };
 
   private handleYes = () => {
-    this.setState({ gameState: GameState.Resetting, resetDialogIsOpen: false });
+    this.setState({
+      gameLifecycle: GameLifecycle.Resetting,
+      resetDialogIsOpen: false,
+    });
   };
 
   private handleNo = () => {
@@ -130,7 +133,7 @@ class App extends Component<any, IState> {
   };
 
   private onTimesUp = () => {
-    this.setState({ gameState: GameState.GameOver });
+    this.setState({ gameLifecycle: GameLifecycle.GameOver });
     const onTimesUpSound = new Audio("onTimesUp.mp3");
     onTimesUpSound.play();
   };
@@ -188,7 +191,7 @@ class App extends Component<any, IState> {
   // ) => {
   //   return () =>
   //     this.setState(state => ({
-  //       gameState: reset ? GameState.Resetting : state.gameState,
+  //       gameLifecycle: reset ? GameLifecycle.Resetting : state.gameLifecycle,
   //       settingsIsOpen: !reset,
   //       timerOptions: { ...state.timerOptions, ...newTimerOptions },
   //     }));

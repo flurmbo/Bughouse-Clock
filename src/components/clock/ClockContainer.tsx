@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
-import { GameState, IPreset, ITurnState, Side } from "../../types";
+import { GameLifecycle, IGameState, IPreset, Side } from "../../types";
 import { otherSide } from "../../utils";
 import ButtonTray from "./ButtonTray";
 import ChessClock from "./ChessClock";
 
 interface IProps {
-  gameState: GameState;
+  gameLifecycle: GameLifecycle;
   selectedPreset: IPreset;
-  setGameState: (gameState: GameState) => void;
+  setGameLifecycle: (gameLifecycle: GameLifecycle) => void;
   onResetGame: () => void;
   onClickPauseButton: () => void;
   onClickSettingsButton: () => void;
@@ -15,7 +15,7 @@ interface IProps {
 }
 const ClockContainer = (props: IProps) => {
   const {
-    gameState,
+    gameLifecycle,
     selectedPreset,
     onResetGame,
     onClickPauseButton,
@@ -23,24 +23,42 @@ const ClockContainer = (props: IProps) => {
     openConfirmResetDialog,
   } = props;
 
-  const [turnState, setTurnState] = useState<ITurnState>({
-    left: Side.Top,
-    right: Side.Bottom,
+  const { startingTime } = selectedPreset;
+  const [gameState, setGameState] = useState<IGameState>({
+    left: {
+      side: Side.Top,
+      time: {
+        top: startingTime,
+        bottom: startingTime,
+      },
+    },
+    right: {
+      side: Side.Bottom,
+      time: {
+        top: startingTime,
+        bottom: startingTime,
+      },
+    },
   });
 
-  const turnStateRef = useRef(turnState);
+  const gameStateRef = useRef(gameState);
 
   useEffect(() => {
-    turnStateRef.current = turnState;
-  }, [turnState]);
+    gameStateRef.current = gameState;
+  }, [gameState]);
 
   const onClickClockFace = (side: Side, clock: "left" | "right") => {
-    const state = turnStateRef.current;
-    if (state[clock] === side) {
-      setTurnState(prevState => {
+    const state = gameStateRef.current;
+    if (state[clock].side === side) {
+      setGameState(prevState => {
         return {
           ...prevState,
-          ...{ [clock]: otherSide(side) },
+          ...{
+            [clock]: {
+              side: otherSide(side),
+              time: prevState[clock].time,
+            },
+          },
         };
       });
     }
@@ -57,11 +75,11 @@ const ClockContainer = (props: IProps) => {
         className="LeftClock"
         onClickClockFace={onClickClockFace}
         clock="left"
-        turnState={turnState}
+        gameState={gameState}
         displayedTimes={displayedTimes}
       />
       <ButtonTray
-        gameState={gameState}
+        gameLifecycle={gameLifecycle}
         onResetGame={onResetGame}
         onClickPauseButton={onClickPauseButton}
         onClickSettingsButton={onClickSettingsButton}
@@ -71,7 +89,7 @@ const ClockContainer = (props: IProps) => {
         className="RightClock"
         onClickClockFace={onClickClockFace}
         clock="right"
-        turnState={turnState}
+        gameState={gameState}
         displayedTimes={displayedTimes}
       />
     </React.Fragment>

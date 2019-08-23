@@ -3,7 +3,7 @@ import PauseIcon from "@material-ui/icons/Pause";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import SettingsIcon from "@material-ui/icons/Settings";
 import React, { Component } from "react";
-import { GameState } from "../../types";
+import { GameLifecycle } from "../../types";
 import { isCordova } from "../../utils";
 
 declare let navigator: any;
@@ -12,7 +12,7 @@ interface IProps {
   onResetGame: () => void;
   onClickPauseButton: () => void;
   onClickSettingsButton: () => void;
-  gameState: GameState;
+  gameLifecycle: GameLifecycle;
   classes: any;
   openConfirmResetDialog: () => void;
 }
@@ -46,7 +46,7 @@ class ButtonTray extends Component<IProps> {
   };
 
   public render() {
-    const { classes, gameState, onClickSettingsButton } = this.props;
+    const { classes, gameLifecycle, onClickSettingsButton } = this.props;
     return (
       <React.Fragment>
         <div className="topButton">
@@ -56,7 +56,7 @@ class ButtonTray extends Component<IProps> {
             onClick={onClickSettingsButton}
           />
         </div>
-        {gameState === GameState.InProgress && (
+        {gameLifecycle === GameLifecycle.InProgress && (
           <div className="middleButton">
             <PauseIcon
               classes={{ root: classes.root }}

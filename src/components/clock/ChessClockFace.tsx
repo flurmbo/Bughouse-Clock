@@ -1,5 +1,5 @@
 import React from "react";
-import { ITurnState, Seconds, Side } from "../../types";
+import { IGameState, Seconds, Side } from "../../types";
 import { toDurationString } from "../../utils";
 
 interface IProps {
@@ -7,7 +7,7 @@ interface IProps {
   className: string;
   clock: "left" | "right";
   onClickClockFace: (side: Side, clock: "left" | "right") => void;
-  turnState: ITurnState;
+  gameState: IGameState;
   displayedTime: Seconds;
 }
 
@@ -17,7 +17,7 @@ const ChessClockFace = (props: IProps) => {
     className,
     onClickClockFace,
     clock,
-    turnState,
+    gameState,
     displayedTime,
   } = props;
 
@@ -27,7 +27,7 @@ const ChessClockFace = (props: IProps) => {
 
   return (
     <div
-      className={className + (turnState[clock] === side ? " active" : "")}
+      className={className + (gameState[clock].side === side ? " active" : "")}
       onTouchEnd={onTouchEnd}
     >
       {toDurationString(displayedTime)}
