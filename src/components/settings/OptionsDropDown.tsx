@@ -6,14 +6,12 @@ import MenuItem from "@material-ui/core/MenuItem";
 import { makeStyles } from "@material-ui/core/styles";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import React from "react";
-import { ITimerOptions } from "../../types";
+import { ISettings } from "../../types";
 import AboutDialog from "./AboutDialog";
+
 interface IProps {
-  timerOptions: ITimerOptions;
-  setTimerOptions: (
-    newTimerOptions: Partial<ITimerOptions>,
-    reset?: boolean,
-  ) => () => void;
+  settings: ISettings;
+  setSettings: (settings: Partial<ISettings>) => void;
 }
 
 const useStyles = makeStyles({
@@ -27,6 +25,7 @@ const useStyles = makeStyles({
 });
 
 function OptionsDropDown(props: IProps) {
+  const { settings, setSettings } = props;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [aboutDialogIsOpen, setAboutDialogIsOpen] = React.useState(false);
 
@@ -58,10 +57,7 @@ function OptionsDropDown(props: IProps) {
       e.target.getAttribute("type") === "checkbox" ||
       e.target.getAttribute("role") === "menuitem"
     ) {
-      props.setTimerOptions(
-        { fullScreen: !props.timerOptions.fullScreen },
-        false,
-      )();
+      props.setSettings({ fullScreen: !settings.fullScreen });
     }
   }
   function onClickSingleTap(e: any) {
@@ -69,10 +65,7 @@ function OptionsDropDown(props: IProps) {
       e.target.getAttribute("type") === "checkbox" ||
       e.target.getAttribute("role") === "menuitem"
     ) {
-      props.setTimerOptions(
-        { singleTap: !props.timerOptions.singleTap },
-        false,
-      )();
+      setSettings({ singleTap: !settings.singleTap });
     }
   }
   const classes = useStyles();
@@ -89,7 +82,7 @@ function OptionsDropDown(props: IProps) {
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
         <MenuItem onClick={onClickFullScreen}>
           <FormControlLabel
-            control={<Checkbox checked={props.timerOptions.fullScreen} />}
+            control={<Checkbox checked={settings.fullScreen} />}
             label="Full Screen"
             labelPlacement="start"
             className={classes.formControlLabel}
@@ -97,7 +90,7 @@ function OptionsDropDown(props: IProps) {
         </MenuItem>
         <MenuItem onClick={onClickSingleTap}>
           <FormControlLabel
-            control={<Checkbox checked={props.timerOptions.singleTap} />}
+            control={<Checkbox checked={settings.singleTap} />}
             label="Single tap starts timers"
             labelPlacement="start"
             className={classes.formControlLabel}

@@ -1,22 +1,16 @@
 import React, { Component } from "react";
-import {
-  GameState,
-  ITimerOptions,
-  Milliseconds,
-  Seconds,
-  Side,
-} from "../../types";
+import { GameState, IPreset, Milliseconds, Seconds, Side } from "../../types";
 import { toDurationString } from "../../utils";
 
 interface IProps {
   side: Side;
-  options: ITimerOptions;
   onClickHandler: (side: Side) => () => void;
   onTimesUp: () => void;
   gameState: GameState;
   isItMyTurn: boolean;
   className: string;
   onThisComponentDoneResetting: () => void;
+  selectedPreset: IPreset;
 }
 
 interface IState {
@@ -30,9 +24,9 @@ interface IState {
 
 class ChessClockFace extends Component<IProps, IState> {
   public state: IState = {
-    displayedTime: this.props.options.startingTime,
+    displayedTime: this.props.selectedPreset.startingTime,
     ranOutOfTimeIsMe: false,
-    timeLeft: this.props.options.startingTime * 1000,
+    timeLeft: this.props.selectedPreset.startingTime * 1000,
   };
   public componentDidMount() {
     const updateIntervalID = window.setInterval(() => {
@@ -58,9 +52,9 @@ class ChessClockFace extends Component<IProps, IState> {
       {
         countdownStartTime: undefined,
         delayTimeoutID: undefined,
-        displayedTime: this.props.options.startingTime,
+        displayedTime: this.props.selectedPreset.startingTime,
         ranOutOfTimeIsMe: false,
-        timeLeft: this.props.options.startingTime * 1000,
+        timeLeft: this.props.selectedPreset.startingTime * 1000,
         updateIntervalID: undefined,
       },
       this.props.onThisComponentDoneResetting,
@@ -77,7 +71,7 @@ class ChessClockFace extends Component<IProps, IState> {
       // begin our turn
       const delayTimeoutID = window.setTimeout(
         this.onDelayElapsed,
-        1000 * this.props.options.increment,
+        1000 * this.props.selectedPreset.increment,
       );
       this.setState({
         delayTimeoutID,

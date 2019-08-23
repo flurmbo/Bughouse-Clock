@@ -20,20 +20,18 @@ export type Seconds = number;
 
 export type Milliseconds = number;
 
-export interface ITimerOptions {
-  increment: Seconds;
-  incrementType: IncrementType;
-  startingTime: Seconds;
-  fullScreen: boolean;
-  singleTap: boolean;
-}
-
 export interface IPreset {
   text: string;
   increment: number;
   incrementType: IncrementType;
   startingTime: number;
   id: string;
+}
+
+export interface ISettings {
+  selected: string;
+  fullScreen: boolean;
+  singleTap: boolean;
 }
 
 export interface IDuration {

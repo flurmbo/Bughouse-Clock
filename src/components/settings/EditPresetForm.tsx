@@ -12,7 +12,7 @@ import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormLabel from "@material-ui/core/FormLabel";
 import Grid from "@material-ui/core/Grid";
-import { IDuration, IncrementType, IPreset, ITimerOptions } from "../../types";
+import { IDuration, IncrementType, IPreset } from "../../types";
 import { durationToSeconds, toDurationString } from "../../utils";
 import ConfirmationDialog from "../ConfirmationDialog";
 import DurationPickerDialog from "./DurationPickerDialog";

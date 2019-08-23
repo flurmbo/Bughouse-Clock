@@ -6,7 +6,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
 import React, { useState } from "react";
 import { v4 as uuid } from "uuid";
-import { IPreset, ITimerOptions, IncrementType } from "../../types";
+import { IncrementType, IPreset, ISettings } from "../../types";
 import ConfirmationDialog from "../ConfirmationDialog";
 import EditPresetForm from "./EditPresetForm";
 import ListOfPresets from "./ListOfPresets";
@@ -14,11 +14,13 @@ import SettingsAppBar from "./SettingsAppBar";
 
 interface IProps {
   open: boolean;
-  setTimerOptions: (newTimerOptions: Partial<ITimerOptions>) => () => void;
-  timerOptions: ITimerOptions;
+  setSelectedPreset: (presetId: string) => void;
   presets: IPreset[];
   closeSettings: () => void;
   updatePresets: (presets: IPreset[]) => void;
+  selectedPreset: string;
+  settings: ISettings;
+  setSettings: (settings: Partial<ISettings>) => void;
 }
 
 const useStyles = makeStyles(theme => ({
@@ -35,11 +37,13 @@ const useStyles = makeStyles(theme => ({
 function SettingsMenu(props: IProps) {
   const {
     open,
-    setTimerOptions,
-    timerOptions,
+    setSelectedPreset,
+    setSettings,
     presets,
     updatePresets,
     closeSettings,
+    selectedPreset,
+    settings,
   } = props;
 
   function onYesDelete() {
@@ -59,7 +63,7 @@ function SettingsMenu(props: IProps) {
         id,
       },
     ]);
-    setSelectedPreset(id);
+    setFocusedPreset(id);
     setEditPresetFormIsOpen(true);
   }
 
@@ -72,11 +76,10 @@ function SettingsMenu(props: IProps) {
     showEditDeletePresetButtons,
     setShowEditDeletePresetButtons,
   ] = useState(false);
+  const [focusedPreset, setFocusedPreset] = useState("");
   const [deletePresetDialogIsOpen, setDeletePresetDialogIsOpen] = useState(
     false,
   );
-
-  const [selectedPreset, setSelectedPreset] = useState("");
   const [editPresetFormIsOpen, setEditPresetFormIsOpen] = useState(false);
   return (
     <React.Fragment>
@@ -88,21 +91,24 @@ function SettingsMenu(props: IProps) {
         }}
       >
         <SettingsAppBar
-          setTimerOptions={setTimerOptions}
-          timerOptions={timerOptions}
+          setSettings={setSettings}
+          settings={settings}
+          setSelectedPreset={setSelectedPreset}
           setShowEditDeletePresetButtons={setShowEditDeletePresetButtons}
           showEditDeletePresetButtons={showEditDeletePresetButtons}
           closeSettings={closeSettings}
         />
         <Container>
           <ListOfPresets
+            focusedPreset={focusedPreset}
+            setFocusedPreset={setFocusedPreset}
             presets={presets}
             showEditDeletePresetButtons={showEditDeletePresetButtons}
             setDeletePresetDialogIsOpen={setDeletePresetDialogIsOpen}
             setEditPresetFormIsOpen={setEditPresetFormIsOpen}
-            setTimerOptions={setTimerOptions}
             updatePresets={updatePresets}
             setSelectedPreset={setSelectedPreset}
+            selectedPreset={selectedPreset}
           />
         </Container>
         {!showEditDeletePresetButtons && (
@@ -127,8 +133,8 @@ function SettingsMenu(props: IProps) {
           open={editPresetFormIsOpen}
           updatePresets={updatePresets}
           editedPreset={
-            selectedPreset
-              ? presets.find(preset => preset.id === selectedPreset)
+            focusedPreset
+              ? presets.find(preset => preset.id === focusedPreset)
               : undefined
           }
           setEditPresetFormIsOpen={setEditPresetFormIsOpen}

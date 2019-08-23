@@ -1,8 +1,16 @@
 import { v4 as uuid } from "uuid";
-import { IDuration, IPreset, Seconds, Side, IncrementType } from "./types";
+import {
+  IDuration,
+  IncrementType,
+  IPreset,
+  ISettings,
+  Seconds,
+  Side,
+} from "./types";
 
 declare let window: any;
-const LOCAL_STORAGE_ITEM = "bughouseTimerPresets2";
+const LOCAL_STORAGE_PRESETS_ITEM = "bughouseTimerPresets2";
+const LOCAL_STORAGE_SETTINGS_ITEM = "bughouseTimerSelected";
 const DEFAULT_PRESETS: IPreset[] = [
   {
     text: "5|5",
@@ -19,6 +27,12 @@ const DEFAULT_PRESETS: IPreset[] = [
     id: uuid(),
   },
 ];
+
+const DEFAULT_SETTINGS = {
+  selected: DEFAULT_PRESETS[0].id,
+  fullScreen: false,
+  singleTap: false,
+};
 function toDurationString(seconds: Seconds): string {
   const m = Math.floor(seconds / 60);
   const s = seconds % 60;
@@ -34,7 +48,7 @@ function isCordova() {
 }
 
 function getStoredPresets(): IPreset[] {
-  const data = localStorage.getItem(LOCAL_STORAGE_ITEM);
+  const data = localStorage.getItem(LOCAL_STORAGE_PRESETS_ITEM);
   if (data) {
     return JSON.parse(data);
   } else {
@@ -43,7 +57,20 @@ function getStoredPresets(): IPreset[] {
 }
 
 function savePresetsInLocalStorage(presets: IPreset[]) {
-  localStorage.setItem(LOCAL_STORAGE_ITEM, JSON.stringify(presets));
+  localStorage.setItem(LOCAL_STORAGE_PRESETS_ITEM, JSON.stringify(presets));
+}
+
+function getStoredSettings(): ISettings {
+  const data = localStorage.getItem(LOCAL_STORAGE_SETTINGS_ITEM);
+  if (data) {
+    return JSON.parse(data);
+  } else {
+    return DEFAULT_SETTINGS;
+  }
+}
+
+function saveSettingsInLocalStorage(settings: ISettings) {
+  localStorage.setItem(LOCAL_STORAGE_SETTINGS_ITEM, JSON.stringify(settings));
 }
 
 function secondsToDuration(secs: number): IDuration {
@@ -58,12 +85,28 @@ function durationToSeconds({ hours, minutes, seconds }: IDuration): number {
   return hours * 3600 + minutes * 60 + seconds;
 }
 
+function getPresetById(id: string, presets: IPreset[]): IPreset {
+  const foundPreset = presets.find(preset => preset.id === id);
+  return foundPreset
+    ? foundPreset
+    : {
+        text: "5|5",
+        increment: 5,
+        incrementType: IncrementType.Delay,
+        startingTime: 60 * 5,
+        id,
+      };
+}
+
 export {
   toDurationString,
   otherSide,
   isCordova,
   getStoredPresets,
   savePresetsInLocalStorage,
+  getStoredSettings,
+  saveSettingsInLocalStorage,
   secondsToDuration,
   durationToSeconds,
+  getPresetById,
 };

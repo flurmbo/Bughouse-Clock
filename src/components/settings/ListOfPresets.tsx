@@ -6,16 +6,17 @@ import ListItemText from "@material-ui/core/ListItemText";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import React from "react";
-import { IPreset, ITimerOptions } from "../../types";
+import { IPreset } from "../../types";
 
 interface IProps {
   presets: IPreset[];
   showEditDeletePresetButtons: boolean;
   setDeletePresetDialogIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setSelectedPreset: React.Dispatch<React.SetStateAction<string>>;
+  setFocusedPreset: React.Dispatch<React.SetStateAction<string>>;
+  focusedPreset: string;
   setEditPresetFormIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-
-  setTimerOptions: (newTimerOptions: Partial<ITimerOptions>) => () => void;
+  setSelectedPreset: (presetId: string) => void;
+  selectedPreset: string;
   updatePresets: (presets: IPreset[]) => void;
 }
 
@@ -23,39 +24,36 @@ function OptionsDropDown(props: IProps) {
   function onClickDeleteButton(id: string) {
     return () => {
       setDeletePresetDialogIsOpen(true);
-      setSelectedPreset(id);
+      setFocusedPreset(id);
     };
   }
 
   function onClickEditButton(id: string) {
     return () => {
       setEditPresetFormIsOpen(true);
-      setSelectedPreset(id);
+      setFocusedPreset(id);
     };
   }
 
   const {
-    setTimerOptions,
     presets,
     showEditDeletePresetButtons,
     setDeletePresetDialogIsOpen,
-    setSelectedPreset,
+    setFocusedPreset,
     setEditPresetFormIsOpen,
+    selectedPreset,
   } = props;
   return (
     <List>
       {presets.map(preset => {
-        const { text, startingTime, increment, id } = preset;
+        const { text, id } = preset;
         return (
           <React.Fragment key={id}>
             <ListItem
               key={id}
               button={!showEditDeletePresetButtons as any}
-              onClick={
-                showEditDeletePresetButtons
-                  ? undefined
-                  : setTimerOptions({ increment, startingTime })
-              }
+              className={id === selectedPreset ? "selected-preset" : ""}
+              onClick={showEditDeletePresetButtons ? undefined : undefined}
             >
               <ListItemText primary={text} />
               {showEditDeletePresetButtons && (

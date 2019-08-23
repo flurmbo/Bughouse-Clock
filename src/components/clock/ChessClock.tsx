@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import { GameState, ITimerOptions, Side } from "../../types";
+import { GameState, IPreset, Side } from "../../types";
 import { otherSide } from "../../utils";
 import ChessClockFace from "./ChessClockFace";
 
 interface IProps {
   className: string;
-  options: ITimerOptions;
+  selectedPreset: IPreset;
   onTimesUp: () => void;
   onStartGame: () => void;
   gameState: GameState;
@@ -42,7 +42,7 @@ class ChessClock extends Component<IProps, IState> {
   public render() {
     const {
       className,
-      options,
+      selectedPreset,
       onTimesUp,
       gameState,
       onThisComponentDoneResetting,
@@ -51,7 +51,7 @@ class ChessClock extends Component<IProps, IState> {
     return (
       <React.Fragment>
         <ChessClockFace
-          options={options}
+          selectedPreset={selectedPreset}
           className={"timer top" + className}
           side={Side.Top}
           onClickHandler={this.onClickHandler}
@@ -63,7 +63,7 @@ class ChessClock extends Component<IProps, IState> {
           onThisComponentDoneResetting={onThisComponentDoneResetting}
         />
         <ChessClockFace
-          options={options}
+          selectedPreset={selectedPreset}
           className={"timer bottom" + className}
           side={Side.Bottom}
           onClickHandler={this.onClickHandler}

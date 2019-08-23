@@ -5,33 +5,41 @@ import ButtonTray from "./components/clock/ButtonTray";
 import ChessClock from "./components/clock/ChessClock";
 import ConfirmationDialog from "./components/ConfirmationDialog";
 import SettingsMenu from "./components/settings/SettingsMenu";
-import { GameState, IncrementType, IPreset, ITimerOptions } from "./types";
-import { getStoredPresets, savePresetsInLocalStorage } from "./utils";
-
-const OPTIONS: ITimerOptions = {
-  increment: 5,
-  incrementType: IncrementType.Delay,
-  fullScreen: false,
-  singleTap: false,
-  startingTime: 5 * 60,
-};
+import { GameState, IncrementType, IPreset, ISettings } from "./types";
+import {
+  getPresetById,
+  getStoredPresets,
+  getStoredSettings,
+  savePresetsInLocalStorage,
+  saveSettingsInLocalStorage,
+} from "./utils";
 
 interface IState {
   gameState: GameState;
-  timerOptions: ITimerOptions;
+  selectedPreset: IPreset;
   settingsIsOpen: boolean;
   numberOfComponentsDoneResetting?: number;
   resetDialogIsOpen: boolean;
   presets: IPreset[];
+  settings: ISettings;
 }
 
 class App extends Component<any, IState> {
+  public storedPresets = getStoredPresets();
+  public storedSettings = getStoredSettings();
+  public selectedPreset = getPresetById(
+    this.storedSettings.selected,
+    this.storedPresets,
+  );
+  public selectedTimerOptions = {};
+
   public state: IState = {
     gameState: GameState.NotStarted,
-    presets: getStoredPresets(),
+    presets: this.storedPresets,
     resetDialogIsOpen: false,
     settingsIsOpen: false,
-    timerOptions: OPTIONS,
+    selectedPreset: this.selectedPreset,
+    settings: this.storedSettings,
   };
 
   public componentDidUpdate() {
@@ -46,19 +54,20 @@ class App extends Component<any, IState> {
   public render() {
     const {
       gameState,
-      timerOptions,
       settingsIsOpen,
       resetDialogIsOpen,
       presets,
+      selectedPreset,
+      settings,
     } = this.state;
     return (
       <div className="App">
         <ChessClock
           className="LeftClock"
-          options={timerOptions}
           onTimesUp={this.onTimesUp}
           onStartGame={this.onStartGame}
           gameState={gameState}
+          selectedPreset={selectedPreset}
           onThisComponentDoneResetting={this.onThisComponentDoneResetting}
         />
         <ButtonTray
@@ -70,18 +79,20 @@ class App extends Component<any, IState> {
         />
         <ChessClock
           className="RightClock"
-          options={timerOptions}
           onTimesUp={this.onTimesUp}
           onStartGame={this.onStartGame}
           gameState={gameState}
+          selectedPreset={selectedPreset}
           onThisComponentDoneResetting={this.onThisComponentDoneResetting}
         />
         {settingsIsOpen && (
           <SettingsMenu
             open={settingsIsOpen}
-            setTimerOptions={this.setTimerOptions}
-            timerOptions={timerOptions}
+            selectedPreset={selectedPreset.id}
+            setSelectedPreset={this.setSelectedPreset}
             presets={presets}
+            settings={settings}
+            setSettings={this.setSettings}
             updatePresets={this.updatePresets}
             closeSettings={this.closeSettings}
           />
@@ -97,6 +108,7 @@ class App extends Component<any, IState> {
       </div>
     );
   }
+
   private updatePresets = (newPresets: IPreset[]) => {
     savePresetsInLocalStorage(newPresets);
     this.setState({ presets: newPresets });
@@ -156,18 +168,39 @@ class App extends Component<any, IState> {
     onTimesUpSound.play();
   };
 
-  private setTimerOptions = (
-    newTimerOptions: Partial<ITimerOptions>,
-    reset = true,
-  ) => {
-    return () =>
-      this.setState(state => ({
-        gameState: reset ? GameState.Resetting : state.gameState,
-        settingsIsOpen: !reset,
-        timerOptions: { ...state.timerOptions, ...newTimerOptions },
-      }));
-    // tslint:disable-next-line: semicolon
+  private setSettings = (settings: Partial<ISettings>) => {
+    this.setState(
+      prevState => {
+        return {
+          settings: { ...prevState.settings, settings },
+        };
+      },
+      () => {
+        saveSettingsInLocalStorage(this.state.settings);
+      },
+    );
   };
+
+  private setSelectedPreset = (presetId: string) => {
+    this.setState(state => {
+      return {
+        selectedPreset: getPresetById(presetId, state.presets),
+      };
+    });
+  };
+
+  // private setTimerOptions = (
+  //   newTimerOptions: Partial<ITimerOptions>,
+  //   reset = true,
+  // ) => {
+  //   return () =>
+  //     this.setState(state => ({
+  //       gameState: reset ? GameState.Resetting : state.gameState,
+  //       settingsIsOpen: !reset,
+  //       timerOptions: { ...state.timerOptions, ...newTimerOptions },
+  //     }));
+  //   // tslint:disable-next-line: semicolon
+  // };
 }
 
 export default App;

@@ -7,14 +7,15 @@ import useScrollTrigger from "@material-ui/core/useScrollTrigger";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import EditIcon from "@material-ui/icons/Edit";
 import React from "react";
-import { ITimerOptions } from "../../types";
+import { ISettings } from "../../types";
 import OptionsDropDown from "./OptionsDropDown";
 
 interface IProps {
-  setTimerOptions: (newTimerOptions: Partial<ITimerOptions>) => () => void;
-  timerOptions: ITimerOptions;
   setShowEditDeletePresetButtons: React.Dispatch<React.SetStateAction<boolean>>;
   showEditDeletePresetButtons: boolean;
+  settings: ISettings;
+  setSettings: (settings: Partial<ISettings>) => void;
+  setSelectedPreset: (presetId: string) => void;
   closeSettings: () => void;
 }
 const useStyles = makeStyles({
@@ -32,11 +33,11 @@ function ElevationScroll(props: any) {
 }
 function SettingsAppBar(props: IProps) {
   const {
-    setTimerOptions,
-    timerOptions,
     setShowEditDeletePresetButtons,
     showEditDeletePresetButtons,
     closeSettings,
+    settings,
+    setSettings,
   } = props;
 
   function toggleShowEditDeleteButtons() {
@@ -77,8 +78,8 @@ function SettingsAppBar(props: IProps) {
                   <EditIcon />
                 </IconButton>
                 <OptionsDropDown
-                  setTimerOptions={setTimerOptions}
-                  timerOptions={timerOptions}
+                  settings={settings}
+                  setSettings={setSettings}
                 />
               </React.Fragment>
             )}

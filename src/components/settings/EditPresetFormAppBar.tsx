@@ -7,7 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import useScrollTrigger from "@material-ui/core/useScrollTrigger";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import React from "react";
-import { IPreset, ITimerOptions } from "../../types";
+import { IPreset } from "../../types";
 import ConfirmationDialog from "../ConfirmationDialog";
 
 interface IProps {
