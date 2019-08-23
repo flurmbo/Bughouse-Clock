@@ -172,7 +172,7 @@ class App extends Component<any, IState> {
     this.setState(
       prevState => {
         return {
-          settings: { ...prevState.settings, settings },
+          settings: { ...prevState.settings, ...settings },
         };
       },
       () => {
