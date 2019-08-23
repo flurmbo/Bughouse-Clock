@@ -6,17 +6,18 @@ import ChessClock from "./components/clock/ChessClock";
 import ConfirmationDialog from "./components/ConfirmationDialog";
 import SettingsMenu from "./components/settings/SettingsMenu";
 import { GameState, IncrementType, IPreset, ISettings } from "./types";
+
 import {
   getPresetById,
   getStoredPresets,
   getStoredSettings,
   savePresetsInLocalStorage,
   saveSettingsInLocalStorage,
+  WEIRD_DEFAULT_PRESET,
 } from "./utils";
 
 interface IState {
   gameState: GameState;
-  selectedPreset: IPreset;
   settingsIsOpen: boolean;
   numberOfComponentsDoneResetting?: number;
   resetDialogIsOpen: boolean;
@@ -27,18 +28,12 @@ interface IState {
 class App extends Component<any, IState> {
   public storedPresets = getStoredPresets();
   public storedSettings = getStoredSettings();
-  public selectedPreset = getPresetById(
-    this.storedSettings.selected,
-    this.storedPresets,
-  );
-  public selectedTimerOptions = {};
 
   public state: IState = {
     gameState: GameState.NotStarted,
     presets: this.storedPresets,
     resetDialogIsOpen: false,
     settingsIsOpen: false,
-    selectedPreset: this.selectedPreset,
     settings: this.storedSettings,
   };
 
@@ -57,9 +52,11 @@ class App extends Component<any, IState> {
       settingsIsOpen,
       resetDialogIsOpen,
       presets,
-      selectedPreset,
       settings,
     } = this.state;
+
+    const selectedPreset =
+      getPresetById(settings.selected, presets) || WEIRD_DEFAULT_PRESET;
     return (
       <div className="App">
         <ChessClock
@@ -88,7 +85,7 @@ class App extends Component<any, IState> {
         {settingsIsOpen && (
           <SettingsMenu
             open={settingsIsOpen}
-            selectedPreset={selectedPreset.id}
+            selectedPreset={settings.selected}
             setSelectedPreset={this.setSelectedPreset}
             presets={presets}
             settings={settings}
@@ -111,7 +108,15 @@ class App extends Component<any, IState> {
 
   private updatePresets = (newPresets: IPreset[]) => {
     savePresetsInLocalStorage(newPresets);
-    this.setState({ presets: newPresets });
+    this.setState({ presets: newPresets }, () => {
+      const oldSelection = this.state.settings.selected;
+      if (
+        !this.state.presets.filter(preset => preset.id === oldSelection).length
+      ) {
+        console.log("this is excuting");
+        this.setSelectedPreset(this.state.presets[0].id);
+      }
+    });
   };
   private onThisComponentDoneResetting = () => {
     this.setState(
@@ -182,11 +187,16 @@ class App extends Component<any, IState> {
   };
 
   private setSelectedPreset = (presetId: string) => {
-    this.setState(state => {
-      return {
-        selectedPreset: getPresetById(presetId, state.presets),
-      };
-    });
+    this.setState(
+      state => {
+        return {
+          settings: { ...state.settings, ...{ selected: presetId } },
+        };
+      },
+      () => {
+        saveSettingsInLocalStorage(this.state.settings);
+      },
+    );
   };
 
   // private setTimerOptions = (

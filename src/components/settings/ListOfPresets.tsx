@@ -4,6 +4,7 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import DeleteIcon from "@material-ui/icons/Delete";
+import CheckCircleIcon from "@material-ui/icons/Done";
 import EditIcon from "@material-ui/icons/Edit";
 import React from "react";
 import { IPreset } from "../../types";
@@ -23,8 +24,10 @@ interface IProps {
 function OptionsDropDown(props: IProps) {
   function onClickDeleteButton(id: string) {
     return () => {
-      setDeletePresetDialogIsOpen(true);
-      setFocusedPreset(id);
+      if (presets.length > 1) {
+        setDeletePresetDialogIsOpen(true);
+        setFocusedPreset(id);
+      }
     };
   }
 
@@ -43,6 +46,7 @@ function OptionsDropDown(props: IProps) {
     setEditPresetFormIsOpen,
     selectedPreset,
   } = props;
+
   return (
     <List>
       {presets.map(preset => {
@@ -52,10 +56,10 @@ function OptionsDropDown(props: IProps) {
             <ListItem
               key={id}
               button={!showEditDeletePresetButtons as any}
-              className={id === selectedPreset ? "selected-preset" : ""}
               onClick={showEditDeletePresetButtons ? undefined : undefined}
             >
               <ListItemText primary={text} />
+              {id === selectedPreset && <CheckCircleIcon />}
               {showEditDeletePresetButtons && (
                 <React.Fragment>
                   <IconButton

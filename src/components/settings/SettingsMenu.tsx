@@ -47,7 +47,7 @@ function SettingsMenu(props: IProps) {
   } = props;
 
   function onYesDelete() {
-    updatePresets(presets.filter(preset => preset.id !== selectedPreset));
+    updatePresets(presets.filter(preset => preset.id !== focusedPreset));
     setDeletePresetDialogIsOpen(false);
   }
 

@@ -9,8 +9,8 @@ import {
 } from "./types";
 
 declare let window: any;
-const LOCAL_STORAGE_PRESETS_ITEM = "bughouseTimerPresets2";
-const LOCAL_STORAGE_SETTINGS_ITEM = "bughouseTimerSelected";
+const LOCAL_STORAGE_PRESETS_ITEM = "bughouseTiasdfmerPresets17";
+const LOCAL_STORAGE_SETTINGS_ITEM = "bughouseTimerSelectes1sss7";
 const DEFAULT_PRESETS: IPreset[] = [
   {
     text: "5|5",
@@ -85,18 +85,18 @@ function durationToSeconds({ hours, minutes, seconds }: IDuration): number {
   return hours * 3600 + minutes * 60 + seconds;
 }
 
-function getPresetById(id: string, presets: IPreset[]): IPreset {
+function getPresetById(id: string, presets: IPreset[]): IPreset | undefined {
   const foundPreset = presets.find(preset => preset.id === id);
-  return foundPreset
-    ? foundPreset
-    : {
-        text: "5|5",
-        increment: 5,
-        incrementType: IncrementType.Delay,
-        startingTime: 60 * 5,
-        id,
-      };
+  return foundPreset;
 }
+
+const WEIRD_DEFAULT_PRESET = {
+  text: "lololo",
+  increment: 100,
+  incrementType: IncrementType.Delay,
+  startingTime: 9999,
+  id: "hymynameis",
+};
 
 export {
   toDurationString,
@@ -109,4 +109,5 @@ export {
   secondsToDuration,
   durationToSeconds,
   getPresetById,
+  WEIRD_DEFAULT_PRESET,
 };
