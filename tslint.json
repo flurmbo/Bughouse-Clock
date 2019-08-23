@@ -1,5 +1,5 @@
 {
-  "extends": ["tslint:latest", "tslint-react"],
+  "extends": ["tslint:latest", "tslint-react", "tslint-react-hooks"],
   "rules": {
     // override tslint-react rules here
     "jsx-wrap-multiline": false,
@@ -8,6 +8,8 @@
     "semicolon": [true, "always", "strict-bound-class-methods"],
     "arrow-parens": false,
     "jsx-boolean-value": false,
-    "object-literal-sort-keys": false
+    "object-literal-sort-keys": false,
+    "react-hooks-nesting": "error",
+    "react-hooks/exhaustive-deps": "warn"
   }
 }

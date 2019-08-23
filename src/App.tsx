@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { v4 as uuid } from "uuid";
 import "./App.css";
-import ButtonTray from "./components/clock/ButtonTray";
-import ChessClock from "./components/clock/ChessClock";
+import ClockContainer from "./components/clock/ClockContainer";
 import ConfirmationDialog from "./components/ConfirmationDialog";
 import SettingsMenu from "./components/settings/SettingsMenu";
 import { GameState, IncrementType, IPreset, ISettings } from "./types";
@@ -59,28 +58,14 @@ class App extends Component<any, IState> {
       getPresetById(settings.selected, presets) || WEIRD_DEFAULT_PRESET;
     return (
       <div className="App">
-        <ChessClock
-          className="LeftClock"
-          onTimesUp={this.onTimesUp}
-          onStartGame={this.onStartGame}
+        <ClockContainer
           gameState={gameState}
+          setGameState={this.setGameState}
           selectedPreset={selectedPreset}
-          onThisComponentDoneResetting={this.onThisComponentDoneResetting}
-        />
-        <ButtonTray
-          gameState={gameState}
-          onResetGame={this.resetGame}
-          onClickPauseButton={this.pauseGame}
           onClickSettingsButton={this.openSettings}
+          onClickPauseButton={this.pauseGame}
           openConfirmResetDialog={this.openConfirmResetDialog}
-        />
-        <ChessClock
-          className="RightClock"
-          onTimesUp={this.onTimesUp}
-          onStartGame={this.onStartGame}
-          gameState={gameState}
-          selectedPreset={selectedPreset}
-          onThisComponentDoneResetting={this.onThisComponentDoneResetting}
+          onResetGame={() => {}}
         />
         {settingsIsOpen && (
           <SettingsMenu
@@ -106,18 +91,6 @@ class App extends Component<any, IState> {
     );
   }
 
-  private updatePresets = (newPresets: IPreset[]) => {
-    savePresetsInLocalStorage(newPresets);
-    this.setState({ presets: newPresets }, () => {
-      const oldSelection = this.state.settings.selected;
-      if (
-        !this.state.presets.filter(preset => preset.id === oldSelection).length
-      ) {
-        console.log("this is excuting");
-        this.setSelectedPreset(this.state.presets[0].id);
-      }
-    });
-  };
   private onThisComponentDoneResetting = () => {
     this.setState(
       state => ({
@@ -135,20 +108,12 @@ class App extends Component<any, IState> {
     );
   };
 
-  private onStartGame = () => {
-    this.setState({ gameState: GameState.InProgress });
-  };
-
-  private resetGame = () => {
-    this.setState({ gameState: GameState.Resetting });
-  };
-
   private pauseGame = () => {
     this.setState({ gameState: GameState.Paused });
   };
 
-  private openSettings = () => {
-    this.setState(state => ({ settingsIsOpen: !state.settingsIsOpen }));
+  private setGameState = (gameState: GameState) => {
+    this.setState({ gameState });
   };
 
   private handleYes = () => {
@@ -159,9 +124,6 @@ class App extends Component<any, IState> {
     // do nothing
   };
 
-  private closeSettings = () => {
-    this.setState({ settingsIsOpen: false });
-  };
   private openConfirmResetDialog = () => {
     this.pauseGame();
     this.setState({ resetDialogIsOpen: true });
@@ -173,6 +135,7 @@ class App extends Component<any, IState> {
     onTimesUpSound.play();
   };
 
+  // ***** SETTINGS METHODS *****
   private setSettings = (settings: Partial<ISettings>) => {
     this.setState(
       prevState => {
@@ -197,6 +160,26 @@ class App extends Component<any, IState> {
         saveSettingsInLocalStorage(this.state.settings);
       },
     );
+  };
+
+  private updatePresets = (newPresets: IPreset[]) => {
+    savePresetsInLocalStorage(newPresets);
+    this.setState({ presets: newPresets }, () => {
+      const oldSelection = this.state.settings.selected;
+      if (
+        !this.state.presets.filter(preset => preset.id === oldSelection).length
+      ) {
+        this.setSelectedPreset(this.state.presets[0].id);
+      }
+    });
+  };
+
+  private closeSettings = () => {
+    this.setState({ settingsIsOpen: false });
+  };
+
+  private openSettings = () => {
+    this.setState(state => ({ settingsIsOpen: !state.settingsIsOpen }));
   };
 
   // private setTimerOptions = (

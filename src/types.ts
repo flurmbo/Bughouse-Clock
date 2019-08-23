@@ -39,3 +39,8 @@ export interface IDuration {
   minutes: number;
   seconds: number;
 }
+
+export interface ITurnState {
+  left: Side | undefined;
+  right: Side | undefined;
+}
