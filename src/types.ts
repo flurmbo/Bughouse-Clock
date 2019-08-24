@@ -14,6 +14,7 @@ export enum GameLifecycle {
 export enum IncrementType {
   Fischer = "FISCHER",
   Delay = "DELAY",
+  None = "NONE",
 }
 
 export type Seconds = number;
@@ -43,6 +44,7 @@ export interface IDuration {
 export interface IClockState {
   side: Side | undefined;
   turnStartTime: number | undefined;
+  flagged: Side | undefined;
   time: {
     top: number;
     bottom: number;

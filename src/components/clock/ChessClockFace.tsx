@@ -25,9 +25,15 @@ const ChessClockFace = (props: IProps) => {
     onClickClockFace(side, clock);
   };
 
+  const flagged = gameState[clock].flagged === side;
+
   return (
     <div
-      className={className + (gameState[clock].side === side ? " active" : "")}
+      className={
+        className +
+        (gameState[clock].side === side ? " active" : "") +
+        (flagged ? " flagged" : "")
+      }
       onTouchEnd={onTouchEnd}
     >
       {toDurationString(displayedTime)}

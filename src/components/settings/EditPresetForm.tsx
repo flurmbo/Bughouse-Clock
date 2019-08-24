@@ -183,6 +183,12 @@ function EditPresetForm(props: IProps) {
                   label="Fischer"
                   style={{ display: "inline-block" }}
                 />
+                <FormControlLabel
+                  value={IncrementType.Fischer}
+                  control={<Radio style={{ display: "inline-block" }} />}
+                  label="None"
+                  style={{ display: "inline-block" }}
+                />
               </RadioGroup>
             </FormControl>
           </Grid>

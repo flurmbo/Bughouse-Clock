@@ -71,7 +71,7 @@
   background-color: orange;
 }
 
-.timer.timeUp {
+.timer.flagged {
   background-color: red;
 }
 
