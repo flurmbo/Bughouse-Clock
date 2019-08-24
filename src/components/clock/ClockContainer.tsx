@@ -59,9 +59,13 @@ const ClockContainer = (props: IProps) => {
 
   const onClickClockFace = (side: Side, clock: "left" | "right") => {
     const state = gameStateRef.current;
+    const lifecycle = gameLifecycleRef.current;
     if (state[clock].turnStartTime) {
       updateGameState("END_TURN", { side, clock });
-    } else {
+    } else if (
+      lifecycle === GameLifecycle.InProgress ||
+      lifecycle === GameLifecycle.NotStarted
+    ) {
       updateGameState("FIRST_TURN", { side, clock });
     }
   };
@@ -83,47 +87,54 @@ const ClockContainer = (props: IProps) => {
       if (gameLifecycleRef.current === GameLifecycle.InProgress) {
         const { left, right } = gameStateRef.current;
         const times = [
-          Math.ceil(
-            (left.time.top -
-              (left.side === Side.Top && left.turnStartTime
-                ? Date.now() - left.turnStartTime
-                : 0)) /
-              1000,
-          ),
-          Math.ceil(
-            (left.time.bottom -
-              (left.side === Side.Bottom && left.turnStartTime
-                ? Date.now() - left.turnStartTime
-                : 0)) /
-              1000,
-          ),
-          Math.ceil(
-            (right.time.top -
-              (right.side === Side.Top && right.turnStartTime
-                ? Date.now() - right.turnStartTime
-                : 0)) /
-              1000,
-          ),
-          Math.ceil(
-            (right.time.bottom -
-              (right.side === Side.Bottom && right.turnStartTime
-                ? Date.now() - right.turnStartTime
-                : 0)) /
-              1000,
-          ),
+          (left.time.top -
+            (left.side === Side.Top && left.turnStartTime
+              ? Date.now() - left.turnStartTime
+              : 0)) /
+            1000,
+          (left.time.bottom -
+            (left.side === Side.Bottom && left.turnStartTime
+              ? Date.now() - left.turnStartTime
+              : 0)) /
+            1000,
+          (right.time.top -
+            (right.side === Side.Top && right.turnStartTime
+              ? Date.now() - right.turnStartTime
+              : 0)) /
+            1000,
+          (right.time.bottom -
+            (right.side === Side.Bottom && right.turnStartTime
+              ? Date.now() - right.turnStartTime
+              : 0)) /
+            1000,
         ];
-        if (times[0] <= 0 || times[1] <= 0 || times[2] <= 0 || times[3] <= 0) {
-          updateGameState("END_GAME", { side: "TOP", clock: "left" });
+        const min = Math.min(...times);
+        if (min <= 0) {
+          const index = times.indexOf(min);
+          switch (index) {
+            case 0:
+              updateGameState("END_GAME", { side: "TOP", clock: "left" });
+              break;
+            case 1:
+              updateGameState("END_GAME", { side: "BOTTOM", clock: "left" });
+              break;
+            case 2:
+              updateGameState("END_GAME", { side: "TOP", clock: "right" });
+              break;
+            case 3:
+              updateGameState("END_GAME", { side: "BOTTOM", clock: "right" });
+              break;
+          }
         }
         setDisplayedTimes(() => {
           return {
             left: {
-              top: times[0],
-              bottom: times[1],
+              top: Math.ceil(times[0]),
+              bottom: Math.ceil(times[1]),
             },
             right: {
-              top: times[2],
-              bottom: times[3],
+              top: Math.ceil(times[2]),
+              bottom: Math.ceil(times[3]),
             },
           };
         });
@@ -191,16 +202,22 @@ const ClockContainer = (props: IProps) => {
         clock = payload.clock;
         side = payload.side;
         setGameLifecycle(GameLifecycle.GameOver);
-        setGameState(prevState => {
-          return {
-            ...prevState,
-            ...{
-              [clock]: {
-                ...prevState[clock],
-                flagged: side,
-              },
-            },
+        setGameState((prevState: IGameState) => {
+          const otherClock = clock === "left" ? "right" : "left";
+          const clocksNewState = {
+            ...prevState[clock],
+            flagged: side,
+            turnStartTime: undefined,
           };
+          const otherClocksNewState = {
+            ...prevState[otherClock],
+            turnStartTime: undefined,
+          };
+          const newGameState: IGameState = {
+            left: clock === "left" ? clocksNewState : otherClocksNewState,
+            right: clock === "left" ? otherClocksNewState : clocksNewState,
+          };
+          return newGameState;
         });
         break;
 
