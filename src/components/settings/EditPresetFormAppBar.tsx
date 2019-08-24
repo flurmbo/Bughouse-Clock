@@ -49,8 +49,10 @@ function EditPresetFormAppBar(props: IProps) {
   function handleBackButton() {
     if (JSON.stringify(editedPreset) !== JSON.stringify(unsavedPreset)) {
       setDiscardChangesDialogIsOpen(true);
-    } else {
+    } else if (unsavedPreset && unsavedPreset.text) {
       closePresetForm();
+    } else {
+      props.setShowError(true);
     }
   }
 
