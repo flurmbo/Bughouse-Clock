@@ -40,19 +40,15 @@ export interface IDuration {
   seconds: number;
 }
 
+export interface IClockState {
+  side: Side | undefined;
+  turnStartTime: number | undefined;
+  time: {
+    top: number;
+    bottom: number;
+  };
+}
 export interface IGameState {
-  left: {
-    side: Side | undefined;
-    time: {
-      top: number;
-      bottom: number;
-    };
-  };
-  right: {
-    side: Side | undefined;
-    time: {
-      top: number;
-      bottom: number;
-    };
-  };
+  left: IClockState;
+  right: IClockState;
 }

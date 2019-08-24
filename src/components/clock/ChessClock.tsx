@@ -7,7 +7,7 @@ interface IProps {
   onClickClockFace: (side: Side, clock: "left" | "right") => void;
   clock: "left" | "right";
   gameState: IGameState;
-  displayedTimes: number[];
+  displayedTimes: { top: number; bottom: number };
 }
 
 const ChessClock = (props: IProps) => {
@@ -26,7 +26,7 @@ const ChessClock = (props: IProps) => {
         onClickClockFace={onClickClockFace}
         clock={clock}
         gameState={gameState}
-        displayedTime={displayedTimes[0]}
+        displayedTime={displayedTimes.top}
       />
       <ChessClockFace
         className={"timer bottom" + className}
@@ -34,7 +34,7 @@ const ChessClock = (props: IProps) => {
         onClickClockFace={onClickClockFace}
         clock={clock}
         gameState={gameState}
-        displayedTime={displayedTimes[1]}
+        displayedTime={displayedTimes.bottom}
       />
     </React.Fragment>
   );

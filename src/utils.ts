@@ -90,12 +90,16 @@ function getPresetById(id: string, presets: IPreset[]): IPreset | undefined {
   return foundPreset;
 }
 
-const WEIRD_DEFAULT_PRESET = {
+export const WEIRD_DEFAULT_PRESET = {
   text: "lololo",
   increment: 100,
   incrementType: IncrementType.Delay,
   startingTime: 9999,
   id: "hymynameis",
+};
+
+export const sideToIdentifier = (side: Side): "top" | "bottom" => {
+  return side === Side.Top ? "top" : "bottom";
 };
 
 export {
@@ -109,5 +113,4 @@ export {
   secondsToDuration,
   durationToSeconds,
   getPresetById,
-  WEIRD_DEFAULT_PRESET,
 };
