@@ -1,3 +1,4 @@
+import { makeStyles } from "@material-ui/core";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import List from "@material-ui/core/List";
@@ -8,6 +9,12 @@ import CheckCircleIcon from "@material-ui/icons/Done";
 import EditIcon from "@material-ui/icons/Edit";
 import React from "react";
 import { IPreset } from "../../types";
+
+const useStyles = makeStyles({
+  listItem: {
+    height: 64,
+  },
+});
 
 interface IProps {
   presets: IPreset[];
@@ -47,6 +54,8 @@ function OptionsDropDown(props: IProps) {
     selectedPreset,
   } = props;
 
+  const classes = useStyles();
+
   return (
     <List>
       {presets.map(preset => {
@@ -57,6 +66,7 @@ function OptionsDropDown(props: IProps) {
               key={id}
               button={!showEditDeletePresetButtons as any}
               onClick={showEditDeletePresetButtons ? undefined : undefined}
+              className={classes.listItem}
             >
               <ListItemText primary={text} />
               {id === selectedPreset && <CheckCircleIcon />}
