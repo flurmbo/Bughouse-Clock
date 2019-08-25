@@ -30,7 +30,7 @@ const ClockContainer = (props: IProps) => {
   const { startingTime } = selectedPreset;
   const [gameState, setGameState] = useState<IGameState>({
     left: {
-      side: Side.Top,
+      side: undefined,
       turnStartTime: undefined,
       flagged: undefined,
       time: {
@@ -39,7 +39,7 @@ const ClockContainer = (props: IProps) => {
       },
     },
     right: {
-      side: Side.Bottom,
+      side: undefined,
       turnStartTime: undefined,
       flagged: undefined,
       time: {
@@ -67,7 +67,8 @@ const ClockContainer = (props: IProps) => {
       updateGameState("END_TURN", { side, clock });
     } else if (
       lifecycle === GameLifecycle.InProgress ||
-      lifecycle === GameLifecycle.NotStarted
+      lifecycle === GameLifecycle.NotStarted ||
+      lifecycle === GameLifecycle.Paused
     ) {
       updateGameState("FIRST_TURN", { side, clock });
     }
@@ -252,12 +253,12 @@ const ClockContainer = (props: IProps) => {
             flagged: undefined,
             time: {
               top:
-                oldRight.side === Side.Top && leftStartTime
-                  ? oldRight.time.top - (now - leftStartTime)
+                oldRight.side === Side.Top && rightStartTime
+                  ? oldRight.time.top - (now - rightStartTime)
                   : oldRight.time.top,
               bottom:
-                oldRight.side === Side.Bottom && leftStartTime
-                  ? oldRight.time.bottom - (now - leftStartTime)
+                oldRight.side === Side.Bottom && rightStartTime
+                  ? oldRight.time.bottom - (now - rightStartTime)
                   : oldRight.time.bottom,
             },
           };
