@@ -189,19 +189,6 @@ class App extends Component<any, IState> {
   private openSettings = () => {
     this.setState(state => ({ settingsIsOpen: !state.settingsIsOpen }));
   };
-
-  // private setTimerOptions = (
-  //   newTimerOptions: Partial<ITimerOptions>,
-  //   reset = true,
-  // ) => {
-  //   return () =>
-  //     this.setState(state => ({
-  //       gameLifecycle: reset ? GameLifecycle.Resetting : state.gameLifecycle,
-  //       settingsIsOpen: !reset,
-  //       timerOptions: { ...state.timerOptions, ...newTimerOptions },
-  //     }));
-  //   // tslint:disable-next-line: semicolon
-  // };
 }
 
 export default App;

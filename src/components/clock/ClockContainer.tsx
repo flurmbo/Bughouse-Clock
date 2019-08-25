@@ -225,9 +225,44 @@ const ClockContainer = (props: IProps) => {
         break;
 
       case "PAUSE_GAME":
-        console.log("pausing game!");
         setGameState(prevState => {
-          return prevState;
+          const now = Date.now();
+          const leftStartTime = prevState.left.turnStartTime;
+          const oldLeft = prevState.left;
+          const newLeft = {
+            side: undefined,
+            turnStartTime: undefined,
+            flagged: undefined,
+            time: {
+              top:
+                oldLeft.side === Side.Top && leftStartTime
+                  ? oldLeft.time.top - (now - leftStartTime)
+                  : oldLeft.time.top,
+              bottom:
+                oldLeft.side === Side.Bottom && leftStartTime
+                  ? oldLeft.time.bottom - (now - leftStartTime)
+                  : oldLeft.time.bottom,
+            },
+          };
+          const rightStartTime = prevState.right.turnStartTime;
+          const oldRight = prevState.right;
+          const newRight = {
+            side: undefined,
+            turnStartTime: undefined,
+            flagged: undefined,
+            time: {
+              top:
+                oldRight.side === Side.Top && leftStartTime
+                  ? oldRight.time.top - (now - leftStartTime)
+                  : oldRight.time.top,
+              bottom:
+                oldRight.side === Side.Bottom && leftStartTime
+                  ? oldRight.time.bottom - (now - leftStartTime)
+                  : oldRight.time.bottom,
+            },
+          };
+
+          return { left: newLeft, right: newRight };
         });
 
       case "RESET_GAME":
