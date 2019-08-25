@@ -12,7 +12,9 @@ interface IProps {
   onClickPauseButton: () => void;
   onClickSettingsButton: () => void;
   openConfirmResetDialog: () => void;
+  updateGameLifecycle: (GameLifecycle: GameLifecycle) => void;
 }
+
 const ClockContainer = (props: IProps) => {
   const {
     gameLifecycle,
@@ -22,6 +24,7 @@ const ClockContainer = (props: IProps) => {
     onClickSettingsButton,
     openConfirmResetDialog,
     setGameLifecycle,
+    updateGameLifecycle,
   } = props;
 
   const { startingTime } = selectedPreset;
@@ -221,10 +224,21 @@ const ClockContainer = (props: IProps) => {
         });
         break;
 
+      case "PAUSE_GAME":
+        console.log("pausing game!");
+        setGameState(prevState => {
+          return prevState;
+        });
+
       case "RESET_GAME":
         // do something
         break;
     }
+  };
+
+  const onPause = () => {
+    updateGameLifecycle(GameLifecycle.Paused);
+    updateGameState("PAUSE_GAME", {});
   };
 
   return (
@@ -239,7 +253,7 @@ const ClockContainer = (props: IProps) => {
       <ButtonTray
         gameLifecycle={gameLifecycle}
         onResetGame={onResetGame}
-        onClickPauseButton={onClickPauseButton}
+        onClickPauseButton={onPause}
         onClickSettingsButton={onClickSettingsButton}
         openConfirmResetDialog={openConfirmResetDialog}
       />

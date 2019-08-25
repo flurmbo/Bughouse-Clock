@@ -66,6 +66,7 @@ class App extends Component<any, IState> {
           onClickPauseButton={this.pauseGame}
           openConfirmResetDialog={this.openConfirmResetDialog}
           onResetGame={() => {}}
+          updateGameLifecycle={this.updateGameLifecycle}
         />
         {settingsIsOpen && (
           <SettingsMenu
@@ -106,6 +107,10 @@ class App extends Component<any, IState> {
         );
       },
     );
+  };
+
+  private updateGameLifecycle = (gameLifecycle: GameLifecycle) => {
+    this.setGameLifecycle(gameLifecycle);
   };
 
   private pauseGame = () => {

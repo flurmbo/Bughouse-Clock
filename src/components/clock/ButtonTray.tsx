@@ -32,21 +32,14 @@ class ButtonTray extends Component<IProps> {
   public onConfirm = (i: number) => {
     alert("You selected button " + i);
   };
-  public dave = () => {
-    if (isCordova()) {
-      navigator.notification.confirm(
-        "a winner is you",
-        this.onConfirm,
-        "Game Over",
-        ["Restart", "Exit"],
-      );
-    } else {
-      alert("I'm sorry Dave, I'm afraid I can't do that.");
-    }
-  };
 
   public render() {
-    const { classes, gameLifecycle, onClickSettingsButton } = this.props;
+    const {
+      classes,
+      gameLifecycle,
+      onClickSettingsButton,
+      onClickPauseButton,
+    } = this.props;
     return (
       <React.Fragment>
         <div className="topButton">
@@ -60,7 +53,7 @@ class ButtonTray extends Component<IProps> {
           <div className="middleButton">
             <PauseIcon
               classes={{ root: classes.root }}
-              onClick={this.dave}
+              onClick={onClickPauseButton}
               fontSize="large"
             />
           </div>
