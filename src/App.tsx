@@ -62,10 +62,8 @@ class App extends Component<any, IState> {
           gameLifecycle={gameLifecycle}
           setGameLifecycle={this.setGameLifecycle}
           selectedPreset={selectedPreset}
-          onClickSettingsButton={this.openSettings}
-          onClickPauseButton={this.pauseGame}
+          openSettings={this.openSettings}
           openConfirmResetDialog={this.openConfirmResetDialog}
-          onResetGame={() => {}}
           updateGameLifecycle={this.updateGameLifecycle}
         />
         {settingsIsOpen && (
@@ -113,10 +111,6 @@ class App extends Component<any, IState> {
     this.setGameLifecycle(gameLifecycle);
   };
 
-  private pauseGame = () => {
-    this.setState({ gameLifecycle: GameLifecycle.Paused });
-  };
-
   private setGameLifecycle = (gameLifecycle: GameLifecycle) => {
     this.setState({ gameLifecycle });
   };
@@ -133,7 +127,6 @@ class App extends Component<any, IState> {
   };
 
   private openConfirmResetDialog = () => {
-    this.pauseGame();
     this.setState({ resetDialogIsOpen: true });
   };
 

@@ -9,12 +9,11 @@ import { isCordova } from "../../utils";
 declare let navigator: any;
 
 interface IProps {
-  onResetGame: () => void;
   onClickPauseButton: () => void;
   onClickSettingsButton: () => void;
+  onClickResetButton: () => void;
   gameLifecycle: GameLifecycle;
   classes: any;
-  openConfirmResetDialog: () => void;
 }
 
 const styles = {
@@ -25,10 +24,6 @@ const styles = {
 };
 
 class ButtonTray extends Component<IProps> {
-  public handleOnClickResetButton = () => {
-    this.props.openConfirmResetDialog();
-    // this.props.onResetGame();
-  };
   public onConfirm = (i: number) => {
     alert("You selected button " + i);
   };
@@ -39,6 +34,7 @@ class ButtonTray extends Component<IProps> {
       gameLifecycle,
       onClickSettingsButton,
       onClickPauseButton,
+      onClickResetButton,
     } = this.props;
     return (
       <React.Fragment>
@@ -62,7 +58,7 @@ class ButtonTray extends Component<IProps> {
           <RefreshIcon
             classes={{ root: classes.root }}
             fontSize="large"
-            onClick={this.handleOnClickResetButton}
+            onClick={onClickResetButton}
           />
         </div>
       </React.Fragment>

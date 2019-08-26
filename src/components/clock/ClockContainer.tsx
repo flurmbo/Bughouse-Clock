@@ -8,9 +8,7 @@ interface IProps {
   gameLifecycle: GameLifecycle;
   selectedPreset: IPreset;
   setGameLifecycle: (gameLifecycle: GameLifecycle) => void;
-  onResetGame: () => void;
-  onClickPauseButton: () => void;
-  onClickSettingsButton: () => void;
+  openSettings: () => void;
   openConfirmResetDialog: () => void;
   updateGameLifecycle: (GameLifecycle: GameLifecycle) => void;
 }
@@ -19,9 +17,7 @@ const ClockContainer = (props: IProps) => {
   const {
     gameLifecycle,
     selectedPreset,
-    onResetGame,
-    onClickPauseButton,
-    onClickSettingsButton,
+    openSettings,
     openConfirmResetDialog,
     setGameLifecycle,
     updateGameLifecycle,
@@ -267,9 +263,39 @@ const ClockContainer = (props: IProps) => {
         });
 
       case "RESET_GAME":
-        // do something
+        setGameState({
+          left: {
+            side: undefined,
+            turnStartTime: undefined,
+            flagged: undefined,
+            time: {
+              top: startingTime * 1000,
+              bottom: startingTime * 1000,
+            },
+          },
+          right: {
+            side: undefined,
+            turnStartTime: undefined,
+            flagged: undefined,
+            time: {
+              top: startingTime * 1000,
+              bottom: startingTime * 1000,
+            },
+          },
+        });
+
         break;
     }
+  };
+
+  const onClickSettingsButton = () => {
+    onPause();
+    openSettings();
+  };
+
+  const onClickResetButton = () => {
+    onPause();
+    openConfirmResetDialog();
   };
 
   const onPause = () => {
@@ -288,10 +314,9 @@ const ClockContainer = (props: IProps) => {
       />
       <ButtonTray
         gameLifecycle={gameLifecycle}
-        onResetGame={onResetGame}
+        onClickResetButton={onClickResetButton}
         onClickPauseButton={onPause}
         onClickSettingsButton={onClickSettingsButton}
-        openConfirmResetDialog={openConfirmResetDialog}
       />
       <ChessClock
         className="RightClock"
