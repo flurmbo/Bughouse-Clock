@@ -2,7 +2,7 @@ import { withStyles } from "@material-ui/core/styles";
 import PauseIcon from "@material-ui/icons/Pause";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import SettingsIcon from "@material-ui/icons/Settings";
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { GameLifecycle } from "../../types";
 import { isCordova } from "../../utils";
 
@@ -23,12 +23,12 @@ const styles = {
   },
 };
 
-class ButtonTray extends Component<IProps> {
+class ButtonTray extends PureComponent<IProps> {
   public onConfirm = (i: number) => {
     alert("You selected button " + i);
   };
-
   public render() {
+    console.log("rendering tray");
     const {
       classes,
       gameLifecycle,

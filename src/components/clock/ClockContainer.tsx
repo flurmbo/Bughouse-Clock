@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { GameLifecycle, IGameState, IPreset, Side } from "../../types";
 import { otherSide, sideToIdentifier } from "../../utils";
 import ButtonTray from "./ButtonTray";
@@ -47,6 +47,152 @@ const ClockContainer = (props: IProps) => {
 
   const gameStateRef = useRef(gameState);
   const gameLifecycleRef = useRef(gameLifecycle);
+
+  const updateGameState = useCallback(
+    (action: string, payload: any) => {
+      let clock: "left" | "right";
+      let side: Side;
+
+      switch (action) {
+        case "FIRST_TURN":
+          clock = payload.clock;
+          side = payload.side;
+          setGameLifecycle(GameLifecycle.InProgress);
+          setGameState(prevState => {
+            const now = Date.now();
+            return {
+              ...prevState,
+              ...{
+                [clock]: {
+                  side: otherSide(side),
+                  turnStartTime: now,
+                  time: prevState[clock].time,
+                },
+              },
+            };
+          });
+          break;
+
+        case "END_TURN":
+          clock = payload.clock;
+          side = payload.side;
+          setGameState(prevState => {
+            const now = Date.now();
+            const sideId = sideToIdentifier(side);
+            const otherSideId = sideToIdentifier(otherSide(side));
+            const lastStartTime = prevState[clock].turnStartTime as number;
+            return {
+              ...prevState,
+              ...{
+                [clock]: {
+                  side: otherSide(side),
+                  turnStartTime: now,
+                  time: {
+                    [sideId]:
+                      prevState[clock].time[sideId] - (now - lastStartTime),
+                    [otherSideId]: prevState[clock].time[otherSideId],
+                  },
+                },
+              },
+            };
+          });
+          break;
+
+        case "DELAY_ELAPSED":
+          // do something
+          break;
+
+        case "END_GAME":
+          clock = payload.clock;
+          side = payload.side;
+          setGameLifecycle(GameLifecycle.GameOver);
+          setGameState((prevState: IGameState) => {
+            const otherClock = clock === "left" ? "right" : "left";
+            const clocksNewState = {
+              ...prevState[clock],
+              flagged: side,
+              turnStartTime: undefined,
+            };
+            const otherClocksNewState = {
+              ...prevState[otherClock],
+              turnStartTime: undefined,
+            };
+            const newGameState: IGameState = {
+              left: clock === "left" ? clocksNewState : otherClocksNewState,
+              right: clock === "left" ? otherClocksNewState : clocksNewState,
+            };
+            return newGameState;
+          });
+          break;
+
+        case "PAUSE_GAME":
+          setGameState(prevState => {
+            const now = Date.now();
+            const leftStartTime = prevState.left.turnStartTime;
+            const oldLeft = prevState.left;
+            const newLeft = {
+              side: undefined,
+              turnStartTime: undefined,
+              flagged: undefined,
+              time: {
+                top:
+                  oldLeft.side === Side.Top && leftStartTime
+                    ? oldLeft.time.top - (now - leftStartTime)
+                    : oldLeft.time.top,
+                bottom:
+                  oldLeft.side === Side.Bottom && leftStartTime
+                    ? oldLeft.time.bottom - (now - leftStartTime)
+                    : oldLeft.time.bottom,
+              },
+            };
+            const rightStartTime = prevState.right.turnStartTime;
+            const oldRight = prevState.right;
+            const newRight = {
+              side: undefined,
+              turnStartTime: undefined,
+              flagged: undefined,
+              time: {
+                top:
+                  oldRight.side === Side.Top && rightStartTime
+                    ? oldRight.time.top - (now - rightStartTime)
+                    : oldRight.time.top,
+                bottom:
+                  oldRight.side === Side.Bottom && rightStartTime
+                    ? oldRight.time.bottom - (now - rightStartTime)
+                    : oldRight.time.bottom,
+              },
+            };
+
+            return { left: newLeft, right: newRight };
+          });
+
+        case "RESET_GAME":
+          setGameState({
+            left: {
+              side: undefined,
+              turnStartTime: undefined,
+              flagged: undefined,
+              time: {
+                top: startingTime * 1000,
+                bottom: startingTime * 1000,
+              },
+            },
+            right: {
+              side: undefined,
+              turnStartTime: undefined,
+              flagged: undefined,
+              time: {
+                top: startingTime * 1000,
+                bottom: startingTime * 1000,
+              },
+            },
+          });
+
+          break;
+      }
+    },
+    [setGameLifecycle, startingTime],
+  );
   useEffect(() => {
     gameStateRef.current = gameState;
   }, [gameState]);
@@ -54,7 +200,7 @@ const ClockContainer = (props: IProps) => {
   useEffect(() => {
     gameLifecycleRef.current = gameLifecycle;
     console.log(` it is now ${gameLifecycle}`);
-  }, [props.gameLifecycle]);
+  }, [gameLifecycle, props.gameLifecycle]);
 
   const onClickClockFace = (side: Side, clock: "left" | "right") => {
     const state = gameStateRef.current;
@@ -144,164 +290,22 @@ const ClockContainer = (props: IProps) => {
     return () => {
       window.clearInterval(updateDisplayId);
     };
-  }, []);
-  const updateGameState = (action: string, payload: any) => {
-    let clock: "left" | "right";
-    let side: Side;
+  }, [updateGameState]);
 
-    switch (action) {
-      case "FIRST_TURN":
-        clock = payload.clock;
-        side = payload.side;
-        setGameLifecycle(GameLifecycle.InProgress);
-        setGameState(prevState => {
-          const now = Date.now();
-          return {
-            ...prevState,
-            ...{
-              [clock]: {
-                side: otherSide(side),
-                turnStartTime: now,
-                time: prevState[clock].time,
-              },
-            },
-          };
-        });
-        break;
-
-      case "END_TURN":
-        clock = payload.clock;
-        side = payload.side;
-        setGameState(prevState => {
-          const now = Date.now();
-          const sideId = sideToIdentifier(side);
-          const otherSideId = sideToIdentifier(otherSide(side));
-          const lastStartTime = prevState[clock].turnStartTime as number;
-          return {
-            ...prevState,
-            ...{
-              [clock]: {
-                side: otherSide(side),
-                turnStartTime: now,
-                time: {
-                  [sideId]:
-                    prevState[clock].time[sideId] - (now - lastStartTime),
-                  [otherSideId]: prevState[clock].time[otherSideId],
-                },
-              },
-            },
-          };
-        });
-        break;
-
-      case "DELAY_ELAPSED":
-        // do something
-        break;
-
-      case "END_GAME":
-        clock = payload.clock;
-        side = payload.side;
-        setGameLifecycle(GameLifecycle.GameOver);
-        setGameState((prevState: IGameState) => {
-          const otherClock = clock === "left" ? "right" : "left";
-          const clocksNewState = {
-            ...prevState[clock],
-            flagged: side,
-            turnStartTime: undefined,
-          };
-          const otherClocksNewState = {
-            ...prevState[otherClock],
-            turnStartTime: undefined,
-          };
-          const newGameState: IGameState = {
-            left: clock === "left" ? clocksNewState : otherClocksNewState,
-            right: clock === "left" ? otherClocksNewState : clocksNewState,
-          };
-          return newGameState;
-        });
-        break;
-
-      case "PAUSE_GAME":
-        setGameState(prevState => {
-          const now = Date.now();
-          const leftStartTime = prevState.left.turnStartTime;
-          const oldLeft = prevState.left;
-          const newLeft = {
-            side: undefined,
-            turnStartTime: undefined,
-            flagged: undefined,
-            time: {
-              top:
-                oldLeft.side === Side.Top && leftStartTime
-                  ? oldLeft.time.top - (now - leftStartTime)
-                  : oldLeft.time.top,
-              bottom:
-                oldLeft.side === Side.Bottom && leftStartTime
-                  ? oldLeft.time.bottom - (now - leftStartTime)
-                  : oldLeft.time.bottom,
-            },
-          };
-          const rightStartTime = prevState.right.turnStartTime;
-          const oldRight = prevState.right;
-          const newRight = {
-            side: undefined,
-            turnStartTime: undefined,
-            flagged: undefined,
-            time: {
-              top:
-                oldRight.side === Side.Top && rightStartTime
-                  ? oldRight.time.top - (now - rightStartTime)
-                  : oldRight.time.top,
-              bottom:
-                oldRight.side === Side.Bottom && rightStartTime
-                  ? oldRight.time.bottom - (now - rightStartTime)
-                  : oldRight.time.bottom,
-            },
-          };
-
-          return { left: newLeft, right: newRight };
-        });
-
-      case "RESET_GAME":
-        setGameState({
-          left: {
-            side: undefined,
-            turnStartTime: undefined,
-            flagged: undefined,
-            time: {
-              top: startingTime * 1000,
-              bottom: startingTime * 1000,
-            },
-          },
-          right: {
-            side: undefined,
-            turnStartTime: undefined,
-            flagged: undefined,
-            time: {
-              top: startingTime * 1000,
-              bottom: startingTime * 1000,
-            },
-          },
-        });
-
-        break;
-    }
-  };
-
-  const onClickSettingsButton = () => {
-    onPause();
-    openSettings();
-  };
-
-  const onClickResetButton = () => {
-    onPause();
-    openConfirmResetDialog();
-  };
-
-  const onPause = () => {
+  const onPause = useCallback(() => {
     updateGameLifecycle(GameLifecycle.Paused);
     updateGameState("PAUSE_GAME", {});
-  };
+  }, [updateGameLifecycle, updateGameState]);
+
+  const onClickSettingsButton = useCallback(() => {
+    onPause();
+    openSettings();
+  }, [onPause, openSettings]);
+
+  const onClickResetButton = useCallback(() => {
+    onPause();
+    openConfirmResetDialog();
+  }, [onPause, openConfirmResetDialog]);
 
   return (
     <React.Fragment>

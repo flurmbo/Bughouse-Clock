@@ -37,6 +37,7 @@
   "devDependencies": {
     "@types/uuid": "^3.4.5",
     "@typescript-eslint/parser": "^2.0.0",
+    "eslint-plugin-react-hooks": "^2.0.1",
     "husky": "^2.3.0",
     "prettier": "^1.17.1",
     "pretty-quick": "^1.11.0",
