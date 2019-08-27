@@ -28,7 +28,6 @@ class ButtonTray extends PureComponent<IProps> {
     alert("You selected button " + i);
   };
   public render() {
-    console.log("rendering tray");
     const {
       classes,
       gameLifecycle,

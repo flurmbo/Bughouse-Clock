@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { v4 as uuid } from "uuid";
 import "./App.css";
 import ClockContainer from "./components/clock/ClockContainer";
-import ConfirmationDialog from "./components/ConfirmationDialog";
 import SettingsMenu from "./components/settings/SettingsMenu";
 import { GameLifecycle, IncrementType, IPreset, ISettings } from "./types";
 
@@ -19,7 +18,6 @@ interface IState {
   gameLifecycle: GameLifecycle;
   settingsIsOpen: boolean;
   numberOfComponentsDoneResetting?: number;
-  resetDialogIsOpen: boolean;
   presets: IPreset[];
   settings: ISettings;
 }
@@ -31,7 +29,6 @@ class App extends Component<any, IState> {
   public state: IState = {
     gameLifecycle: GameLifecycle.NotStarted,
     presets: this.storedPresets,
-    resetDialogIsOpen: false,
     settingsIsOpen: false,
     settings: this.storedSettings,
   };
@@ -46,13 +43,7 @@ class App extends Component<any, IState> {
   }
 
   public render() {
-    const {
-      gameLifecycle,
-      settingsIsOpen,
-      resetDialogIsOpen,
-      presets,
-      settings,
-    } = this.state;
+    const { gameLifecycle, settingsIsOpen, presets, settings } = this.state;
 
     const selectedPreset =
       getPresetById(settings.selected, presets) || WEIRD_DEFAULT_PRESET;
@@ -63,7 +54,6 @@ class App extends Component<any, IState> {
           setGameLifecycle={this.setGameLifecycle}
           selectedPreset={selectedPreset}
           openSettings={this.openSettings}
-          openConfirmResetDialog={this.openConfirmResetDialog}
           updateGameLifecycle={this.updateGameLifecycle}
         />
         {settingsIsOpen && (
@@ -76,14 +66,6 @@ class App extends Component<any, IState> {
             setSettings={this.setSettings}
             updatePresets={this.updatePresets}
             closeSettings={this.closeSettings}
-          />
-        )}
-        {resetDialogIsOpen && (
-          <ConfirmationDialog
-            open={resetDialogIsOpen}
-            handleYes={this.handleYes}
-            handleNo={this.handleNo}
-            text={"Are you sure you want to reset the clock?"}
           />
         )}
       </div>
@@ -113,21 +95,6 @@ class App extends Component<any, IState> {
 
   private setGameLifecycle = (gameLifecycle: GameLifecycle) => {
     this.setState({ gameLifecycle });
-  };
-
-  private handleYes = () => {
-    this.setState({
-      gameLifecycle: GameLifecycle.Resetting,
-      resetDialogIsOpen: false,
-    });
-  };
-
-  private handleNo = () => {
-    // do nothing
-  };
-
-  private openConfirmResetDialog = () => {
-    this.setState({ resetDialogIsOpen: true });
   };
 
   private onTimesUp = () => {

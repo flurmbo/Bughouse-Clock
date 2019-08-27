@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { GameLifecycle, IGameState, IPreset, Side } from "../../types";
 import { otherSide, sideToIdentifier } from "../../utils";
+import ConfirmationDialog from "../ConfirmationDialog";
 import ButtonTray from "./ButtonTray";
 import ChessClock from "./ChessClock";
 
@@ -9,7 +10,6 @@ interface IProps {
   selectedPreset: IPreset;
   setGameLifecycle: (gameLifecycle: GameLifecycle) => void;
   openSettings: () => void;
-  openConfirmResetDialog: () => void;
   updateGameLifecycle: (GameLifecycle: GameLifecycle) => void;
 }
 
@@ -18,7 +18,6 @@ const ClockContainer = (props: IProps) => {
     gameLifecycle,
     selectedPreset,
     openSettings,
-    openConfirmResetDialog,
     setGameLifecycle,
     updateGameLifecycle,
   } = props;
@@ -47,6 +46,8 @@ const ClockContainer = (props: IProps) => {
 
   const gameStateRef = useRef(gameState);
   const gameLifecycleRef = useRef(gameLifecycle);
+
+  const [resetDialogIsOpen, setResetDialogIsOpen] = useState(false);
 
   const updateGameState = useCallback(
     (action: string, payload: any) => {
@@ -165,6 +166,7 @@ const ClockContainer = (props: IProps) => {
 
             return { left: newLeft, right: newRight };
           });
+          break;
 
         case "RESET_GAME":
           setGameState({
@@ -187,11 +189,21 @@ const ClockContainer = (props: IProps) => {
               },
             },
           });
+          setDisplayedTimes({
+            left: {
+              top: selectedPreset.startingTime,
+              bottom: selectedPreset.startingTime,
+            },
+            right: {
+              top: selectedPreset.startingTime,
+              bottom: selectedPreset.startingTime,
+            },
+          });
 
           break;
       }
     },
-    [setGameLifecycle, startingTime],
+    [selectedPreset.startingTime, setGameLifecycle, startingTime],
   );
   useEffect(() => {
     gameStateRef.current = gameState;
@@ -304,8 +316,17 @@ const ClockContainer = (props: IProps) => {
 
   const onClickResetButton = useCallback(() => {
     onPause();
-    openConfirmResetDialog();
-  }, [onPause, openConfirmResetDialog]);
+    setResetDialogIsOpen(true);
+  }, [onPause]);
+
+  const handleYesReset = () => {
+    updateGameState("RESET_GAME", {});
+    setResetDialogIsOpen(false);
+  };
+
+  const handleNoReset = () => {
+    setResetDialogIsOpen(false);
+  };
 
   return (
     <React.Fragment>
@@ -329,6 +350,14 @@ const ClockContainer = (props: IProps) => {
         gameState={gameState}
         displayedTimes={displayedTimes.right}
       />
+      {resetDialogIsOpen && (
+        <ConfirmationDialog
+          open={resetDialogIsOpen}
+          handleYes={handleYesReset}
+          handleNo={handleNoReset}
+          text={"Are you sure you want to reset the clock?"}
+        />
+      )}
     </React.Fragment>
   );
 };
