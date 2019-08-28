@@ -2,11 +2,10 @@ import { DialogContent } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import React, { useCallback, useState } from "react";
 import DurationPicker from "react-duration-picker";
-import { durationToSeconds, secondsToDuration } from "../../utils";
+import { secondsToDuration } from "../../utils";
 
 interface IProps {
   open: boolean;
@@ -42,11 +41,11 @@ function DurationPickerDialog(props: IProps) {
           onChange={onChangeDisplayedDuration}
           initialDuration={
             secondsToDuration(initialDuration) || {
-              hours: 0,
               minutes: 0,
               seconds: 0,
             }
           }
+          noHours
         />
         <DialogActions>
           <Button onClick={closeDialog} color="primary">

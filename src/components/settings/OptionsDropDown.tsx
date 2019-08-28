@@ -37,16 +37,16 @@ function OptionsDropDown(props: IProps) {
     setAnchorEl(null);
   }
 
-  function onClickButton(callback: () => void) {
-    return (e: any) => {
-      if (
-        e.target.getAttribute("type") === "checkbox" ||
-        e.target.getAttribute("role") === "menuitem"
-      ) {
-        callback();
-      }
-    };
-  }
+  // function onClickButton(callback: () => void) {
+  //   return (e: any) => {
+  //     if (
+  //       e.target.getAttribute("type") === "checkbox" ||
+  //       e.target.getAttribute("role") === "menuitem"
+  //     ) {
+  //       callback();
+  //     }
+  //   };
+  // }
 
   const onClickAbout = () => {
     setAboutDialogIsOpen(true);

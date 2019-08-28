@@ -82,7 +82,7 @@ function secondsToDuration(secs: number): IDuration {
 }
 
 function durationToSeconds({ hours, minutes, seconds }: IDuration): number {
-  return hours * 3600 + minutes * 60 + seconds;
+  return (hours || 0) * 3600 + minutes * 60 + seconds;
 }
 
 function getPresetById(id: string, presets: IPreset[]): IPreset | undefined {

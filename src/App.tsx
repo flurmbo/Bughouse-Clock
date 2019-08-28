@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import { v4 as uuid } from "uuid";
 import "./App.css";
 import ClockContainer from "./components/clock/ClockContainer";
 import SettingsMenu from "./components/settings/SettingsMenu";
-import { GameLifecycle, IncrementType, IPreset, ISettings } from "./types";
+import { GameLifecycle, IPreset, ISettings } from "./types";
 
 import {
   getPresetById,

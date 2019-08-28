@@ -4,9 +4,8 @@ import RefreshIcon from "@material-ui/icons/Refresh";
 import SettingsIcon from "@material-ui/icons/Settings";
 import React, { PureComponent } from "react";
 import { GameLifecycle } from "../../types";
-import { isCordova } from "../../utils";
 
-declare let navigator: any;
+// declare let navigator: any;
 
 interface IProps {
   onClickPauseButton: () => void;
@@ -24,9 +23,6 @@ const styles = {
 };
 
 class ButtonTray extends PureComponent<IProps> {
-  public onConfirm = (i: number) => {
-    alert("You selected button " + i);
-  };
   public render() {
     const {
       classes,

@@ -36,7 +36,7 @@ export interface ISettings {
 }
 
 export interface IDuration {
-  hours: number;
+  hours?: number;
   minutes: number;
   seconds: number;
 }

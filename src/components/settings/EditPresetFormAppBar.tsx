@@ -8,7 +8,6 @@ import useScrollTrigger from "@material-ui/core/useScrollTrigger";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import React from "react";
 import { IPreset } from "../../types";
-import ConfirmationDialog from "../ConfirmationDialog";
 
 interface IProps {
   editedPreset: IPreset | undefined;

@@ -52,9 +52,14 @@ function OptionsDropDown(props: IProps) {
     setFocusedPreset,
     setEditPresetFormIsOpen,
     selectedPreset,
+    setSelectedPreset,
   } = props;
 
   const classes = useStyles();
+
+  function onClickPreset(this: { id: string }) {
+    setSelectedPreset(this.id);
+  }
 
   return (
     <List>
@@ -65,7 +70,11 @@ function OptionsDropDown(props: IProps) {
             <ListItem
               key={id}
               button={!showEditDeletePresetButtons as any}
-              onClick={showEditDeletePresetButtons ? undefined : undefined}
+              onClick={
+                showEditDeletePresetButtons
+                  ? undefined
+                  : onClickPreset.bind({ id })
+              }
               className={classes.listItem}
             >
               <ListItemText primary={text} />
