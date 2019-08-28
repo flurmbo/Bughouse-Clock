@@ -22,7 +22,7 @@ const styles = {
   },
 };
 
-const ButtonTray = (props: IProps) => {
+const ButtonTray = React.memo((props: IProps) => {
   const {
     classes,
     gameLifecycle,
@@ -30,6 +30,7 @@ const ButtonTray = (props: IProps) => {
     onClickPauseButton,
     onClickResetButton,
   } = props;
+  console.log("rendering tray");
   return (
     <React.Fragment>
       <div className="topButton">
@@ -57,6 +58,6 @@ const ButtonTray = (props: IProps) => {
       </div>
     </React.Fragment>
   );
-};
+});
 
 export default withStyles(styles)(ButtonTray);
