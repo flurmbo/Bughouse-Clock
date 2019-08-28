@@ -286,7 +286,6 @@ const ClockContainer = (props: IProps) => {
   }, [gameLifecycle, props.gameLifecycle]);
 
   useEffect(() => {
-    console.log("selected preset has changed!");
     updateGameState(GameStateAction.ResetGame, {});
   }, [selectedPreset, updateGameState]);
 
@@ -397,7 +396,9 @@ const ClockContainer = (props: IProps) => {
   }, [updateGameLifecycle, updateGameState]);
 
   const onClickSettingsButton = useCallback(() => {
-    onPause();
+    if (gameLifecycleRef.current === GameLifecycle.InProgress) {
+      onPause();
+    }
     openSettings();
   }, [onPause, openSettings]);
 
