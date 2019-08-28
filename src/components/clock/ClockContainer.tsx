@@ -17,6 +17,7 @@ interface IProps {
   selectedPreset: IPreset;
   setGameLifecycle: (gameLifecycle: GameLifecycle) => void;
   openSettings: () => void;
+  singleTap: boolean;
   updateGameLifecycle: (GameLifecycle: GameLifecycle) => void;
 }
 
@@ -27,6 +28,7 @@ const ClockContainer = (props: IProps) => {
     openSettings,
     setGameLifecycle,
     updateGameLifecycle,
+    singleTap,
   } = props;
 
   const { startingTime } = selectedPreset;
@@ -69,6 +71,12 @@ const ClockContainer = (props: IProps) => {
 
   const selectedPresetRef = useRef(selectedPreset);
 
+  const singleTapRef = useRef(singleTap);
+
+  useEffect(() => {
+    singleTapRef.current = singleTap;
+  }, [singleTap]);
+
   const [resetDialogIsOpen, setResetDialogIsOpen] = useState(false);
 
   const updateGameState = useCallback(
@@ -81,18 +89,44 @@ const ClockContainer = (props: IProps) => {
           clock = payload.clock;
           side = payload.side;
           setGameLifecycle(GameLifecycle.InProgress);
+
           setGameState(prevState => {
             const now = Date.now();
-            return {
-              ...prevState,
-              ...{
-                [clock]: {
-                  side: otherSide(side),
-                  turnStartTime: now,
-                  time: prevState[clock].time,
+            const otherClock = clock === "left" ? "right" : "left";
+            if (
+              singleTapRef.current &&
+              !prevState[otherClock].turnStartTime &&
+              gameLifecycleRef.current === GameLifecycle.NotStarted
+            ) {
+              const otherClocksNewState = {
+                side,
+                turnStartTime: now,
+                time: prevState[clock].time,
+                flagged: undefined,
+              };
+              const clocksNewState = {
+                side: otherSide(side),
+                turnStartTime: now,
+                time: prevState[clock].time,
+                flagged: undefined,
+              };
+              const newGameState: IGameState = {
+                left: clock === "left" ? clocksNewState : otherClocksNewState,
+                right: clock === "left" ? otherClocksNewState : clocksNewState,
+              };
+              return newGameState;
+            } else {
+              return {
+                ...prevState,
+                ...{
+                  [clock]: {
+                    side: otherSide(side),
+                    turnStartTime: now,
+                    time: prevState[clock].time,
+                  },
                 },
-              },
-            };
+              };
+            }
           });
           break;
 
@@ -228,6 +262,7 @@ const ClockContainer = (props: IProps) => {
               bottom: startingTimeFromRef,
             },
           });
+          setGameLifecycle(GameLifecycle.NotStarted);
 
           break;
       }

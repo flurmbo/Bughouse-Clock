@@ -32,15 +32,6 @@ class App extends Component<any, IState> {
     settings: this.storedSettings,
   };
 
-  public componentDidUpdate() {
-    if (this.state.numberOfComponentsDoneResetting === 6) {
-      this.setState({
-        gameLifecycle: GameLifecycle.NotStarted,
-        numberOfComponentsDoneResetting: undefined,
-      });
-    }
-  }
-
   public render() {
     const { gameLifecycle, settingsIsOpen, presets, settings } = this.state;
 
@@ -54,6 +45,7 @@ class App extends Component<any, IState> {
           selectedPreset={selectedPreset}
           openSettings={this.openSettings}
           updateGameLifecycle={this.updateGameLifecycle}
+          singleTap={this.state.settings.singleTap}
         />
         {settingsIsOpen && (
           <SettingsMenu
