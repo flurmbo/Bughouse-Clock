@@ -6,7 +6,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
 import React, { useState } from "react";
 import { v4 as uuid } from "uuid";
-import { IncrementType, IPreset, ISettings } from "../../types";
+import { IncrementType, IPreset, ISettings, PresetsAction } from "../../types";
+import { getPresetById } from "../../utils";
 import ConfirmationDialog from "../ConfirmationDialog";
 import EditPresetForm from "./EditPresetForm";
 import ListOfPresets from "./ListOfPresets";
@@ -17,7 +18,7 @@ interface IProps {
   setSelectedPreset: (presetId: string) => void;
   presets: IPreset[];
   closeSettings: () => void;
-  updatePresets: (presets: IPreset[]) => void;
+  updatePresets: (action: PresetsAction, payload: { preset: IPreset }) => void;
   selectedPreset: string;
   settings: ISettings;
   setSettings: (settings: Partial<ISettings>) => void;
@@ -47,22 +48,26 @@ function SettingsMenu(props: IProps) {
   } = props;
 
   function onYesDelete() {
-    updatePresets(presets.filter(preset => preset.id !== focusedPreset));
+    const presetToDelete = getPresetById(focusedPreset, presets);
+    if (presetToDelete) {
+      updatePresets(PresetsAction.DeletePreset, {
+        preset: presetToDelete,
+      });
+    }
     setDeletePresetDialogIsOpen(false);
   }
 
   function editNewPreset() {
     const id = uuid();
-    updatePresets([
-      {
+    updatePresets(PresetsAction.AddPreset, {
+      preset: {
         text: "",
         increment: 0,
         startingTime: 0,
-        incrementType: IncrementType.Delay,
+        incrementType: IncrementType.None,
         id,
       },
-      ...presets,
-    ]);
+    });
     setFocusedPreset(id);
     setEditPresetFormIsOpen(true);
   }
@@ -93,7 +98,6 @@ function SettingsMenu(props: IProps) {
         <SettingsAppBar
           setSettings={setSettings}
           settings={settings}
-          setSelectedPreset={setSelectedPreset}
           setShowEditDeletePresetButtons={setShowEditDeletePresetButtons}
           showEditDeletePresetButtons={showEditDeletePresetButtons}
           closeSettings={closeSettings}
@@ -106,7 +110,6 @@ function SettingsMenu(props: IProps) {
             showEditDeletePresetButtons={showEditDeletePresetButtons}
             setDeletePresetDialogIsOpen={setDeletePresetDialogIsOpen}
             setEditPresetFormIsOpen={setEditPresetFormIsOpen}
-            updatePresets={updatePresets}
             setSelectedPreset={setSelectedPreset}
             selectedPreset={selectedPreset}
           />
@@ -138,7 +141,6 @@ function SettingsMenu(props: IProps) {
               : undefined
           }
           setEditPresetFormIsOpen={setEditPresetFormIsOpen}
-          presets={presets}
         />
       )}
     </React.Fragment>

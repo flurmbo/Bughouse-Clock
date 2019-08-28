@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./App.css";
 import ClockContainer from "./components/clock/ClockContainer";
 import SettingsMenu from "./components/settings/SettingsMenu";
-import { GameLifecycle, IPreset, ISettings } from "./types";
+import { GameLifecycle, IPreset, ISettings, PresetsAction } from "./types";
 
 import {
   getPresetById,
@@ -112,16 +112,74 @@ class App extends Component<any, IState> {
     );
   };
 
-  private updatePresets = (newPresets: IPreset[]) => {
-    savePresetsInLocalStorage(newPresets);
-    this.setState({ presets: newPresets }, () => {
-      const oldSelection = this.state.settings.selected;
-      if (
-        !this.state.presets.filter(preset => preset.id === oldSelection).length
-      ) {
-        this.setSelectedPreset(this.state.presets[0].id);
-      }
-    });
+  private updatePresets = (
+    action: PresetsAction,
+    payload: { preset: IPreset },
+  ) => {
+    // savePresetsInLocalStorage(newPresets);
+    // this.setState({ presets: newPresets }, () => {
+    //   const oldSelection = this.state.settings.selected;
+    //   if (
+    //     !this.state.presets.filter(preset => preset.id === oldSelection).length
+    //   ) {
+    //     this.setSelectedPreset(this.state.presets[0].id);
+    //   }
+    // });
+    switch (action) {
+      case PresetsAction.AddPreset:
+        this.setState(
+          prevState => {
+            return { presets: [payload.preset, ...prevState.presets] };
+          },
+          () => {
+            savePresetsInLocalStorage(this.state.presets);
+            if (payload.preset.text) {
+              this.setSelectedPreset(payload.preset.id);
+            }
+          },
+        );
+        break;
+      case PresetsAction.EditPreset:
+        this.setState(
+          prevState => {
+            return {
+              presets: prevState.presets.map(preset => {
+                if (preset.id !== payload.preset.id) {
+                  return preset;
+                } else {
+                  return payload.preset;
+                }
+              }),
+            };
+          },
+          () => {
+            savePresetsInLocalStorage(this.state.presets);
+            this.setSelectedPreset(payload.preset.id);
+          },
+        );
+        break;
+      case PresetsAction.DeletePreset:
+        this.setState(
+          prevState => {
+            return {
+              presets: prevState.presets.filter(
+                preset => preset.id !== payload.preset.id,
+              ),
+            };
+          },
+          () => {
+            savePresetsInLocalStorage(this.state.presets);
+            if (
+              !this.state.presets.filter(
+                preset => preset.id === this.state.settings.selected,
+              ).length
+            ) {
+              this.setSelectedPreset(this.state.presets[0].id);
+            }
+          },
+        );
+        break;
+    }
   };
 
   private closeSettings = () => {

@@ -12,7 +12,7 @@ import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormLabel from "@material-ui/core/FormLabel";
 import Grid from "@material-ui/core/Grid";
-import { IDuration, IncrementType, IPreset } from "../../types";
+import { IDuration, IncrementType, IPreset, PresetsAction } from "../../types";
 import { durationToSeconds, toDurationString } from "../../utils";
 import ConfirmationDialog from "../ConfirmationDialog";
 import DurationPickerDialog from "./DurationPickerDialog";
@@ -21,8 +21,7 @@ import EditPresetFormAppBar from "./EditPresetFormAppBar";
 interface IProps {
   open: boolean;
   editedPreset?: IPreset;
-  presets: IPreset[];
-  updatePresets: (presets: IPreset[]) => void;
+  updatePresets: (action: PresetsAction, payload: { preset: IPreset }) => void;
   setEditPresetFormIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -33,13 +32,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 function EditPresetForm(props: IProps) {
-  const {
-    open,
-    editedPreset,
-    updatePresets,
-    setEditPresetFormIsOpen,
-    presets,
-  } = props;
+  const { open, editedPreset, updatePresets, setEditPresetFormIsOpen } = props;
   const [unsavedPreset, setUnsavedPreset] = useState(editedPreset);
   const [discardChangesDialogIsOpen, setDiscardChangesDialogIsOpen] = useState(
     false,
@@ -49,23 +42,14 @@ function EditPresetForm(props: IProps) {
 
   const [showError, setShowError] = useState(false);
 
-  const isNewPreset = useState(!editedPreset || !editedPreset.text);
-  console.log("it is", isNewPreset);
-
   useEffect(() => {
     setUnsavedPreset(editedPreset);
   }, [editedPreset]);
 
   function savePreset() {
-    updatePresets(
-      presets.map(preset => {
-        if (editedPreset && unsavedPreset && preset.id === editedPreset.id) {
-          return unsavedPreset;
-        } else {
-          return preset;
-        }
-      }),
-    );
+    if (editedPreset && unsavedPreset) {
+      updatePresets(PresetsAction.EditPreset, { preset: unsavedPreset });
+    }
   }
   function handleChange(name: string) {
     return (event: any) => {

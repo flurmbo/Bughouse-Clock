@@ -49,6 +49,12 @@ export enum GameStateAction {
   ResetGame = "RESET_GAME",
 }
 
+export enum PresetsAction {
+  AddPreset = "ADD_PRESET",
+  DeletePreset = "DELETE_PRESET",
+  EditPreset = "EDIT_PRESET",
+}
+
 export interface IClockState {
   side: Side | undefined;
   turnStartTime: number | undefined;

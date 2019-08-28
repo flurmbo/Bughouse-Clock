@@ -15,7 +15,6 @@ interface IProps {
   showEditDeletePresetButtons: boolean;
   settings: ISettings;
   setSettings: (settings: Partial<ISettings>) => void;
-  setSelectedPreset: (presetId: string) => void;
   closeSettings: () => void;
 }
 const useStyles = makeStyles({

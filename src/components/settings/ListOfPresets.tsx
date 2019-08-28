@@ -25,7 +25,6 @@ interface IProps {
   setEditPresetFormIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedPreset: (presetId: string) => void;
   selectedPreset: string;
-  updatePresets: (presets: IPreset[]) => void;
 }
 
 function OptionsDropDown(props: IProps) {

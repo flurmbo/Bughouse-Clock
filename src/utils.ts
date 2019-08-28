@@ -9,8 +9,8 @@ import {
 } from "./types";
 
 declare let window: any;
-const LOCAL_STORAGE_PRESETS_ITEM = "bughouseTiasdfmerPresets17";
-const LOCAL_STORAGE_SETTINGS_ITEM = "bughouseTimerSelectes1sss7";
+const LOCAL_STORAGE_PRESETS_ITEM = "thepresets11";
+const LOCAL_STORAGE_SETTINGS_ITEM = "thesettings11";
 const DEFAULT_PRESETS: IPreset[] = [
   {
     text: "5|5",
