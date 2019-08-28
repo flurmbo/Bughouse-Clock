@@ -54,7 +54,6 @@ function SettingsMenu(props: IProps) {
   function editNewPreset() {
     const id = uuid();
     updatePresets([
-      ...presets,
       {
         text: "",
         increment: 0,
@@ -62,6 +61,7 @@ function SettingsMenu(props: IProps) {
         incrementType: IncrementType.Delay,
         id,
       },
+      ...presets,
     ]);
     setFocusedPreset(id);
     setEditPresetFormIsOpen(true);

@@ -57,7 +57,11 @@ function getStoredPresets(): IPreset[] {
 }
 
 function savePresetsInLocalStorage(presets: IPreset[]) {
-  localStorage.setItem(LOCAL_STORAGE_PRESETS_ITEM, JSON.stringify(presets));
+  const namedPresets = presets.filter(preset => preset.text);
+  localStorage.setItem(
+    LOCAL_STORAGE_PRESETS_ITEM,
+    JSON.stringify(namedPresets),
+  );
 }
 
 function getStoredSettings(): ISettings {

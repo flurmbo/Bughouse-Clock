@@ -26,13 +26,36 @@ interface IProps {
   setEditPresetFormIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   drawerPaper: {
     width: "100%",
   },
 }));
 
 function EditPresetForm(props: IProps) {
+  const {
+    open,
+    editedPreset,
+    updatePresets,
+    setEditPresetFormIsOpen,
+    presets,
+  } = props;
+  const [unsavedPreset, setUnsavedPreset] = useState(editedPreset);
+  const [discardChangesDialogIsOpen, setDiscardChangesDialogIsOpen] = useState(
+    false,
+  );
+  const [mainTimeDialogIsOpen, setMainTimeDialogIsOpen] = useState(false);
+  const [incrementDialogIsOpen, setIncrementDialogIsOpen] = useState(false);
+
+  const [showError, setShowError] = useState(false);
+
+  const isNewPreset = useState(!editedPreset || !editedPreset.text);
+  console.log("it is", isNewPreset);
+
+  useEffect(() => {
+    setUnsavedPreset(editedPreset);
+  }, [editedPreset]);
+
   function savePreset() {
     updatePresets(
       presets.map(preset => {
@@ -75,25 +98,6 @@ function EditPresetForm(props: IProps) {
       setUnsavedPreset(newUnsavedPreset);
     }
   };
-
-  const {
-    open,
-    editedPreset,
-    updatePresets,
-    setEditPresetFormIsOpen,
-    presets,
-  } = props;
-  const [unsavedPreset, setUnsavedPreset] = useState(editedPreset);
-  const [discardChangesDialogIsOpen, setDiscardChangesDialogIsOpen] = useState(
-    false,
-  );
-  const [mainTimeDialogIsOpen, setMainTimeDialogIsOpen] = useState(false);
-  const [incrementDialogIsOpen, setIncrementDialogIsOpen] = useState(false);
-
-  const [showError, setShowError] = useState(false);
-  useEffect(() => {
-    setUnsavedPreset(editedPreset);
-  }, [editedPreset]);
 
   function closeEditPresetFormWithoutSaving(): void {
     setDiscardChangesDialogIsOpen(false);
