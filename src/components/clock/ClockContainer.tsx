@@ -354,16 +354,6 @@ const ClockContainer = (props: IProps) => {
     } else if (state[clock].side === side) {
       updateGameState(GameStateAction.EndTurn, { side, clock });
     }
-    // if (side === state[clock].side && state[clock].turnStartTime) {
-    //   updateGameState(GameStateAction.EndTurn, { side, clock });
-    // } else if (
-    //   lifecycle === GameLifecycle.InProgress ||
-    //   lifecycle === GameLifecycle.NotStarted ||
-    //   lifecycle === GameLifecycle.Paused
-    // ) {
-    //   console.log("this is happening");
-    //   updateGameState(GameStateAction.FirstTurn, { side, clock });
-    // }
   };
 
   const onPause = useCallback(() => {
@@ -377,8 +367,10 @@ const ClockContainer = (props: IProps) => {
   }, [onPause, openSettings]);
 
   const onClickResetButton = useCallback(() => {
-    onPause();
-    setResetDialogIsOpen(true);
+    if (gameLifecycleRef.current !== GameLifecycle.NotStarted) {
+      onPause();
+      setResetDialogIsOpen(true);
+    }
   }, [onPause]);
 
   const handleYesReset = () => {

@@ -8,7 +8,6 @@ export enum GameLifecycle {
   Paused = "PAUSED",
   InProgress = "IN_PROGRESS",
   GameOver = "GAME_OVER",
-  Resetting = "RESETTING",
 }
 
 export enum IncrementType {
