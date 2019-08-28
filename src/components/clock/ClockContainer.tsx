@@ -1,5 +1,11 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { GameLifecycle, IGameState, IPreset, Side } from "../../types";
+import {
+  GameLifecycle,
+  GameStateAction,
+  IGameState,
+  IPreset,
+  Side,
+} from "../../types";
 import { otherSide, sideToIdentifier } from "../../utils";
 import ConfirmationDialog from "../ConfirmationDialog";
 import ButtonTray from "./ButtonTray";
@@ -44,13 +50,28 @@ const ClockContainer = (props: IProps) => {
     },
   });
 
+  const [displayedTimes, setDisplayedTimes] = useState({
+    left: {
+      top: selectedPreset.startingTime,
+      bottom: selectedPreset.startingTime,
+    },
+    right: {
+      top: selectedPreset.startingTime,
+      bottom: selectedPreset.startingTime,
+    },
+  });
+
+  const dispayedTimesRef = useRef(displayedTimes);
+
   const gameStateRef = useRef(gameState);
   const gameLifecycleRef = useRef(gameLifecycle);
+
+  const selectedPresetRef = useRef(selectedPreset);
 
   const [resetDialogIsOpen, setResetDialogIsOpen] = useState(false);
 
   const updateGameState = useCallback(
-    (action: string, payload: any) => {
+    (action: GameStateAction, payload: any) => {
       let clock: "left" | "right";
       let side: Side;
 
@@ -169,14 +190,15 @@ const ClockContainer = (props: IProps) => {
           break;
 
         case "RESET_GAME":
+          const startingTimeFromRef = selectedPresetRef.current.startingTime;
           setGameState({
             left: {
               side: undefined,
               turnStartTime: undefined,
               flagged: undefined,
               time: {
-                top: startingTime * 1000,
-                bottom: startingTime * 1000,
+                top: startingTimeFromRef * 1000,
+                bottom: startingTimeFromRef * 1000,
               },
             },
             right: {
@@ -184,60 +206,61 @@ const ClockContainer = (props: IProps) => {
               turnStartTime: undefined,
               flagged: undefined,
               time: {
-                top: startingTime * 1000,
-                bottom: startingTime * 1000,
+                top: startingTimeFromRef * 1000,
+                bottom: startingTimeFromRef * 1000,
               },
             },
           });
           setDisplayedTimes({
             left: {
-              top: selectedPreset.startingTime,
-              bottom: selectedPreset.startingTime,
+              top: startingTimeFromRef,
+              bottom: startingTimeFromRef,
             },
             right: {
-              top: selectedPreset.startingTime,
-              bottom: selectedPreset.startingTime,
+              top: startingTimeFromRef,
+              bottom: startingTimeFromRef,
             },
           });
 
           break;
       }
     },
-    [selectedPreset.startingTime, setGameLifecycle, startingTime],
+    [setGameLifecycle],
   );
   useEffect(() => {
     gameStateRef.current = gameState;
   }, [gameState]);
 
   useEffect(() => {
+    dispayedTimesRef.current = displayedTimes;
+  }, [displayedTimes]);
+  useEffect(() => {
+    selectedPresetRef.current = selectedPreset;
+  }, [selectedPreset]);
+
+  useEffect(() => {
     gameLifecycleRef.current = gameLifecycle;
     console.log(` it is now ${gameLifecycle}`);
   }, [gameLifecycle, props.gameLifecycle]);
+
+  useEffect(() => {
+    console.log("selected preset has changed!");
+    updateGameState(GameStateAction.ResetGame, {});
+  }, [selectedPreset, updateGameState]);
 
   const onClickClockFace = (side: Side, clock: "left" | "right") => {
     const state = gameStateRef.current;
     const lifecycle = gameLifecycleRef.current;
     if (state[clock].turnStartTime) {
-      updateGameState("END_TURN", { side, clock });
+      updateGameState(GameStateAction.EndTurn, { side, clock });
     } else if (
       lifecycle === GameLifecycle.InProgress ||
       lifecycle === GameLifecycle.NotStarted ||
       lifecycle === GameLifecycle.Paused
     ) {
-      updateGameState("FIRST_TURN", { side, clock });
+      updateGameState(GameStateAction.FirstTurn, { side, clock });
     }
   };
-
-  const [displayedTimes, setDisplayedTimes] = useState({
-    left: {
-      top: selectedPreset.startingTime,
-      bottom: selectedPreset.startingTime,
-    },
-    right: {
-      top: selectedPreset.startingTime,
-      bottom: selectedPreset.startingTime,
-    },
-  });
 
   // this effect updates the displayed times on clock faces
   useEffect(() => {
@@ -271,31 +294,52 @@ const ClockContainer = (props: IProps) => {
           const index = times.indexOf(min);
           switch (index) {
             case 0:
-              updateGameState("END_GAME", { side: "TOP", clock: "left" });
+              updateGameState(GameStateAction.EndGame, {
+                side: "TOP",
+                clock: "left",
+              });
               break;
             case 1:
-              updateGameState("END_GAME", { side: "BOTTOM", clock: "left" });
+              updateGameState(GameStateAction.EndGame, {
+                side: "BOTTOM",
+                clock: "left",
+              });
               break;
             case 2:
-              updateGameState("END_GAME", { side: "TOP", clock: "right" });
+              updateGameState(GameStateAction.EndGame, {
+                side: "TOP",
+                clock: "right",
+              });
               break;
             case 3:
-              updateGameState("END_GAME", { side: "BOTTOM", clock: "right" });
+              updateGameState(GameStateAction.EndGame, {
+                side: "BOTTOM",
+                clock: "right",
+              });
               break;
           }
         }
-        setDisplayedTimes(() => {
-          return {
-            left: {
-              top: Math.ceil(times[0]),
-              bottom: Math.ceil(times[1]),
-            },
-            right: {
-              top: Math.ceil(times[2]),
-              bottom: Math.ceil(times[3]),
-            },
-          };
-        });
+        const roundedTimes = times.map(time => Math.ceil(time));
+        const currentTimes = dispayedTimesRef.current;
+        if (
+          currentTimes.left.top !== roundedTimes[0] ||
+          currentTimes.left.bottom !== roundedTimes[1] ||
+          currentTimes.right.top !== roundedTimes[2] ||
+          currentTimes.right.bottom !== roundedTimes[3]
+        ) {
+          setDisplayedTimes(() => {
+            return {
+              left: {
+                top: roundedTimes[0],
+                bottom: roundedTimes[1],
+              },
+              right: {
+                top: roundedTimes[2],
+                bottom: roundedTimes[3],
+              },
+            };
+          });
+        }
       }
     }, 30);
 
@@ -306,7 +350,7 @@ const ClockContainer = (props: IProps) => {
 
   const onPause = useCallback(() => {
     updateGameLifecycle(GameLifecycle.Paused);
-    updateGameState("PAUSE_GAME", {});
+    updateGameState(GameStateAction.PauseGame, {});
   }, [updateGameLifecycle, updateGameState]);
 
   const onClickSettingsButton = useCallback(() => {
@@ -320,7 +364,7 @@ const ClockContainer = (props: IProps) => {
   }, [onPause]);
 
   const handleYesReset = () => {
-    updateGameState("RESET_GAME", {});
+    updateGameState(GameStateAction.ResetGame, {});
     setResetDialogIsOpen(false);
   };
 

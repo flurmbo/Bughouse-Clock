@@ -71,23 +71,6 @@ class App extends Component<any, IState> {
     );
   }
 
-  private onThisComponentDoneResetting = () => {
-    this.setState(
-      state => ({
-        numberOfComponentsDoneResetting: state.numberOfComponentsDoneResetting
-          ? state.numberOfComponentsDoneResetting + 1
-          : 1,
-      }),
-      () => {
-        // tslint:disable-next-line:no-console
-        console.log(
-          "numberDoneResetting is",
-          this.state.numberOfComponentsDoneResetting,
-        );
-      },
-    );
-  };
-
   private updateGameLifecycle = (gameLifecycle: GameLifecycle) => {
     this.setGameLifecycle(gameLifecycle);
   };

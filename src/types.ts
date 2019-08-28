@@ -41,6 +41,15 @@ export interface IDuration {
   seconds: number;
 }
 
+export enum GameStateAction {
+  FirstTurn = "FIRST_TURN",
+  EndTurn = "END_TURN",
+  DelayElapsed = "DELAY_ELAPSED",
+  EndGame = "END_GAME",
+  PauseGame = "PAUSE_GAME",
+  ResetGame = "RESET_GAME",
+}
+
 export interface IClockState {
   side: Side | undefined;
   turnStartTime: number | undefined;

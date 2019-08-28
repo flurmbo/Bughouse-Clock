@@ -30,7 +30,6 @@ const ButtonTray = React.memo((props: IProps) => {
     onClickPauseButton,
     onClickResetButton,
   } = props;
-  console.log("rendering tray");
   return (
     <React.Fragment>
       <div className="topButton">
