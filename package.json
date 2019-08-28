@@ -11,8 +11,8 @@
     "@types/react-dom": "^16.8.4",
     "react": "^16.9.0",
     "react-dom": "^16.8.6",
-    "react-duration-picker": "^1.0.1",
-    "react-scripts": "2.1.8",
+    "react-duration-picker": "^1.1.0",
+    "react-scripts": "3.0.0",
     "typescript": "^3.4.3",
     "uuid": "^3.3.2"
   },
@@ -36,8 +36,8 @@
   "homepage": "./",
   "devDependencies": {
     "@types/uuid": "^3.4.5",
-    "@typescript-eslint/parser": "^2.0.0",
-    "eslint-plugin-react-hooks": "^2.0.1",
+    "@typescript-eslint/parser": "^1.13.0",
+    "eslint-plugin-react-hooks": "^1.7.0",
     "husky": "^2.3.0",
     "prettier": "^1.17.1",
     "pretty-quick": "^1.11.0",
