@@ -9,18 +9,18 @@ import {
 } from "./types";
 
 declare let window: any;
-const LOCAL_STORAGE_PRESETS_ITEM = "thepresets11";
-const LOCAL_STORAGE_SETTINGS_ITEM = "thesettings11";
+const LOCAL_STORAGE_PRESETS_ITEM = "thepresets22";
+const LOCAL_STORAGE_SETTINGS_ITEM = "thesettings22";
 const DEFAULT_PRESETS: IPreset[] = [
   {
-    text: "5|5",
+    text: "5|5 (5 minutes main time, 5 second delay)",
     increment: 5,
     startingTime: 5 * 60,
     incrementType: IncrementType.Delay,
     id: uuid(),
   },
   {
-    text: "2|2",
+    text: "2|2 (2 minutes main time, 2 second delay)",
     increment: 2,
     startingTime: 2 * 60,
     incrementType: IncrementType.Delay,
@@ -95,7 +95,7 @@ function getPresetById(id: string, presets: IPreset[]): IPreset | undefined {
 }
 
 export const WEIRD_DEFAULT_PRESET = {
-  text: "lololo",
+  text: "You shouldn't be able to see this",
   increment: 100,
   incrementType: IncrementType.Delay,
   startingTime: 9999,

@@ -141,6 +141,7 @@ function SettingsMenu(props: IProps) {
               : undefined
           }
           setEditPresetFormIsOpen={setEditPresetFormIsOpen}
+          setShowEditDeletePresetButtons={setShowEditDeletePresetButtons}
         />
       )}
     </React.Fragment>

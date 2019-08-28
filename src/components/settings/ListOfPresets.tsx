@@ -40,6 +40,7 @@ function OptionsDropDown(props: IProps) {
   function onClickEditButton(id: string) {
     return () => {
       setEditPresetFormIsOpen(true);
+      setSelectedPreset(id);
       setFocusedPreset(id);
     };
   }

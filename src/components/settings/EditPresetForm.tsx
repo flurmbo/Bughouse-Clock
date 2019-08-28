@@ -23,6 +23,7 @@ interface IProps {
   editedPreset?: IPreset;
   updatePresets: (action: PresetsAction, payload: { preset: IPreset }) => void;
   setEditPresetFormIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowEditDeletePresetButtons: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const useStyles = makeStyles(() => ({
@@ -32,7 +33,13 @@ const useStyles = makeStyles(() => ({
 }));
 
 function EditPresetForm(props: IProps) {
-  const { open, editedPreset, updatePresets, setEditPresetFormIsOpen } = props;
+  const {
+    open,
+    editedPreset,
+    updatePresets,
+    setEditPresetFormIsOpen,
+    setShowEditDeletePresetButtons,
+  } = props;
   const [unsavedPreset, setUnsavedPreset] = useState(editedPreset);
   const [discardChangesDialogIsOpen, setDiscardChangesDialogIsOpen] = useState(
     false,
@@ -110,6 +117,7 @@ function EditPresetForm(props: IProps) {
           unsavedPreset={unsavedPreset}
           setEditPresetFormIsOpen={setEditPresetFormIsOpen}
           savePreset={savePreset}
+          setShowEditDeletePresetButtons={setShowEditDeletePresetButtons}
           setDiscardChangesDialogIsOpen={setDiscardChangesDialogIsOpen}
           setShowError={setShowError}
         />
