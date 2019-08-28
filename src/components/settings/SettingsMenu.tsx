@@ -4,10 +4,10 @@ import Drawer from "@material-ui/core/Drawer";
 import Fab from "@material-ui/core/Fab";
 import { makeStyles } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { v4 as uuid } from "uuid";
 import { IncrementType, IPreset, ISettings, PresetsAction } from "../../types";
-import { getPresetById } from "../../utils";
+import { getPresetById, isCordova } from "../../utils";
 import ConfirmationDialog from "../ConfirmationDialog";
 import EditPresetForm from "./EditPresetForm";
 import ListOfPresets from "./ListOfPresets";
@@ -86,6 +86,20 @@ function SettingsMenu(props: IProps) {
     false,
   );
   const [editPresetFormIsOpen, setEditPresetFormIsOpen] = useState(false);
+
+  const closeSettingsRef = useRef(closeSettings);
+  useEffect(() => {
+    const closeCordova = closeSettingsRef.current;
+    if (isCordova()) {
+      document.addEventListener("backbutton", closeCordova, false);
+    }
+    return () => {
+      if (isCordova()) {
+        document.removeEventListener("backbutton", closeCordova, false);
+      }
+    };
+  }, []);
+
   return (
     <React.Fragment>
       <CssBaseline />
