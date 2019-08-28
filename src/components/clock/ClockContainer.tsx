@@ -3,6 +3,7 @@ import {
   GameLifecycle,
   GameStateAction,
   IGameState,
+  IncrementType,
   IPreset,
   Side,
 } from "../../types";
@@ -103,6 +104,10 @@ const ClockContainer = (props: IProps) => {
             const sideId = sideToIdentifier(side);
             const otherSideId = sideToIdentifier(otherSide(side));
             const lastStartTime = prevState[clock].turnStartTime as number;
+            const fischerIncrement =
+              selectedPresetRef.current.incrementType === IncrementType.Fischer
+                ? selectedPresetRef.current.increment * 1000
+                : 0;
             return {
               ...prevState,
               ...{
@@ -111,7 +116,9 @@ const ClockContainer = (props: IProps) => {
                   turnStartTime: now,
                   time: {
                     [sideId]:
-                      prevState[clock].time[sideId] - (now - lastStartTime),
+                      prevState[clock].time[sideId] -
+                      (now - lastStartTime) +
+                      fischerIncrement,
                     [otherSideId]: prevState[clock].time[otherSideId],
                   },
                 },
@@ -248,20 +255,6 @@ const ClockContainer = (props: IProps) => {
     updateGameState(GameStateAction.ResetGame, {});
   }, [selectedPreset, updateGameState]);
 
-  const onClickClockFace = (side: Side, clock: "left" | "right") => {
-    const state = gameStateRef.current;
-    const lifecycle = gameLifecycleRef.current;
-    if (state[clock].turnStartTime) {
-      updateGameState(GameStateAction.EndTurn, { side, clock });
-    } else if (
-      lifecycle === GameLifecycle.InProgress ||
-      lifecycle === GameLifecycle.NotStarted ||
-      lifecycle === GameLifecycle.Paused
-    ) {
-      updateGameState(GameStateAction.FirstTurn, { side, clock });
-    }
-  };
-
   // this effect updates the displayed times on clock faces
   useEffect(() => {
     const updateDisplayId = window.setInterval(() => {
@@ -347,6 +340,31 @@ const ClockContainer = (props: IProps) => {
       window.clearInterval(updateDisplayId);
     };
   }, [updateGameState]);
+
+  const onClickClockFace = (side: Side, clock: "left" | "right") => {
+    const state = gameStateRef.current;
+    const lifecycle = gameLifecycleRef.current;
+    if (
+      lifecycle === GameLifecycle.NotStarted ||
+      lifecycle === GameLifecycle.Paused
+    ) {
+      updateGameState(GameStateAction.FirstTurn, { side, clock });
+    } else if (!state[clock].turnStartTime) {
+      updateGameState(GameStateAction.FirstTurn, { side, clock });
+    } else if (state[clock].side === side) {
+      updateGameState(GameStateAction.EndTurn, { side, clock });
+    }
+    // if (side === state[clock].side && state[clock].turnStartTime) {
+    //   updateGameState(GameStateAction.EndTurn, { side, clock });
+    // } else if (
+    //   lifecycle === GameLifecycle.InProgress ||
+    //   lifecycle === GameLifecycle.NotStarted ||
+    //   lifecycle === GameLifecycle.Paused
+    // ) {
+    //   console.log("this is happening");
+    //   updateGameState(GameStateAction.FirstTurn, { side, clock });
+    // }
+  };
 
   const onPause = useCallback(() => {
     updateGameLifecycle(GameLifecycle.Paused);
