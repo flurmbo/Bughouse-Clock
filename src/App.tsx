@@ -112,7 +112,7 @@ class App extends Component<any, IState> {
     );
   };
 
-  private updatePresets = (newPresets: IPreset[], callback: () => void) => {
+  private updatePresets = (newPresets: IPreset[]) => {
     savePresetsInLocalStorage(newPresets);
     this.setState({ presets: newPresets }, () => {
       const oldSelection = this.state.settings.selected;
