@@ -93,6 +93,11 @@ function SettingsMenu(props: IProps) {
     };
   });
   const androidBackCallbackRef = useRef(androidBackCallback);
+
+  useEffect(() => {
+    androidBackCallbackRef.current = androidBackCallback;
+  }, [androidBackCallback]);
+
   const onPressAndroidBackButton = () => {
     const currentCallback = androidBackCallbackRef.current;
     currentCallback();
