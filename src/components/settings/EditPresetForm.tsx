@@ -24,6 +24,7 @@ interface IProps {
   updatePresets: (action: PresetsAction, payload: { preset: IPreset }) => void;
   setEditPresetFormIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setShowEditDeletePresetButtons: React.Dispatch<React.SetStateAction<boolean>>;
+  setAndroidBackCallback: React.Dispatch<React.SetStateAction<() => void>>;
 }
 
 const useStyles = makeStyles(() => ({
@@ -39,6 +40,7 @@ function EditPresetForm(props: IProps) {
     updatePresets,
     setEditPresetFormIsOpen,
     setShowEditDeletePresetButtons,
+    setAndroidBackCallback,
   } = props;
   const [unsavedPreset, setUnsavedPreset] = useState(editedPreset);
   const [discardChangesDialogIsOpen, setDiscardChangesDialogIsOpen] = useState(
@@ -120,6 +122,7 @@ function EditPresetForm(props: IProps) {
           setShowEditDeletePresetButtons={setShowEditDeletePresetButtons}
           setDiscardChangesDialogIsOpen={setDiscardChangesDialogIsOpen}
           setShowError={setShowError}
+          setAndroidBackCallback={setAndroidBackCallback}
         />
         <Container>
           <Grid container>

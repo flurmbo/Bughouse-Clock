@@ -34,7 +34,6 @@ class App extends Component<any, IState> {
 
   public render() {
     const { gameLifecycle, settingsIsOpen, presets, settings } = this.state;
-
     const selectedPreset =
       getPresetById(settings.selected, presets) || WEIRD_DEFAULT_PRESET;
     return (

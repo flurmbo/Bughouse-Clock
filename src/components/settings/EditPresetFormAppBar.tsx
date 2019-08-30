@@ -6,7 +6,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import useScrollTrigger from "@material-ui/core/useScrollTrigger";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import React from "react";
+import React, { useCallback, useEffect } from "react";
 import { IPreset } from "../../types";
 
 interface IProps {
@@ -17,6 +17,7 @@ interface IProps {
   setDiscardChangesDialogIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setShowError: React.Dispatch<React.SetStateAction<boolean>>;
   setShowEditDeletePresetButtons: React.Dispatch<React.SetStateAction<boolean>>;
+  setAndroidBackCallback: React.Dispatch<React.SetStateAction<() => void>>;
 }
 const useStyles = makeStyles({
   title: {
@@ -40,22 +41,37 @@ function EditPresetFormAppBar(props: IProps) {
     setDiscardChangesDialogIsOpen,
     savePreset,
     setShowEditDeletePresetButtons,
+    setAndroidBackCallback,
+    setShowError,
   } = props;
   const appBarDisplayText = "Edit Preset";
 
-  function closePresetForm() {
+  const closePresetForm = useCallback(() => {
     setEditPresetFormIsOpen(false);
-  }
+  }, [setEditPresetFormIsOpen]);
 
-  function handleBackButton() {
+  const handleBackButton = useCallback(() => {
     if (JSON.stringify(editedPreset) !== JSON.stringify(unsavedPreset)) {
       setDiscardChangesDialogIsOpen(true);
     } else if (unsavedPreset && unsavedPreset.text) {
       closePresetForm();
     } else {
-      props.setShowError(true);
+      setShowError(true);
     }
-  }
+  }, [
+    editedPreset,
+    closePresetForm,
+    setDiscardChangesDialogIsOpen,
+    unsavedPreset,
+    setShowError,
+  ]);
+
+  useEffect(() => {
+    console.log("setting up edit preset app bar!");
+    return () => {
+      console.log("tearing down edit preset app bar!");
+    };
+  }, []);
 
   function savePresetAndCloseForm() {
     if (unsavedPreset && unsavedPreset.text) {
@@ -66,6 +82,19 @@ function EditPresetFormAppBar(props: IProps) {
       props.setShowError(true);
     }
   }
+  useEffect(() => {
+    console.log("handlebackbutton changed");
+  }, [handleBackButton]);
+
+  useEffect(() => {
+    console.log("setAndroid changed");
+  }, [setAndroidBackCallback]);
+
+  useEffect(() => {
+    setAndroidBackCallback(() => {
+      return handleBackButton;
+    });
+  }, [handleBackButton, setAndroidBackCallback]);
 
   const classes = useStyles();
   return (

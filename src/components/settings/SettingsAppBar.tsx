@@ -6,7 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import useScrollTrigger from "@material-ui/core/useScrollTrigger";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import EditIcon from "@material-ui/icons/Edit";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { ISettings } from "../../types";
 import OptionsDropDown from "./OptionsDropDown";
 
@@ -16,6 +16,7 @@ interface IProps {
   settings: ISettings;
   setSettings: (settings: Partial<ISettings>) => void;
   closeSettings: () => void;
+  setAndroidBackCallback: React.Dispatch<React.SetStateAction<() => void>>;
 }
 const useStyles = makeStyles({
   title: {
@@ -37,11 +38,34 @@ function SettingsAppBar(props: IProps) {
     closeSettings,
     settings,
     setSettings,
+    setAndroidBackCallback,
   } = props;
+
+  const showEditDeletePresetButtonsRef = useRef(showEditDeletePresetButtons);
+
+  useEffect(() => {
+    showEditDeletePresetButtonsRef.current = showEditDeletePresetButtons;
+  }, [showEditDeletePresetButtons]);
 
   function toggleShowEditDeleteButtons() {
     setShowEditDeletePresetButtons(!showEditDeletePresetButtons);
   }
+
+  useEffect(() => {
+    setAndroidBackCallback(() => {
+      return () => {
+        const buttonsAreShown = showEditDeletePresetButtonsRef.current;
+        if (buttonsAreShown) {
+          setShowEditDeletePresetButtons(false);
+        } else {
+          closeSettings();
+        }
+      };
+    });
+    return () => {
+      console.log("tearing down settings app bar!");
+    };
+  }, [closeSettings, setAndroidBackCallback, setShowEditDeletePresetButtons]);
 
   const appBarDisplayText = showEditDeletePresetButtons
     ? "Edit or Delete Presets"

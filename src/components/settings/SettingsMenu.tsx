@@ -87,19 +87,33 @@ function SettingsMenu(props: IProps) {
   );
   const [editPresetFormIsOpen, setEditPresetFormIsOpen] = useState(false);
 
-  const closeSettingsRef = useRef(closeSettings);
+  const [androidBackCallback, setAndroidBackCallback] = useState(() => {
+    return () => {
+      //
+    };
+  });
+  const androidBackCallbackRef = useRef(androidBackCallback);
+  const onPressAndroidBackButton = () => {
+    const currentCallback = androidBackCallbackRef.current;
+    currentCallback();
+  };
+
   useEffect(() => {
-    const closeCordova = closeSettingsRef.current;
+    console.log("setting up cordova listener!");
     if (isCordova()) {
-      document.addEventListener("backbutton", closeCordova, false);
+      document.addEventListener("backbutton", onPressAndroidBackButton, false);
     }
     return () => {
+      console.log("tearing down cordova listener!");
       if (isCordova()) {
-        document.removeEventListener("backbutton", closeCordova, false);
+        document.removeEventListener(
+          "backbutton",
+          onPressAndroidBackButton,
+          false,
+        );
       }
     };
   }, []);
-
   return (
     <React.Fragment>
       <CssBaseline />
@@ -109,13 +123,16 @@ function SettingsMenu(props: IProps) {
           paper: classes.drawerPaper,
         }}
       >
-        <SettingsAppBar
-          setSettings={setSettings}
-          settings={settings}
-          setShowEditDeletePresetButtons={setShowEditDeletePresetButtons}
-          showEditDeletePresetButtons={showEditDeletePresetButtons}
-          closeSettings={closeSettings}
-        />
+        {!editPresetFormIsOpen && (
+          <SettingsAppBar
+            setSettings={setSettings}
+            settings={settings}
+            setShowEditDeletePresetButtons={setShowEditDeletePresetButtons}
+            showEditDeletePresetButtons={showEditDeletePresetButtons}
+            closeSettings={closeSettings}
+            setAndroidBackCallback={setAndroidBackCallback}
+          />
+        )}
         <Container>
           <ListOfPresets
             focusedPreset={focusedPreset}
@@ -156,6 +173,7 @@ function SettingsMenu(props: IProps) {
           }
           setEditPresetFormIsOpen={setEditPresetFormIsOpen}
           setShowEditDeletePresetButtons={setShowEditDeletePresetButtons}
+          setAndroidBackCallback={setAndroidBackCallback}
         />
       )}
     </React.Fragment>
