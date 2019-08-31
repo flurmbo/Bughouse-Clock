@@ -30,7 +30,7 @@ export interface IPreset {
 
 export interface ISettings {
   selected: string;
-  fullScreen: boolean;
+  // fullScreen: boolean;
   singleTap: boolean;
 }
 

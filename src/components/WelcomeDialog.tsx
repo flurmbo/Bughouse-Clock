@@ -8,22 +8,22 @@ import React from "react";
 
 interface IProps {
   open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpen: (isOpen: boolean) => void;
 }
 
-function AboutDialog(props: IProps) {
+function WelcomeDialog(props: IProps) {
   const { open, setOpen } = props;
   const closeDialog = () => {
     setOpen(false);
   };
   return (
     <Dialog open={open}>
-      <DialogTitle>About Bughouse Clock</DialogTitle>
+      <DialogTitle>Welcome to Bughouse Clock</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          Bughouse Clock was developed by Phil Marshall in 2019. You can email
-          him comments and questions{" "}
-          <a href="mailto: phillipsolomonmarshall@gmail.com">here</a>.
+          Thanks for using Bughouse Clock! This app uses fullscreen mode. To
+          access your device's navigation, swipe up from the bottom of the
+          screen.
         </DialogContentText>
         <DialogActions>
           <Button onClick={closeDialog} color="primary">
@@ -35,4 +35,4 @@ function AboutDialog(props: IProps) {
   );
 }
 
-export default AboutDialog;
+export default WelcomeDialog;

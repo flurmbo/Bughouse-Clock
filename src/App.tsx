@@ -2,12 +2,14 @@ import React, { Component } from "react";
 import "./App.css";
 import ClockContainer from "./components/clock/ClockContainer";
 import SettingsMenu from "./components/settings/SettingsMenu";
+import WelcomeDialog from "./components/WelcomeDialog";
 import { GameLifecycle, IPreset, ISettings, PresetsAction } from "./types";
 
 import {
   getPresetById,
   getStoredPresets,
   getStoredSettings,
+  isFirstUse,
   savePresetsInLocalStorage,
   saveSettingsInLocalStorage,
   WEIRD_DEFAULT_PRESET,
@@ -19,9 +21,11 @@ interface IState {
   numberOfComponentsDoneResetting?: number;
   presets: IPreset[];
   settings: ISettings;
+  welcomeDialogIsOpen: boolean;
 }
 
 class App extends Component<any, IState> {
+  public firstUse = isFirstUse();
   public storedPresets = getStoredPresets();
   public storedSettings = getStoredSettings();
 
@@ -30,10 +34,17 @@ class App extends Component<any, IState> {
     presets: this.storedPresets,
     settingsIsOpen: false,
     settings: this.storedSettings,
+    welcomeDialogIsOpen: this.firstUse,
   };
 
   public render() {
-    const { gameLifecycle, settingsIsOpen, presets, settings } = this.state;
+    const {
+      gameLifecycle,
+      settingsIsOpen,
+      presets,
+      settings,
+      welcomeDialogIsOpen,
+    } = this.state;
     const selectedPreset =
       getPresetById(settings.selected, presets) || WEIRD_DEFAULT_PRESET;
     return (
@@ -56,6 +67,12 @@ class App extends Component<any, IState> {
             setSettings={this.setSettings}
             updatePresets={this.updatePresets}
             closeSettings={this.closeSettings}
+          />
+        )}
+        {welcomeDialogIsOpen && (
+          <WelcomeDialog
+            open={welcomeDialogIsOpen}
+            setOpen={this.setWelcomeDialogIsOpen}
           />
         )}
       </div>
@@ -88,6 +105,10 @@ class App extends Component<any, IState> {
         saveSettingsInLocalStorage(this.state.settings);
       },
     );
+  };
+
+  private setWelcomeDialogIsOpen = (isOpen: boolean) => {
+    this.setState({ welcomeDialogIsOpen: isOpen });
   };
 
   private setSelectedPreset = (presetId: string) => {

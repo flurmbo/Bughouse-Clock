@@ -9,8 +9,8 @@ import {
 } from "./types";
 
 declare let window: any;
-const LOCAL_STORAGE_PRESETS_ITEM = "thepresets22";
-const LOCAL_STORAGE_SETTINGS_ITEM = "thesettings22";
+const LOCAL_STORAGE_PRESETS_ITEM = "thepresets33";
+const LOCAL_STORAGE_SETTINGS_ITEM = "thesettings33";
 const DEFAULT_PRESETS: IPreset[] = [
   {
     text: "5|5 (5 minutes main time, 5 second delay)",
@@ -30,7 +30,6 @@ const DEFAULT_PRESETS: IPreset[] = [
 
 const DEFAULT_SETTINGS = {
   selected: DEFAULT_PRESETS[0].id,
-  fullScreen: false,
   singleTap: false,
 };
 function toDurationString(seconds: Seconds): string {
@@ -104,6 +103,10 @@ export const WEIRD_DEFAULT_PRESET = {
 
 export const sideToIdentifier = (side: Side): "top" | "bottom" => {
   return side === Side.Top ? "top" : "bottom";
+};
+
+export const isFirstUse = (): boolean => {
+  return true;
 };
 
 export {

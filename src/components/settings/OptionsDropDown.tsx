@@ -37,29 +37,18 @@ function OptionsDropDown(props: IProps) {
     setAnchorEl(null);
   }
 
-  // function onClickButton(callback: () => void) {
-  //   return (e: any) => {
-  //     if (
-  //       e.target.getAttribute("type") === "checkbox" ||
-  //       e.target.getAttribute("role") === "menuitem"
-  //     ) {
-  //       callback();
-  //     }
-  //   };
-  // }
-
   const onClickAbout = () => {
     setAboutDialogIsOpen(true);
   };
 
-  function onClickFullScreen(e: any) {
-    if (
-      e.target.getAttribute("type") === "checkbox" ||
-      e.target.getAttribute("role") === "menuitem"
-    ) {
-      props.setSettings({ fullScreen: !settings.fullScreen });
-    }
-  }
+  // function onClickFullScreen(e: any) {
+  //   if (
+  //     e.target.getAttribute("type") === "checkbox" ||
+  //     e.target.getAttribute("role") === "menuitem"
+  //   ) {
+  //     props.setSettings({ fullScreen: !settings.fullScreen });
+  //   }
+  // }
   function onClickSingleTap(e: any) {
     if (
       e.target.getAttribute("type") === "checkbox" ||
@@ -80,14 +69,14 @@ function OptionsDropDown(props: IProps) {
         <MoreIcon />
       </IconButton>
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-        <MenuItem onClick={onClickFullScreen}>
+        {/* <MenuItem onClick={onClickFullScreen}>
           <FormControlLabel
             control={<Checkbox checked={settings.fullScreen} />}
             label="Full Screen"
             labelPlacement="start"
             className={classes.formControlLabel}
           />
-        </MenuItem>
+        </MenuItem> */}
         <MenuItem onClick={onClickSingleTap}>
           <FormControlLabel
             control={<Checkbox checked={settings.singleTap} />}
