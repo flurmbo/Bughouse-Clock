@@ -100,7 +100,7 @@ export const WEIRD_DEFAULT_PRESET = {
   increment: 100,
   incrementType: IncrementType.Delay,
   startingTime: 9999,
-  id: "hymynameis",
+  id: "idForErrorPreset",
 };
 
 export const sideToIdentifier = (side: Side): "top" | "bottom" => {
@@ -110,11 +110,20 @@ export const sideToIdentifier = (side: Side): "top" | "bottom" => {
 export const isFirstUse = (): boolean => {
   const data = localStorage.getItem(LOCAL_STORAGE_SETTINGS_ITEM);
   if (data) {
-    console.log("data");
     return false;
   } else {
-    console.log("no data");
     return true;
+  }
+};
+
+export const getTimeLeftAfterDelay = (
+  delayInSecs: number,
+  timeElapsed: number,
+): number => {
+  if (delayInSecs * 1000 >= timeElapsed) {
+    return 0;
+  } else {
+    return timeElapsed - delayInSecs * 1000;
   }
 };
 

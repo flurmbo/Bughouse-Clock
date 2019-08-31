@@ -128,15 +128,6 @@ class App extends Component<any, IState> {
     action: PresetsAction,
     payload: { preset: IPreset },
   ) => {
-    // savePresetsInLocalStorage(newPresets);
-    // this.setState({ presets: newPresets }, () => {
-    //   const oldSelection = this.state.settings.selected;
-    //   if (
-    //     !this.state.presets.filter(preset => preset.id === oldSelection).length
-    //   ) {
-    //     this.setSelectedPreset(this.state.presets[0].id);
-    //   }
-    // });
     switch (action) {
       case PresetsAction.AddPreset:
         this.setState(

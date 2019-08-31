@@ -7,7 +7,11 @@ import {
   IPreset,
   Side,
 } from "../../types";
-import { otherSide, sideToIdentifier } from "../../utils";
+import {
+  getTimeLeftAfterDelay,
+  otherSide,
+  sideToIdentifier,
+} from "../../utils";
 import ConfirmationDialog from "../ConfirmationDialog";
 import ButtonTray from "./ButtonTray";
 import ChessClock from "./ChessClock";
@@ -138,10 +142,17 @@ const ClockContainer = (props: IProps) => {
             const sideId = sideToIdentifier(side);
             const otherSideId = sideToIdentifier(otherSide(side));
             const lastStartTime = prevState[clock].turnStartTime as number;
+            const { incrementType } = selectedPresetRef.current;
             const fischerIncrement =
-              selectedPresetRef.current.incrementType === IncrementType.Fischer
+              incrementType === IncrementType.Fischer
                 ? selectedPresetRef.current.increment * 1000
                 : 0;
+            console.log(
+              getTimeLeftAfterDelay(
+                selectedPresetRef.current.increment,
+                now - lastStartTime,
+              ),
+            );
             return {
               ...prevState,
               ...{
@@ -151,7 +162,12 @@ const ClockContainer = (props: IProps) => {
                   time: {
                     [sideId]:
                       prevState[clock].time[sideId] -
-                      (now - lastStartTime) +
+                      (incrementType === IncrementType.Delay
+                        ? getTimeLeftAfterDelay(
+                            selectedPresetRef.current.increment,
+                            now - lastStartTime,
+                          )
+                        : now - lastStartTime) +
                       fischerIncrement,
                     [otherSideId]: prevState[clock].time[otherSideId],
                   },
@@ -191,6 +207,7 @@ const ClockContainer = (props: IProps) => {
         case "PAUSE_GAME":
           setGameState(prevState => {
             const now = Date.now();
+            const { incrementType } = selectedPresetRef.current;
             const leftStartTime = prevState.left.turnStartTime;
             const oldLeft = prevState.left;
             const newLeft = {
@@ -200,11 +217,23 @@ const ClockContainer = (props: IProps) => {
               time: {
                 top:
                   oldLeft.side === Side.Top && leftStartTime
-                    ? oldLeft.time.top - (now - leftStartTime)
+                    ? oldLeft.time.top -
+                      (incrementType === IncrementType.Delay
+                        ? getTimeLeftAfterDelay(
+                            selectedPresetRef.current.increment,
+                            now - leftStartTime,
+                          )
+                        : now - leftStartTime)
                     : oldLeft.time.top,
                 bottom:
                   oldLeft.side === Side.Bottom && leftStartTime
-                    ? oldLeft.time.bottom - (now - leftStartTime)
+                    ? oldLeft.time.bottom -
+                      (incrementType === IncrementType.Delay
+                        ? getTimeLeftAfterDelay(
+                            selectedPresetRef.current.increment,
+                            now - leftStartTime,
+                          )
+                        : now - leftStartTime)
                     : oldLeft.time.bottom,
               },
             };
@@ -217,11 +246,23 @@ const ClockContainer = (props: IProps) => {
               time: {
                 top:
                   oldRight.side === Side.Top && rightStartTime
-                    ? oldRight.time.top - (now - rightStartTime)
+                    ? oldRight.time.top -
+                      (incrementType === IncrementType.Delay
+                        ? getTimeLeftAfterDelay(
+                            selectedPresetRef.current.increment,
+                            now - rightStartTime,
+                          )
+                        : now - rightStartTime)
                     : oldRight.time.top,
                 bottom:
                   oldRight.side === Side.Bottom && rightStartTime
-                    ? oldRight.time.bottom - (now - rightStartTime)
+                    ? oldRight.time.bottom -
+                      (incrementType === IncrementType.Delay
+                        ? getTimeLeftAfterDelay(
+                            selectedPresetRef.current.increment,
+                            now - rightStartTime,
+                          )
+                        : now - rightStartTime)
                     : oldRight.time.bottom,
               },
             };
@@ -294,25 +335,46 @@ const ClockContainer = (props: IProps) => {
     const updateDisplayId = window.setInterval(() => {
       if (gameLifecycleRef.current === GameLifecycle.InProgress) {
         const { left, right } = gameStateRef.current;
+        const { incrementType } = selectedPresetRef.current;
         const times = [
           (left.time.top -
             (left.side === Side.Top && left.turnStartTime
-              ? Date.now() - left.turnStartTime
+              ? incrementType === IncrementType.Delay
+                ? getTimeLeftAfterDelay(
+                    selectedPresetRef.current.increment,
+                    Date.now() - left.turnStartTime,
+                  )
+                : Date.now() - left.turnStartTime
               : 0)) /
             1000,
           (left.time.bottom -
             (left.side === Side.Bottom && left.turnStartTime
-              ? Date.now() - left.turnStartTime
+              ? incrementType === IncrementType.Delay
+                ? getTimeLeftAfterDelay(
+                    selectedPresetRef.current.increment,
+                    Date.now() - left.turnStartTime,
+                  )
+                : Date.now() - left.turnStartTime
               : 0)) /
             1000,
           (right.time.top -
             (right.side === Side.Top && right.turnStartTime
-              ? Date.now() - right.turnStartTime
+              ? incrementType === IncrementType.Delay
+                ? getTimeLeftAfterDelay(
+                    selectedPresetRef.current.increment,
+                    Date.now() - right.turnStartTime,
+                  )
+                : Date.now() - right.turnStartTime
               : 0)) /
             1000,
           (right.time.bottom -
             (right.side === Side.Bottom && right.turnStartTime
-              ? Date.now() - right.turnStartTime
+              ? incrementType === IncrementType.Delay
+                ? getTimeLeftAfterDelay(
+                    selectedPresetRef.current.increment,
+                    Date.now() - right.turnStartTime,
+                  )
+                : Date.now() - right.turnStartTime
               : 0)) /
             1000,
         ];
