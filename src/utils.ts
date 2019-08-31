@@ -9,8 +9,8 @@ import {
 } from "./types";
 
 declare let window: any;
-const LOCAL_STORAGE_PRESETS_ITEM = "thepresets33";
-const LOCAL_STORAGE_SETTINGS_ITEM = "thesettings33";
+const LOCAL_STORAGE_PRESETS_ITEM = "thepresets334455";
+const LOCAL_STORAGE_SETTINGS_ITEM = "thesettings334455";
 const DEFAULT_PRESETS: IPreset[] = [
   {
     text: "5|5 (5 minutes main time, 5 second delay)",
@@ -51,6 +51,7 @@ function getStoredPresets(): IPreset[] {
   if (data) {
     return JSON.parse(data);
   } else {
+    savePresetsInLocalStorage(DEFAULT_PRESETS);
     return DEFAULT_PRESETS;
   }
 }
@@ -68,6 +69,7 @@ function getStoredSettings(): ISettings {
   if (data) {
     return JSON.parse(data);
   } else {
+    saveSettingsInLocalStorage(DEFAULT_SETTINGS);
     return DEFAULT_SETTINGS;
   }
 }
@@ -106,7 +108,14 @@ export const sideToIdentifier = (side: Side): "top" | "bottom" => {
 };
 
 export const isFirstUse = (): boolean => {
-  return true;
+  const data = localStorage.getItem(LOCAL_STORAGE_SETTINGS_ITEM);
+  if (data) {
+    console.log("data");
+    return false;
+  } else {
+    console.log("no data");
+    return true;
+  }
 };
 
 export {
