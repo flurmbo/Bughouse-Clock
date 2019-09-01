@@ -149,16 +149,21 @@ function EditPresetForm(props: IProps) {
                 fullWidth
               />
             </Grid>
-            <Grid item xs={12} style={{ margin: 5 }}>
-              <TextField
-                value={
-                  unsavedPreset ? toDurationString(unsavedPreset.increment) : ""
-                }
-                label="Increment"
-                onTouchStart={openIncrementDialog}
-                fullWidth
-              />
-            </Grid>
+            {unsavedPreset &&
+              unsavedPreset.incrementType !== IncrementType.None && (
+                <Grid item xs={12} style={{ margin: 5 }}>
+                  <TextField
+                    value={
+                      unsavedPreset
+                        ? toDurationString(unsavedPreset.increment)
+                        : ""
+                    }
+                    label="Increment"
+                    onTouchStart={openIncrementDialog}
+                    fullWidth
+                  />
+                </Grid>
+              )}
           </Grid>
           <Grid item xs={12} style={{ margin: 5 }}>
             <FormControl component="fieldset">

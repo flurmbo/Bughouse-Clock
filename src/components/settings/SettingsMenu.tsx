@@ -64,7 +64,7 @@ function SettingsMenu(props: IProps) {
         text: "",
         increment: 0,
         startingTime: 0,
-        incrementType: IncrementType.None,
+        incrementType: IncrementType.Delay,
         id,
       },
     });
