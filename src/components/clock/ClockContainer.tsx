@@ -23,6 +23,7 @@ interface IProps {
   openSettings: () => void;
   singleTap: boolean;
   updateGameLifecycle: (GameLifecycle: GameLifecycle) => void;
+  swipedRecently: boolean;
 }
 
 const ClockContainer = (props: IProps) => {
@@ -33,6 +34,7 @@ const ClockContainer = (props: IProps) => {
     setGameLifecycle,
     updateGameLifecycle,
     singleTap,
+    swipedRecently,
   } = props;
 
   const { startingTime } = selectedPreset;
@@ -438,17 +440,20 @@ const ClockContainer = (props: IProps) => {
   }, [updateGameState]);
 
   const onClickClockFace = (side: Side, clock: "left" | "right") => {
-    const state = gameStateRef.current;
-    const lifecycle = gameLifecycleRef.current;
-    if (
-      lifecycle === GameLifecycle.NotStarted ||
-      lifecycle === GameLifecycle.Paused
-    ) {
-      updateGameState(GameStateAction.FirstTurn, { side, clock });
-    } else if (!state[clock].turnStartTime) {
-      updateGameState(GameStateAction.FirstTurn, { side, clock });
-    } else if (state[clock].side === side) {
-      updateGameState(GameStateAction.EndTurn, { side, clock });
+    console.log("swipedrecently is", swipedRecently);
+    if (!swipedRecently || gameLifecycle === GameLifecycle.InProgress) {
+      const state = gameStateRef.current;
+      const lifecycle = gameLifecycleRef.current;
+      if (
+        lifecycle === GameLifecycle.NotStarted ||
+        lifecycle === GameLifecycle.Paused
+      ) {
+        updateGameState(GameStateAction.FirstTurn, { side, clock });
+      } else if (!state[clock].turnStartTime) {
+        updateGameState(GameStateAction.FirstTurn, { side, clock });
+      } else if (state[clock].side === side) {
+        updateGameState(GameStateAction.EndTurn, { side, clock });
+      }
     }
   };
 

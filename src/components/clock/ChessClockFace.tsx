@@ -21,7 +21,8 @@ const ChessClockFace = (props: IProps) => {
     displayedTime,
   } = props;
 
-  const onTouchEnd = () => {
+  const onTouchEnd = (e: any) => {
+    console.log("touch ended!");
     onClickClockFace(side, clock);
   };
 

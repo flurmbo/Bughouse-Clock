@@ -15,6 +15,8 @@ import {
   WEIRD_DEFAULT_PRESET,
 } from "./utils";
 
+import Hammer from "hammerjs";
+
 interface IState {
   gameLifecycle: GameLifecycle;
   settingsIsOpen: boolean;
@@ -22,6 +24,7 @@ interface IState {
   presets: IPreset[];
   settings: ISettings;
   welcomeDialogIsOpen: boolean;
+  swipedRecently: boolean;
 }
 
 class App extends Component<any, IState> {
@@ -35,7 +38,24 @@ class App extends Component<any, IState> {
     settingsIsOpen: false,
     settings: this.storedSettings,
     welcomeDialogIsOpen: this.firstUse,
+    swipedRecently: false,
   };
+
+  constructor(props: any) {
+    super(props);
+    const root = document.getElementById("root");
+    if (root) {
+      const hammer = new Hammer(root);
+      hammer.get("swipe").set({ direction: Hammer.DIRECTION_ALL });
+      hammer.on("swipe", e => {
+        this.setState({ swipedRecently: true });
+        window.setTimeout(() => {
+          console.log("setting state");
+          this.setState({ swipedRecently: false });
+        }, 1000);
+      });
+    }
+  }
 
   public render() {
     const {
@@ -56,6 +76,7 @@ class App extends Component<any, IState> {
           openSettings={this.openSettings}
           updateGameLifecycle={this.updateGameLifecycle}
           singleTap={this.state.settings.singleTap}
+          swipedRecently={this.state.swipedRecently}
         />
         {settingsIsOpen && (
           <SettingsMenu
